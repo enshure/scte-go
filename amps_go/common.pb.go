@@ -2057,7 +2057,7 @@ const file_amps_common_proto_rawDesc = "" +
 	"EV_WARNING\x10\x05\x12\r\n" +
 	"\tEV_NOTICE\x10\x06\x12\v\n" +
 	"\aEV_INFO\x10\a\x12\f\n" +
-	"\bEV_DEBUG\x10\bB6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"\bEV_DEBUG\x10\bB,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_common_proto_rawDescOnce sync.Once

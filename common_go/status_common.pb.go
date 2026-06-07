@@ -320,7 +320,7 @@ const file_common_status_common_proto_rawDesc = "" +
 	"\n" +
 	"SCALE_PETA\x10\x0f\x12\x0f\n" +
 	"\vSCALE_ZETTA\x10\x10\x12\x0f\n" +
-	"\vSCALE_YOTTA\x10\x11B;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"\vSCALE_YOTTA\x10\x11B1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_status_common_proto_rawDescOnce sync.Once

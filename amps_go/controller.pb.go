@@ -1398,7 +1398,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x0fRF_CAPABILITIES\x10=\x12\r\n" +
 	"\tRF_STATUS\x10>\x12\x0e\n" +
 	"\n" +
-	"RF_CFG_GRP\x10?B6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"RF_CFG_GRP\x10?B,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_controller_proto_rawDescOnce sync.Once

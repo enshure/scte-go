@@ -72,7 +72,7 @@ var File_xponder_events_proto protoreflect.FileDescriptor
 
 const file_xponder_events_proto_rawDesc = "" +
 	"\n" +
-	"\x14xponder/events.proto\x12\fscte.xponder\x1a\x19common/event_common.protoB=Z;github.com/enshure/scte-go/xponder_go;sctexponderP\x00"
+	"\x14xponder/events.proto\x12\fscte.xponder\x1a\x19common/event_common.protoB3Z1github.com/enshure/scte-go/xponder_go;sctexponderP\x00"
 
 var file_xponder_events_proto_goTypes = []any{}
 var file_xponder_events_proto_depIdxs = []int32{

@@ -197,7 +197,7 @@ const file_amps_transport_proto_rawDesc = "" +
 	"\vHRDC_SetAPI\x12:\n" +
 	"\arequest\x18\x01 \x01(\v2\x1e.scte.amp.ControllerSetRequestH\x00R\arequest\x12=\n" +
 	"\bresponse\x18\x02 \x01(\v2\x1f.scte.amp.ControllerSetResponseH\x00R\bresponseB\x04\n" +
-	"\x02idB6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"\x02idB,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_transport_proto_rawDescOnce sync.Once

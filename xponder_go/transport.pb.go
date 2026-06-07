@@ -197,7 +197,7 @@ const file_xponder_transport_proto_rawDesc = "" +
 	"\vHRDC_SetAPI\x12>\n" +
 	"\arequest\x18\x01 \x01(\v2\".scte.xponder.ControllerSetRequestH\x00R\arequest\x12A\n" +
 	"\bresponse\x18\x02 \x01(\v2#.scte.xponder.ControllerSetResponseH\x00R\bresponseB\x04\n" +
-	"\x02idB=Z;github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x02idB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_transport_proto_rawDescOnce sync.Once

@@ -321,7 +321,7 @@ const file_common_version_common_proto_rawDesc = "" +
 	"\x18SW_COMPONENT_APPLICATION\x10\x03\x12\x15\n" +
 	"\x11SW_COMPONENT_FPGA\x10\x04\x12\x17\n" +
 	"\x13SW_COMPONENT_CONFIG\x10\x05\x12!\n" +
-	"\x1cSW_COMPONENT_VENDOR_SPECIFIC\x10\xe8\aB;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"\x1cSW_COMPONENT_VENDOR_SPECIFIC\x10\xe8\aB1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_version_common_proto_rawDescOnce sync.Once

@@ -632,7 +632,7 @@ const file_common_sensor_common_proto_rawDesc = "" +
 	"\x14min_interval_seconds\x18\x04 \x01(\rR\x12minIntervalSeconds\x120\n" +
 	"\x14max_interval_seconds\x18\x05 \x01(\rR\x12maxIntervalSeconds\"\\\n" +
 	"\x17TelemetryIntervalConfig\x12A\n" +
-	"\tintervals\x18\x01 \x03(\v2#.scte.common.TelemetryIntervalEntryR\tintervalsB;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"\tintervals\x18\x01 \x03(\v2#.scte.common.TelemetryIntervalEntryR\tintervalsB1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_sensor_common_proto_rawDescOnce sync.Once

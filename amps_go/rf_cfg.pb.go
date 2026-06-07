@@ -802,7 +802,7 @@ const file_amps_rf_cfg_proto_rawDesc = "" +
 	"\x17ingress_switch_states_e\x12\x1a\n" +
 	"\x16SAMP_INGRESS_SWITCH_ON\x10\x01\x12\x1b\n" +
 	"\x17SAMP_INGRESS_SWITCH_OFF\x10\x02\x12\"\n" +
-	"\x1eSAMP_INGRESS_SWITCH_ATTENUATED\x10\x03B6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"\x1eSAMP_INGRESS_SWITCH_ATTENUATED\x10\x03B,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_rf_cfg_proto_rawDescOnce sync.Once

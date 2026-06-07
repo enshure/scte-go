@@ -144,7 +144,7 @@ const file_xponder_system_proto_rawDesc = "" +
 	"\x10InfoModelSupport\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x19\n" +
 	"\bmodel_id\x18\x02 \x01(\tR\amodelId\x12\x14\n" +
-	"\x05index\x18\x03 \x01(\rR\x05indexB=Z;github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x05index\x18\x03 \x01(\rR\x05indexB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_system_proto_rawDescOnce sync.Once

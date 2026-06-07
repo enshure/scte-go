@@ -36,7 +36,7 @@ var File_amps_sensor_proto protoreflect.FileDescriptor
 
 const file_amps_sensor_proto_rawDesc = "" +
 	"\n" +
-	"\x11amps/sensor.proto\x12\bscte.amp\x1a\x1acommon/sensor_common.protoB6Z4github.com/enshure/scte-go/amps_go;scteampP\x00"
+	"\x11amps/sensor.proto\x12\bscte.amp\x1a\x1acommon/sensor_common.protoB,Z*github.com/enshure/scte-go/amps_go;scteampP\x00"
 
 var file_amps_sensor_proto_goTypes = []any{}
 var file_amps_sensor_proto_depIdxs = []int32{

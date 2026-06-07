@@ -501,7 +501,7 @@ const file_amps_spectrum_proto_rawDesc = "" +
 	"\x02id*G\n" +
 	"\x1cspectrum_capture_data_type_e\x12\x13\n" +
 	"\x0fREFERENCE_VALUE\x10\x01\x12\x12\n" +
-	"\x0eMEASURED_VALUE\x10\x02B6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"\x0eMEASURED_VALUE\x10\x02B,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_spectrum_proto_rawDescOnce sync.Once

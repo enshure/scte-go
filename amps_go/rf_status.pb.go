@@ -796,7 +796,7 @@ const file_amps_rf_status_proto_rawDesc = "" +
 	"\x1dPILOT_LOSS_PROTECTION_UNKNOWN\x10\x02\x12(\n" +
 	"$PILOT_LOSS_PROTECTION_ALTERNATE_FREQ\x10\x03\x12!\n" +
 	"\x1dPILOT_LOSS_PROTECTION_THERMAL\x10\x04\x12'\n" +
-	"#PILOT_LOSS_PROTECTION_LOCK_SETTINGS\x10\x05B6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"#PILOT_LOSS_PROTECTION_LOCK_SETTINGS\x10\x05B,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_rf_status_proto_rawDescOnce sync.Once

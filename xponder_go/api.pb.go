@@ -253,7 +253,7 @@ const file_xponder_api_proto_rawDesc = "" +
 	"\x02id*J\n" +
 	"\x0fresponse_status\x12\x1b\n" +
 	"\x17RESPONSE_STATUS_SUCCESS\x10\x00\x12\x1a\n" +
-	"\x16RESPONSE_STATUS_FAILED\x10\x01B=Z;github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x16RESPONSE_STATUS_FAILED\x10\x01B3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_api_proto_rawDescOnce sync.Once

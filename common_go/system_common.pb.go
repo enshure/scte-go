@@ -171,7 +171,7 @@ const file_common_system_common_proto_rawDesc = "" +
 	"\fSystemStatus\x12\x1b\n" +
 	"\tunique_id\x18\x01 \x01(\fR\buniqueId\x12*\n" +
 	"\x11current_date_time\x18\x02 \x01(\tR\x0fcurrentDateTime\x12\x17\n" +
-	"\aup_time\x18\x03 \x01(\rR\x06upTimeB;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"\aup_time\x18\x03 \x01(\rR\x06upTimeB1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_system_common_proto_rawDescOnce sync.Once

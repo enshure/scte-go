@@ -1241,7 +1241,7 @@ const file_amps_rf_capabilities_grp_proto_rawDesc = "" +
 	"\x10AGC_TYPE_UNKNOWN\x10\x01\x12\x13\n" +
 	"\x0fAGC_TYPE_MF_AGC\x10\x02\x12\x16\n" +
 	"\x12AGC_TYPE_AGILE_AGC\x10\x03\x12&\n" +
-	"\"AGC_TYPE_AGC_PILOT_LOSS_PROTECTION\x10\x04B6Z4github.com/enshure/scte-go/amps_go;scteamp"
+	"\"AGC_TYPE_AGC_PILOT_LOSS_PROTECTION\x10\x04B,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_rf_capabilities_grp_proto_rawDescOnce sync.Once

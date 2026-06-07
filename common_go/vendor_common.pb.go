@@ -167,7 +167,7 @@ const file_common_vendor_common_proto_rawDesc = "" +
 	"\fstring_value\x18\f \x01(\tH\x00R\vstringValue\x12\x1f\n" +
 	"\n" +
 	"blob_value\x18\r \x01(\fH\x00R\tblobValueB\a\n" +
-	"\x05valueB;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"\x05valueB1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_vendor_common_proto_rawDescOnce sync.Once

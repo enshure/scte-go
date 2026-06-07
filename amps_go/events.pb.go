@@ -72,7 +72,7 @@ var File_amps_events_proto protoreflect.FileDescriptor
 
 const file_amps_events_proto_rawDesc = "" +
 	"\n" +
-	"\x11amps/events.proto\x12\bscte.amp\x1a\x19common/event_common.protoB6Z4github.com/enshure/scte-go/amps_go;scteampP\x00"
+	"\x11amps/events.proto\x12\bscte.amp\x1a\x19common/event_common.protoB,Z*github.com/enshure/scte-go/amps_go;scteampP\x00"
 
 var file_amps_events_proto_goTypes = []any{}
 var file_amps_events_proto_depIdxs = []int32{

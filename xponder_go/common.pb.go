@@ -176,7 +176,7 @@ const file_xponder_common_proto_rawDesc = "" +
 	"\x0fSCTE_EV_WARNING\x10\x05\x12\x12\n" +
 	"\x0eSCTE_EV_NOTICE\x10\x06\x12\x10\n" +
 	"\fSCTE_EV_INFO\x10\a\x12\x11\n" +
-	"\rSCTE_EV_DEBUG\x10\bB=Z;github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\rSCTE_EV_DEBUG\x10\bB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_common_proto_rawDescOnce sync.Once

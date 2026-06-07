@@ -323,7 +323,7 @@ const file_common_device_common_proto_rawDesc = "" +
 	"\x11INDOOR_COMMERCIAL\x10\x03\x12\x0f\n" +
 	"\vRESIDENTIAL\x10\x04\x12\t\n" +
 	"\x05OTHER\x10\n" +
-	"B;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"B1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_device_common_proto_rawDescOnce sync.Once

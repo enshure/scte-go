@@ -1036,7 +1036,7 @@ const file_common_event_common_proto_rawDesc = "" +
 	"\x14EVENT_PRIORITY_DEBUG\x10\b*/\n" +
 	"\x12event_transition_e\x12\f\n" +
 	"\bASSERTED\x10\x01\x12\v\n" +
-	"\aCLEARED\x10\x02B;Z9github.com/enshure/scte-go/common_go;sctecommon"
+	"\aCLEARED\x10\x02B1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_event_common_proto_rawDescOnce sync.Once

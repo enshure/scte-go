@@ -1339,7 +1339,7 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x11SYSLOG_SERVER_CFG\x10%\x12\x13\n" +
 	"\x0fRESET_EVENT_LOG\x10&\x12\x15\n" +
 	"\x11SENSOR_DESCRIPTOR\x10(\x12\x12\n" +
-	"\x0eSENSOR_READING\x10)B=Z;github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x0eSENSOR_READING\x10)B3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_controller_proto_rawDescOnce sync.Once

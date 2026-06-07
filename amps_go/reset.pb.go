@@ -328,7 +328,7 @@ const file_amps_reset_proto_rawDesc = "" +
 	"\atimeout\x18\x01 \x01(\rR\atimeout\x12\x16\n" +
 	"\x06result\x18\x02 \x01(\bR\x06result\"*\n" +
 	"\x10EnableAutoReboot\x12\x16\n" +
-	"\x06result\x18\x02 \x01(\bR\x06resultB6Z4github.com/enshure/scte-go/amps_go;scteampP\x00"
+	"\x06result\x18\x02 \x01(\bR\x06resultB,Z*github.com/enshure/scte-go/amps_go;scteampP\x00"
 
 var (
 	file_amps_reset_proto_rawDescOnce sync.Once

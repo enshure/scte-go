@@ -456,7 +456,7 @@ const file_xponder_reset_proto_rawDesc = "" +
 	"\x10EnableAutoReboot\x12\x16\n" +
 	"\x06result\x18\x01 \x01(\bR\x06result\x125\n" +
 	"\terror_tag\x18\x02 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessageB=Z;github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessageB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_reset_proto_rawDescOnce sync.Once
