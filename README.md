@@ -32,4 +32,3 @@ git push --tags
 ```
 
 Consumers can then depend on the specific module version they need.
-# scte-go

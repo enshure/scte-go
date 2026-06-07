@@ -1,0 +1,24 @@
+name: Go
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module:
+          - common_go
+          - amps_go
+          - xponder_go
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ matrix.module }}/go.mod
+      - run: go test ./...
+        working-directory: ${{ matrix.module }}
+        env:
+          GOWORK: ${{ github.workspace }}/go.work

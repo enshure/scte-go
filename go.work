@@ -1,0 +1,7 @@
+go 1.22
+
+use ./common_go
+use ./amps_go
+use ./xponder_go
+
+replace github.com/enshure/scte-go/common_go v0.0.4 => ./common_go
