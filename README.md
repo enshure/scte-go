@@ -3,7 +3,19 @@
 Generated Go protobuf bindings for Enshure SCTE APIs.
 
 This repository intentionally publishes only generated Go packages. The source
-protobuf files and internal generation tooling are maintained separately.
+protobuf files and internal generation tooling are maintained separately in
+`scte-apis`.
+
+## Generate
+
+Run the exporter from this repository and point it at an `scte-apis` checkout:
+
+```bash
+python3 scripts/release/export_public_go.py --api-repo ../scte-apis --version 0.1.0
+```
+
+The exporter regenerates `common_go/`, `amps_go/`, and `xponder_go/`, writes
+`go.work`, and runs `go test ./...` in each generated module.
 
 ## Packages
 
