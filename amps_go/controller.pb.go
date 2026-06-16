@@ -10,6 +10,7 @@ import (
 	common_go "github.com/enshure/scte-go/common_go"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -49,58 +50,52 @@ const (
 	GroupId_POWER_SUPPLY_STATUS       GroupId = 9
 	GroupId_OUTPUT_RAIL_STATUS        GroupId = 10
 	GroupId_SYSTEM_CFG                GroupId = 11
-	GroupId_LOCATION                  GroupId = 12
 	GroupId_RESET_CAPABILITIES        GroupId = 20
 	GroupId_RESET_HISTORY_STATUS      GroupId = 21
 	GroupId_RESET                     GroupId = 22
 	GroupId_DISABLE_AUTO_REBOOT       GroupId = 23
 	GroupId_ENABLE_AUTO_REBOOT        GroupId = 24
 	GroupId_EVENT_CAPABILITIES        GroupId = 30
-	GroupId_EVENT_STATUS              GroupId = 31
-	GroupId_EVENT_LOG                 GroupId = 32
-	GroupId_EVENT_REPORTING_CFG       GroupId = 33
+	GroupId_EVENT_NOTIFICATION        GroupId = 31
 	GroupId_SENSOR_DESCRIPTOR         GroupId = 40
 	GroupId_SENSOR_READING            GroupId = 41
 	GroupId_TELEMETRY_INTERVAL_CFG    GroupId = 42
-	GroupId_ACTIVE_FAULTS_READ        GroupId = 50
 	GroupId_SPECTRUM_CAPTURE          GroupId = 60
 	GroupId_RF_CAPABILITIES           GroupId = 61
 	GroupId_RF_STATUS                 GroupId = 62
 	GroupId_RF_CFG_GRP                GroupId = 63
+	GroupId_VENDOR_EXTENSIONS         GroupId = 100 // catch-all for vendor-specific indexed groups, e.g. per-sensor config
 )
 
 // Enum value maps for GroupId.
 var (
 	GroupId_name = map[int32]string{
-		1:  "SYSTEM_CAPABILITIES",
-		2:  "POWER_SUPPLY_CAPABILITIES",
-		3:  "SYSTEM_STATUS",
-		4:  "IDENTIFICATION",
-		5:  "VENDOR",
-		6:  "VERSION_SUMMARY",
-		7:  "ENCLOSURE_STATUS",
-		8:  "SENSOR_STATUS",
-		9:  "POWER_SUPPLY_STATUS",
-		10: "OUTPUT_RAIL_STATUS",
-		11: "SYSTEM_CFG",
-		12: "LOCATION",
-		20: "RESET_CAPABILITIES",
-		21: "RESET_HISTORY_STATUS",
-		22: "RESET",
-		23: "DISABLE_AUTO_REBOOT",
-		24: "ENABLE_AUTO_REBOOT",
-		30: "EVENT_CAPABILITIES",
-		31: "EVENT_STATUS",
-		32: "EVENT_LOG",
-		33: "EVENT_REPORTING_CFG",
-		40: "SENSOR_DESCRIPTOR",
-		41: "SENSOR_READING",
-		42: "TELEMETRY_INTERVAL_CFG",
-		50: "ACTIVE_FAULTS_READ",
-		60: "SPECTRUM_CAPTURE",
-		61: "RF_CAPABILITIES",
-		62: "RF_STATUS",
-		63: "RF_CFG_GRP",
+		1:   "SYSTEM_CAPABILITIES",
+		2:   "POWER_SUPPLY_CAPABILITIES",
+		3:   "SYSTEM_STATUS",
+		4:   "IDENTIFICATION",
+		5:   "VENDOR",
+		6:   "VERSION_SUMMARY",
+		7:   "ENCLOSURE_STATUS",
+		8:   "SENSOR_STATUS",
+		9:   "POWER_SUPPLY_STATUS",
+		10:  "OUTPUT_RAIL_STATUS",
+		11:  "SYSTEM_CFG",
+		20:  "RESET_CAPABILITIES",
+		21:  "RESET_HISTORY_STATUS",
+		22:  "RESET",
+		23:  "DISABLE_AUTO_REBOOT",
+		24:  "ENABLE_AUTO_REBOOT",
+		30:  "EVENT_CAPABILITIES",
+		31:  "EVENT_NOTIFICATION",
+		40:  "SENSOR_DESCRIPTOR",
+		41:  "SENSOR_READING",
+		42:  "TELEMETRY_INTERVAL_CFG",
+		60:  "SPECTRUM_CAPTURE",
+		61:  "RF_CAPABILITIES",
+		62:  "RF_STATUS",
+		63:  "RF_CFG_GRP",
+		100: "VENDOR_EXTENSIONS",
 	}
 	GroupId_value = map[string]int32{
 		"SYSTEM_CAPABILITIES":       1,
@@ -114,24 +109,21 @@ var (
 		"POWER_SUPPLY_STATUS":       9,
 		"OUTPUT_RAIL_STATUS":        10,
 		"SYSTEM_CFG":                11,
-		"LOCATION":                  12,
 		"RESET_CAPABILITIES":        20,
 		"RESET_HISTORY_STATUS":      21,
 		"RESET":                     22,
 		"DISABLE_AUTO_REBOOT":       23,
 		"ENABLE_AUTO_REBOOT":        24,
 		"EVENT_CAPABILITIES":        30,
-		"EVENT_STATUS":              31,
-		"EVENT_LOG":                 32,
-		"EVENT_REPORTING_CFG":       33,
+		"EVENT_NOTIFICATION":        31,
 		"SENSOR_DESCRIPTOR":         40,
 		"SENSOR_READING":            41,
 		"TELEMETRY_INTERVAL_CFG":    42,
-		"ACTIVE_FAULTS_READ":        50,
 		"SPECTRUM_CAPTURE":          60,
 		"RF_CAPABILITIES":           61,
 		"RF_STATUS":                 62,
 		"RF_CFG_GRP":                63,
+		"VENDOR_EXTENSIONS":         100,
 	}
 )
 
@@ -306,9 +298,10 @@ func (x *ControllerGetRequest) GetSpectrumCaptureRequest() *SpectrumCaptureReque
 }
 
 type ControllerGetGroupResponse struct {
-	state        protoimpl.MessageState `protogen:"open.v1"`
-	ErrorTag     *common_go.ErrorTagE   `protobuf:"varint,1,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
-	ErrorMessage *string                `protobuf:"bytes,2,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ErrorTag      *common_go.ErrorTagE   `protobuf:"varint,1,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
+	ErrorMessage  *string                `protobuf:"bytes,2,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
+	LastUpdatedAt *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=last_updated_at,json=lastUpdatedAt" json:"last_updated_at,omitempty"`
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ControllerGetGroupResponse_SystemCapabilities
@@ -321,28 +314,25 @@ type ControllerGetGroupResponse struct {
 	//	*ControllerGetGroupResponse_PowerSupplyStatus
 	//	*ControllerGetGroupResponse_OutputRailStatus
 	//	*ControllerGetGroupResponse_SystemCfg
-	//	*ControllerGetGroupResponse_Location
 	//	*ControllerGetGroupResponse_ResetCapabilities
 	//	*ControllerGetGroupResponse_ResetHistoryStatus
 	//	*ControllerGetGroupResponse_Reset_
 	//	*ControllerGetGroupResponse_DisableAutoReboot
 	//	*ControllerGetGroupResponse_EnableAutoReboot
 	//	*ControllerGetGroupResponse_EventCapabilities
-	//	*ControllerGetGroupResponse_EventStatus
-	//	*ControllerGetGroupResponse_EventLog
-	//	*ControllerGetGroupResponse_EventReportingCfg
+	//	*ControllerGetGroupResponse_EventNotification
 	//	*ControllerGetGroupResponse_TelemetryIntervalConfig
 	//	*ControllerGetGroupResponse_SpectrumCapture
 	//	*ControllerGetGroupResponse_Sensors
 	//	*ControllerGetGroupResponse_SensorDescriptors
 	//	*ControllerGetGroupResponse_SensorsData
-	//	*ControllerGetGroupResponse_ActiveFaults
 	//	*ControllerGetGroupResponse_RfCapabilities
 	//	*ControllerGetGroupResponse_RfStatusGroup
 	//	*ControllerGetGroupResponse_RfConfigGrp
-	Payload       isControllerGetGroupResponse_Payload `protobuf_oneof:"payload"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Payload          isControllerGetGroupResponse_Payload `protobuf_oneof:"payload"`
+	VendorExtensions []*common_go.VendorExtension         `protobuf:"bytes,100,rep,name=vendor_extensions,json=vendorExtensions" json:"vendor_extensions,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *ControllerGetGroupResponse) Reset() {
@@ -387,6 +377,13 @@ func (x *ControllerGetGroupResponse) GetErrorMessage() string {
 		return *x.ErrorMessage
 	}
 	return ""
+}
+
+func (x *ControllerGetGroupResponse) GetLastUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastUpdatedAt
+	}
+	return nil
 }
 
 func (x *ControllerGetGroupResponse) GetPayload() isControllerGetGroupResponse_Payload {
@@ -486,15 +483,6 @@ func (x *ControllerGetGroupResponse) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetLocation() *common_go.Location {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerGetGroupResponse_Location); ok {
-			return x.Location
-		}
-	}
-	return nil
-}
-
 func (x *ControllerGetGroupResponse) GetResetCapabilities() *ResetCapabilities {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_ResetCapabilities); ok {
@@ -549,28 +537,10 @@ func (x *ControllerGetGroupResponse) GetEventCapabilities() *common_go.EventCapa
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetEventStatus() *common_go.EventStatus {
+func (x *ControllerGetGroupResponse) GetEventNotification() *common_go.EventNotification {
 	if x != nil {
-		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventStatus); ok {
-			return x.EventStatus
-		}
-	}
-	return nil
-}
-
-func (x *ControllerGetGroupResponse) GetEventLog() *common_go.EventLog {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventLog); ok {
-			return x.EventLog
-		}
-	}
-	return nil
-}
-
-func (x *ControllerGetGroupResponse) GetEventReportingCfg() *common_go.EventReportingCfg {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventReportingCfg); ok {
-			return x.EventReportingCfg
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventNotification); ok {
+			return x.EventNotification
 		}
 	}
 	return nil
@@ -621,15 +591,6 @@ func (x *ControllerGetGroupResponse) GetSensorsData() *common_go.SensorsData {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetActiveFaults() *common_go.ActiveFaults {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerGetGroupResponse_ActiveFaults); ok {
-			return x.ActiveFaults
-		}
-	}
-	return nil
-}
-
 func (x *ControllerGetGroupResponse) GetRfCapabilities() *RfCapabilities {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_RfCapabilities); ok {
@@ -653,6 +614,13 @@ func (x *ControllerGetGroupResponse) GetRfConfigGrp() *RfCfgGrp {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_RfConfigGrp); ok {
 			return x.RfConfigGrp
 		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetVendorExtensions() []*common_go.VendorExtension {
+	if x != nil {
+		return x.VendorExtensions
 	}
 	return nil
 }
@@ -698,11 +666,7 @@ type ControllerGetGroupResponse_OutputRailStatus struct {
 }
 
 type ControllerGetGroupResponse_SystemCfg struct {
-	SystemCfg *common_go.SystemCfg `protobuf:"bytes,19,opt,name=system_cfg,json=systemCfg,oneof"`
-}
-
-type ControllerGetGroupResponse_Location struct {
-	Location *common_go.Location `protobuf:"bytes,20,opt,name=location,oneof"`
+	SystemCfg *common_go.SystemCfg `protobuf:"bytes,20,opt,name=system_cfg,json=systemCfg,oneof"`
 }
 
 type ControllerGetGroupResponse_ResetCapabilities struct {
@@ -729,52 +693,40 @@ type ControllerGetGroupResponse_EventCapabilities struct {
 	EventCapabilities *common_go.EventCapabilities `protobuf:"bytes,26,opt,name=event_capabilities,json=eventCapabilities,oneof"`
 }
 
-type ControllerGetGroupResponse_EventStatus struct {
-	EventStatus *common_go.EventStatus `protobuf:"bytes,27,opt,name=event_status,json=eventStatus,oneof"`
-}
-
-type ControllerGetGroupResponse_EventLog struct {
-	EventLog *common_go.EventLog `protobuf:"bytes,28,opt,name=event_log,json=eventLog,oneof"`
-}
-
-type ControllerGetGroupResponse_EventReportingCfg struct {
-	EventReportingCfg *common_go.EventReportingCfg `protobuf:"bytes,29,opt,name=event_reporting_cfg,json=eventReportingCfg,oneof"`
+type ControllerGetGroupResponse_EventNotification struct {
+	EventNotification *common_go.EventNotification `protobuf:"bytes,30,opt,name=event_notification,json=eventNotification,oneof"`
 }
 
 type ControllerGetGroupResponse_TelemetryIntervalConfig struct {
-	TelemetryIntervalConfig *common_go.TelemetryIntervalConfig `protobuf:"bytes,30,opt,name=telemetry_interval_config,json=telemetryIntervalConfig,oneof"`
+	TelemetryIntervalConfig *common_go.TelemetryIntervalConfig `protobuf:"bytes,31,opt,name=telemetry_interval_config,json=telemetryIntervalConfig,oneof"`
 }
 
 type ControllerGetGroupResponse_SpectrumCapture struct {
-	SpectrumCapture *SpectrumCaptureResponse `protobuf:"bytes,31,opt,name=spectrum_capture,json=spectrumCapture,oneof"`
+	SpectrumCapture *SpectrumCaptureResponse `protobuf:"bytes,32,opt,name=spectrum_capture,json=spectrumCapture,oneof"`
 }
 
 type ControllerGetGroupResponse_Sensors struct {
-	Sensors *common_go.Sensors `protobuf:"bytes,32,opt,name=sensors,oneof"`
+	Sensors *common_go.Sensors `protobuf:"bytes,33,opt,name=sensors,oneof"`
 }
 
 type ControllerGetGroupResponse_SensorDescriptors struct {
-	SensorDescriptors *common_go.SensorDescriptors `protobuf:"bytes,33,opt,name=sensor_descriptors,json=sensorDescriptors,oneof"`
+	SensorDescriptors *common_go.SensorDescriptors `protobuf:"bytes,34,opt,name=sensor_descriptors,json=sensorDescriptors,oneof"`
 }
 
 type ControllerGetGroupResponse_SensorsData struct {
-	SensorsData *common_go.SensorsData `protobuf:"bytes,34,opt,name=sensors_data,json=sensorsData,oneof"`
-}
-
-type ControllerGetGroupResponse_ActiveFaults struct {
-	ActiveFaults *common_go.ActiveFaults `protobuf:"bytes,35,opt,name=active_faults,json=activeFaults,oneof"`
+	SensorsData *common_go.SensorsData `protobuf:"bytes,35,opt,name=sensors_data,json=sensorsData,oneof"`
 }
 
 type ControllerGetGroupResponse_RfCapabilities struct {
-	RfCapabilities *RfCapabilities `protobuf:"bytes,36,opt,name=rf_capabilities,json=rfCapabilities,oneof"`
+	RfCapabilities *RfCapabilities `protobuf:"bytes,37,opt,name=rf_capabilities,json=rfCapabilities,oneof"`
 }
 
 type ControllerGetGroupResponse_RfStatusGroup struct {
-	RfStatusGroup *RfStatusGrp `protobuf:"bytes,37,opt,name=rf_status_group,json=rfStatusGroup,oneof"`
+	RfStatusGroup *RfStatusGrp `protobuf:"bytes,38,opt,name=rf_status_group,json=rfStatusGroup,oneof"`
 }
 
 type ControllerGetGroupResponse_RfConfigGrp struct {
-	RfConfigGrp *RfCfgGrp `protobuf:"bytes,38,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
+	RfConfigGrp *RfCfgGrp `protobuf:"bytes,39,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
 }
 
 func (*ControllerGetGroupResponse_SystemCapabilities) isControllerGetGroupResponse_Payload() {}
@@ -797,8 +749,6 @@ func (*ControllerGetGroupResponse_OutputRailStatus) isControllerGetGroupResponse
 
 func (*ControllerGetGroupResponse_SystemCfg) isControllerGetGroupResponse_Payload() {}
 
-func (*ControllerGetGroupResponse_Location) isControllerGetGroupResponse_Payload() {}
-
 func (*ControllerGetGroupResponse_ResetCapabilities) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_ResetHistoryStatus) isControllerGetGroupResponse_Payload() {}
@@ -811,11 +761,7 @@ func (*ControllerGetGroupResponse_EnableAutoReboot) isControllerGetGroupResponse
 
 func (*ControllerGetGroupResponse_EventCapabilities) isControllerGetGroupResponse_Payload() {}
 
-func (*ControllerGetGroupResponse_EventStatus) isControllerGetGroupResponse_Payload() {}
-
-func (*ControllerGetGroupResponse_EventLog) isControllerGetGroupResponse_Payload() {}
-
-func (*ControllerGetGroupResponse_EventReportingCfg) isControllerGetGroupResponse_Payload() {}
+func (*ControllerGetGroupResponse_EventNotification) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_TelemetryIntervalConfig) isControllerGetGroupResponse_Payload() {}
 
@@ -826,8 +772,6 @@ func (*ControllerGetGroupResponse_Sensors) isControllerGetGroupResponse_Payload(
 func (*ControllerGetGroupResponse_SensorDescriptors) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_SensorsData) isControllerGetGroupResponse_Payload() {}
-
-func (*ControllerGetGroupResponse_ActiveFaults) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_RfCapabilities) isControllerGetGroupResponse_Payload() {}
 
@@ -901,16 +845,16 @@ type ControllerSetRequest struct {
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ControllerSetRequest_SystemCfg
-	//	*ControllerSetRequest_Location
 	//	*ControllerSetRequest_Reset_
 	//	*ControllerSetRequest_DisableAutoReboot
 	//	*ControllerSetRequest_EnableAutoReboot
 	//	*ControllerSetRequest_EventReportingCfg
 	//	*ControllerSetRequest_TelemetryIntervalConfig
 	//	*ControllerSetRequest_RfConfigGrp
-	Payload       isControllerSetRequest_Payload `protobuf_oneof:"payload"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Payload          isControllerSetRequest_Payload `protobuf_oneof:"payload"`
+	VendorExtensions []*common_go.VendorExtension   `protobuf:"bytes,100,rep,name=vendor_extensions,json=vendorExtensions" json:"vendor_extensions,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 // Default values for ControllerSetRequest fields.
@@ -971,15 +915,6 @@ func (x *ControllerSetRequest) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerSetRequest) GetLocation() *common_go.Location {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerSetRequest_Location); ok {
-			return x.Location
-		}
-	}
-	return nil
-}
-
 func (x *ControllerSetRequest) GetReset_() *Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetRequest_Reset_); ok {
@@ -1034,16 +969,19 @@ func (x *ControllerSetRequest) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
+func (x *ControllerSetRequest) GetVendorExtensions() []*common_go.VendorExtension {
+	if x != nil {
+		return x.VendorExtensions
+	}
+	return nil
+}
+
 type isControllerSetRequest_Payload interface {
 	isControllerSetRequest_Payload()
 }
 
 type ControllerSetRequest_SystemCfg struct {
 	SystemCfg *common_go.SystemCfg `protobuf:"bytes,10,opt,name=system_cfg,json=systemCfg,oneof"`
-}
-
-type ControllerSetRequest_Location struct {
-	Location *common_go.Location `protobuf:"bytes,11,opt,name=location,oneof"`
 }
 
 type ControllerSetRequest_Reset_ struct {
@@ -1072,8 +1010,6 @@ type ControllerSetRequest_RfConfigGrp struct {
 
 func (*ControllerSetRequest_SystemCfg) isControllerSetRequest_Payload() {}
 
-func (*ControllerSetRequest_Location) isControllerSetRequest_Payload() {}
-
 func (*ControllerSetRequest_Reset_) isControllerSetRequest_Payload() {}
 
 func (*ControllerSetRequest_DisableAutoReboot) isControllerSetRequest_Payload() {}
@@ -1093,16 +1029,16 @@ type ControllerSetResponse struct {
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ControllerSetResponse_SystemCfg
-	//	*ControllerSetResponse_Location
 	//	*ControllerSetResponse_Reset_
 	//	*ControllerSetResponse_DisableAutoReboot
 	//	*ControllerSetResponse_EnableAutoReboot
 	//	*ControllerSetResponse_EventReportingCfg
 	//	*ControllerSetResponse_TelemetryIntervalConfig
 	//	*ControllerSetResponse_RfConfigGrp
-	Payload       isControllerSetResponse_Payload `protobuf_oneof:"payload"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Payload          isControllerSetResponse_Payload `protobuf_oneof:"payload"`
+	VendorExtensions []*common_go.VendorExtension    `protobuf:"bytes,100,rep,name=vendor_extensions,json=vendorExtensions" json:"vendor_extensions,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *ControllerSetResponse) Reset() {
@@ -1165,15 +1101,6 @@ func (x *ControllerSetResponse) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerSetResponse) GetLocation() *common_go.Location {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerSetResponse_Location); ok {
-			return x.Location
-		}
-	}
-	return nil
-}
-
 func (x *ControllerSetResponse) GetReset_() *Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetResponse_Reset_); ok {
@@ -1228,16 +1155,19 @@ func (x *ControllerSetResponse) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
+func (x *ControllerSetResponse) GetVendorExtensions() []*common_go.VendorExtension {
+	if x != nil {
+		return x.VendorExtensions
+	}
+	return nil
+}
+
 type isControllerSetResponse_Payload interface {
 	isControllerSetResponse_Payload()
 }
 
 type ControllerSetResponse_SystemCfg struct {
 	SystemCfg *common_go.SystemCfg `protobuf:"bytes,10,opt,name=system_cfg,json=systemCfg,oneof"`
-}
-
-type ControllerSetResponse_Location struct {
-	Location *common_go.Location `protobuf:"bytes,11,opt,name=location,oneof"`
 }
 
 type ControllerSetResponse_Reset_ struct {
@@ -1266,8 +1196,6 @@ type ControllerSetResponse_RfConfigGrp struct {
 
 func (*ControllerSetResponse_SystemCfg) isControllerSetResponse_Payload() {}
 
-func (*ControllerSetResponse_Location) isControllerSetResponse_Payload() {}
-
 func (*ControllerSetResponse_Reset_) isControllerSetResponse_Payload() {}
 
 func (*ControllerSetResponse_DisableAutoReboot) isControllerSetResponse_Payload() {}
@@ -1284,7 +1212,7 @@ var File_amps_controller_proto protoreflect.FileDescriptor
 
 const file_amps_controller_proto_rawDesc = "" +
 	"\n" +
-	"\x15amps/controller.proto\x12\bscte.amp\x1a\x13amps/spectrum.proto\x1a\x19common/error_common.proto\x1a\x1acommon/device_common.proto\x1a\x19common/event_common.proto\x1a\x1acommon/system_common.proto\x1a\x1bcommon/version_common.proto\x1a\x15amps/system_grp.proto\x1a\x1eamps/rf_capabilities_grp.proto\x1a\x14amps/rf_status.proto\x1a\x11amps/rf_cfg.proto\x1a\x10amps/reset.proto\x1a\x11amps/events.proto\x1a\x11amps/sensor.proto\"\xa0\x01\n" +
+	"\x15amps/controller.proto\x12\bscte.amp\x1a\x13amps/spectrum.proto\x1a\x19common/error_common.proto\x1a\x1acommon/device_common.proto\x1a\x19common/event_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/vendor_common.proto\x1a\x1bcommon/version_common.proto\x1a\x15amps/system_grp.proto\x1a\x1eamps/rf_capabilities_grp.proto\x1a\x14amps/rf_status.proto\x1a\x11amps/rf_cfg.proto\x1a\x10amps/reset.proto\x1a\x11amps/events.proto\x1a\x11amps/sensor.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\x01\n" +
 	"\rGroupSelector\x12,\n" +
 	"\bgroup_id\x18\x01 \x01(\x0e2\x11.scte.amp.GroupIdR\agroupId\x12\x1f\n" +
 	"\vinstance_id\x18\x02 \x01(\rR\n" +
@@ -1297,10 +1225,11 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\tselectors\x18\x01 \x03(\v2\x17.scte.amp.GroupSelectorR\tselectors\x12+\n" +
 	"\x0fmax_packet_size\x18\x02 \x01(\r:\x03232R\rmaxPacketSize\x12Z\n" +
 	"\x18spectrum_capture_request\x18\n" +
-	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\"\xfa\x10\n" +
+	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\"\x9c\x10\n" +
 	"\x1aControllerGetGroupResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
-	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12O\n" +
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12B\n" +
+	"\x0flast_updated_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\rlastUpdatedAt\x12O\n" +
 	"\x13system_capabilities\x18\n" +
 	" \x01(\v2\x1c.scte.amp.SystemCapabilitiesH\x00R\x12systemCapabilities\x12_\n" +
 	"\x19power_supply_capabilities\x18\v \x01(\v2!.scte.amp.PowerSupplyCapabilitiesH\x00R\x17powerSupplyCapabilities\x12@\n" +
@@ -1312,59 +1241,56 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x13power_supply_status\x18\x11 \x01(\v2\x1b.scte.amp.PowerSupplyStatusH\x00R\x11powerSupplyStatus\x12J\n" +
 	"\x12output_rail_status\x18\x12 \x01(\v2\x1a.scte.amp.OutputRailStatusH\x00R\x10outputRailStatus\x127\n" +
 	"\n" +
-	"system_cfg\x18\x13 \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x123\n" +
-	"\blocation\x18\x14 \x01(\v2\x15.scte.common.LocationH\x00R\blocation\x12L\n" +
+	"system_cfg\x18\x14 \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12L\n" +
 	"\x12reset_capabilities\x18\x15 \x01(\v2\x1b.scte.amp.ResetCapabilitiesH\x00R\x11resetCapabilities\x12P\n" +
 	"\x14reset_history_status\x18\x16 \x01(\v2\x1c.scte.amp.ResetHistoryStatusH\x00R\x12resetHistoryStatus\x12'\n" +
 	"\x05reset\x18\x17 \x01(\v2\x0f.scte.amp.ResetH\x00R\x05reset\x12M\n" +
 	"\x13disable_auto_reboot\x18\x18 \x01(\v2\x1b.scte.amp.DisableAutoRebootH\x00R\x11disableAutoReboot\x12J\n" +
 	"\x12enable_auto_reboot\x18\x19 \x01(\v2\x1a.scte.amp.EnableAutoRebootH\x00R\x10enableAutoReboot\x12O\n" +
-	"\x12event_capabilities\x18\x1a \x01(\v2\x1e.scte.common.EventCapabilitiesH\x00R\x11eventCapabilities\x12=\n" +
-	"\fevent_status\x18\x1b \x01(\v2\x18.scte.common.EventStatusH\x00R\veventStatus\x124\n" +
-	"\tevent_log\x18\x1c \x01(\v2\x15.scte.common.EventLogH\x00R\beventLog\x12P\n" +
-	"\x13event_reporting_cfg\x18\x1d \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
-	"\x19telemetry_interval_config\x18\x1e \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x12N\n" +
-	"\x10spectrum_capture\x18\x1f \x01(\v2!.scte.amp.SpectrumCaptureResponseH\x00R\x0fspectrumCapture\x120\n" +
-	"\asensors\x18  \x01(\v2\x14.scte.common.SensorsH\x00R\asensors\x12O\n" +
-	"\x12sensor_descriptors\x18! \x01(\v2\x1e.scte.common.SensorDescriptorsH\x00R\x11sensorDescriptors\x12=\n" +
-	"\fsensors_data\x18\" \x01(\v2\x18.scte.common.SensorsDataH\x00R\vsensorsData\x12@\n" +
-	"\ractive_faults\x18# \x01(\v2\x19.scte.common.ActiveFaultsH\x00R\factiveFaults\x12C\n" +
-	"\x0frf_capabilities\x18$ \x01(\v2\x18.scte.amp.RfCapabilitiesH\x00R\x0erfCapabilities\x12?\n" +
-	"\x0frf_status_group\x18% \x01(\v2\x15.scte.amp.RfStatusGrpH\x00R\rrfStatusGroup\x128\n" +
-	"\rrf_config_grp\x18& \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrpB\t\n" +
+	"\x12event_capabilities\x18\x1a \x01(\v2\x1e.scte.common.EventCapabilitiesH\x00R\x11eventCapabilities\x12O\n" +
+	"\x12event_notification\x18\x1e \x01(\v2\x1e.scte.common.EventNotificationH\x00R\x11eventNotification\x12b\n" +
+	"\x19telemetry_interval_config\x18\x1f \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x12N\n" +
+	"\x10spectrum_capture\x18  \x01(\v2!.scte.amp.SpectrumCaptureResponseH\x00R\x0fspectrumCapture\x120\n" +
+	"\asensors\x18! \x01(\v2\x14.scte.common.SensorsH\x00R\asensors\x12O\n" +
+	"\x12sensor_descriptors\x18\" \x01(\v2\x1e.scte.common.SensorDescriptorsH\x00R\x11sensorDescriptors\x12=\n" +
+	"\fsensors_data\x18# \x01(\v2\x18.scte.common.SensorsDataH\x00R\vsensorsData\x12C\n" +
+	"\x0frf_capabilities\x18% \x01(\v2\x18.scte.amp.RfCapabilitiesH\x00R\x0erfCapabilities\x12?\n" +
+	"\x0frf_status_group\x18& \x01(\v2\x15.scte.amp.RfStatusGrpH\x00R\rrfStatusGroup\x128\n" +
+	"\rrf_config_grp\x18' \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12I\n" +
+	"\x11vendor_extensions\x18d \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorExtensionsB\t\n" +
 	"\apayload\"\xac\x01\n" +
 	"\x15ControllerGetResponse\x120\n" +
 	"\x06result\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\x06result\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12<\n" +
 	"\x06groups\x18\n" +
-	" \x03(\v2$.scte.amp.ControllerGetGroupResponseR\x06groups\"\xf0\x04\n" +
+	" \x03(\v2$.scte.amp.ControllerGetGroupResponseR\x06groups\"\x86\x05\n" +
 	"\x14ControllerSetRequest\x12+\n" +
 	"\x0fmax_packet_size\x18\x01 \x01(\r:\x03232R\rmaxPacketSize\x127\n" +
 	"\n" +
 	"system_cfg\x18\n" +
-	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x123\n" +
-	"\blocation\x18\v \x01(\v2\x15.scte.common.LocationH\x00R\blocation\x12'\n" +
+	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12'\n" +
 	"\x05reset\x18\f \x01(\v2\x0f.scte.amp.ResetH\x00R\x05reset\x12M\n" +
 	"\x13disable_auto_reboot\x18\r \x01(\v2\x1b.scte.amp.DisableAutoRebootH\x00R\x11disableAutoReboot\x12J\n" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1a.scte.amp.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
-	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrpB\t\n" +
-	"\apayload\"\xa0\x05\n" +
+	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12I\n" +
+	"\x11vendor_extensions\x18d \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorExtensionsB\t\n" +
+	"\apayload\"\xb6\x05\n" +
 	"\x15ControllerSetResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x127\n" +
 	"\n" +
 	"system_cfg\x18\n" +
-	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x123\n" +
-	"\blocation\x18\v \x01(\v2\x15.scte.common.LocationH\x00R\blocation\x12'\n" +
+	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12'\n" +
 	"\x05reset\x18\f \x01(\v2\x0f.scte.amp.ResetH\x00R\x05reset\x12M\n" +
 	"\x13disable_auto_reboot\x18\r \x01(\v2\x1b.scte.amp.DisableAutoRebootH\x00R\x11disableAutoReboot\x12J\n" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1a.scte.amp.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
-	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrpB\t\n" +
-	"\apayload*\xea\x04\n" +
+	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12I\n" +
+	"\x11vendor_extensions\x18d \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorExtensionsB\t\n" +
+	"\apayload*\xb9\x04\n" +
 	"\aGroupId\x12\x17\n" +
 	"\x13SYSTEM_CAPABILITIES\x10\x01\x12\x1d\n" +
 	"\x19POWER_SUPPLY_CAPABILITIES\x10\x02\x12\x11\n" +
@@ -1379,26 +1305,23 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x12OUTPUT_RAIL_STATUS\x10\n" +
 	"\x12\x0e\n" +
 	"\n" +
-	"SYSTEM_CFG\x10\v\x12\f\n" +
-	"\bLOCATION\x10\f\x12\x16\n" +
+	"SYSTEM_CFG\x10\v\x12\x16\n" +
 	"\x12RESET_CAPABILITIES\x10\x14\x12\x18\n" +
 	"\x14RESET_HISTORY_STATUS\x10\x15\x12\t\n" +
 	"\x05RESET\x10\x16\x12\x17\n" +
 	"\x13DISABLE_AUTO_REBOOT\x10\x17\x12\x16\n" +
 	"\x12ENABLE_AUTO_REBOOT\x10\x18\x12\x16\n" +
-	"\x12EVENT_CAPABILITIES\x10\x1e\x12\x10\n" +
-	"\fEVENT_STATUS\x10\x1f\x12\r\n" +
-	"\tEVENT_LOG\x10 \x12\x17\n" +
-	"\x13EVENT_REPORTING_CFG\x10!\x12\x15\n" +
+	"\x12EVENT_CAPABILITIES\x10\x1e\x12\x16\n" +
+	"\x12EVENT_NOTIFICATION\x10\x1f\x12\x15\n" +
 	"\x11SENSOR_DESCRIPTOR\x10(\x12\x12\n" +
 	"\x0eSENSOR_READING\x10)\x12\x1a\n" +
-	"\x16TELEMETRY_INTERVAL_CFG\x10*\x12\x16\n" +
-	"\x12ACTIVE_FAULTS_READ\x102\x12\x14\n" +
+	"\x16TELEMETRY_INTERVAL_CFG\x10*\x12\x14\n" +
 	"\x10SPECTRUM_CAPTURE\x10<\x12\x13\n" +
 	"\x0fRF_CAPABILITIES\x10=\x12\r\n" +
 	"\tRF_STATUS\x10>\x12\x0e\n" +
 	"\n" +
-	"RF_CFG_GRP\x10?B,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"RF_CFG_GRP\x10?\x12\x15\n" +
+	"\x11VENDOR_EXTENSIONS\x10dB,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_controller_proto_rawDescOnce sync.Once
@@ -1424,94 +1347,91 @@ var file_amps_controller_proto_goTypes = []any{
 	(*ControllerSetResponse)(nil),             // 6: scte.amp.ControllerSetResponse
 	(*SpectrumCaptureRequest)(nil),            // 7: scte.amp.SpectrumCaptureRequest
 	(common_go.ErrorTagE)(0),                  // 8: scte.common.error_tag_e
-	(*SystemCapabilities)(nil),                // 9: scte.amp.SystemCapabilities
-	(*PowerSupplyCapabilities)(nil),           // 10: scte.amp.PowerSupplyCapabilities
-	(*common_go.SystemStatus)(nil),            // 11: scte.common.SystemStatus
-	(*common_go.Identification)(nil),          // 12: scte.common.Identification
-	(*common_go.Vendor)(nil),                  // 13: scte.common.Vendor
-	(*common_go.VersionSummary)(nil),          // 14: scte.common.VersionSummary
-	(*EnclosureStatus)(nil),                   // 15: scte.amp.EnclosureStatus
-	(*PowerSupplyStatus)(nil),                 // 16: scte.amp.PowerSupplyStatus
-	(*OutputRailStatus)(nil),                  // 17: scte.amp.OutputRailStatus
-	(*common_go.SystemCfg)(nil),               // 18: scte.common.SystemCfg
-	(*common_go.Location)(nil),                // 19: scte.common.Location
+	(*timestamppb.Timestamp)(nil),             // 9: google.protobuf.Timestamp
+	(*SystemCapabilities)(nil),                // 10: scte.amp.SystemCapabilities
+	(*PowerSupplyCapabilities)(nil),           // 11: scte.amp.PowerSupplyCapabilities
+	(*common_go.SystemStatus)(nil),            // 12: scte.common.SystemStatus
+	(*common_go.Identification)(nil),          // 13: scte.common.Identification
+	(*common_go.Vendor)(nil),                  // 14: scte.common.Vendor
+	(*common_go.VersionSummary)(nil),          // 15: scte.common.VersionSummary
+	(*EnclosureStatus)(nil),                   // 16: scte.amp.EnclosureStatus
+	(*PowerSupplyStatus)(nil),                 // 17: scte.amp.PowerSupplyStatus
+	(*OutputRailStatus)(nil),                  // 18: scte.amp.OutputRailStatus
+	(*common_go.SystemCfg)(nil),               // 19: scte.common.SystemCfg
 	(*ResetCapabilities)(nil),                 // 20: scte.amp.ResetCapabilities
 	(*ResetHistoryStatus)(nil),                // 21: scte.amp.ResetHistoryStatus
 	(*Reset)(nil),                             // 22: scte.amp.Reset
 	(*DisableAutoReboot)(nil),                 // 23: scte.amp.DisableAutoReboot
 	(*EnableAutoReboot)(nil),                  // 24: scte.amp.EnableAutoReboot
 	(*common_go.EventCapabilities)(nil),       // 25: scte.common.EventCapabilities
-	(*common_go.EventStatus)(nil),             // 26: scte.common.EventStatus
-	(*common_go.EventLog)(nil),                // 27: scte.common.EventLog
-	(*common_go.EventReportingCfg)(nil),       // 28: scte.common.EventReportingCfg
-	(*common_go.TelemetryIntervalConfig)(nil), // 29: scte.common.TelemetryIntervalConfig
-	(*SpectrumCaptureResponse)(nil),           // 30: scte.amp.SpectrumCaptureResponse
-	(*common_go.Sensors)(nil),                 // 31: scte.common.Sensors
-	(*common_go.SensorDescriptors)(nil),       // 32: scte.common.SensorDescriptors
-	(*common_go.SensorsData)(nil),             // 33: scte.common.SensorsData
-	(*common_go.ActiveFaults)(nil),            // 34: scte.common.ActiveFaults
-	(*RfCapabilities)(nil),                    // 35: scte.amp.RfCapabilities
-	(*RfStatusGrp)(nil),                       // 36: scte.amp.RfStatusGrp
-	(*RfCfgGrp)(nil),                          // 37: scte.amp.RfCfgGrp
+	(*common_go.EventNotification)(nil),       // 26: scte.common.EventNotification
+	(*common_go.TelemetryIntervalConfig)(nil), // 27: scte.common.TelemetryIntervalConfig
+	(*SpectrumCaptureResponse)(nil),           // 28: scte.amp.SpectrumCaptureResponse
+	(*common_go.Sensors)(nil),                 // 29: scte.common.Sensors
+	(*common_go.SensorDescriptors)(nil),       // 30: scte.common.SensorDescriptors
+	(*common_go.SensorsData)(nil),             // 31: scte.common.SensorsData
+	(*RfCapabilities)(nil),                    // 32: scte.amp.RfCapabilities
+	(*RfStatusGrp)(nil),                       // 33: scte.amp.RfStatusGrp
+	(*RfCfgGrp)(nil),                          // 34: scte.amp.RfCfgGrp
+	(*common_go.VendorExtension)(nil),         // 35: scte.common.VendorExtension
+	(*common_go.EventReportingCfg)(nil),       // 36: scte.common.EventReportingCfg
 }
 var file_amps_controller_proto_depIdxs = []int32{
 	0,  // 0: scte.amp.GroupSelector.group_id:type_name -> scte.amp.GroupId
 	1,  // 1: scte.amp.ControllerGetRequest.selectors:type_name -> scte.amp.GroupSelector
 	7,  // 2: scte.amp.ControllerGetRequest.spectrum_capture_request:type_name -> scte.amp.SpectrumCaptureRequest
 	8,  // 3: scte.amp.ControllerGetGroupResponse.error_tag:type_name -> scte.common.error_tag_e
-	9,  // 4: scte.amp.ControllerGetGroupResponse.system_capabilities:type_name -> scte.amp.SystemCapabilities
-	10, // 5: scte.amp.ControllerGetGroupResponse.power_supply_capabilities:type_name -> scte.amp.PowerSupplyCapabilities
-	11, // 6: scte.amp.ControllerGetGroupResponse.system_status:type_name -> scte.common.SystemStatus
-	12, // 7: scte.amp.ControllerGetGroupResponse.identification:type_name -> scte.common.Identification
-	13, // 8: scte.amp.ControllerGetGroupResponse.vendor:type_name -> scte.common.Vendor
-	14, // 9: scte.amp.ControllerGetGroupResponse.version_summary:type_name -> scte.common.VersionSummary
-	15, // 10: scte.amp.ControllerGetGroupResponse.enclosure_status:type_name -> scte.amp.EnclosureStatus
-	16, // 11: scte.amp.ControllerGetGroupResponse.power_supply_status:type_name -> scte.amp.PowerSupplyStatus
-	17, // 12: scte.amp.ControllerGetGroupResponse.output_rail_status:type_name -> scte.amp.OutputRailStatus
-	18, // 13: scte.amp.ControllerGetGroupResponse.system_cfg:type_name -> scte.common.SystemCfg
-	19, // 14: scte.amp.ControllerGetGroupResponse.location:type_name -> scte.common.Location
+	9,  // 4: scte.amp.ControllerGetGroupResponse.last_updated_at:type_name -> google.protobuf.Timestamp
+	10, // 5: scte.amp.ControllerGetGroupResponse.system_capabilities:type_name -> scte.amp.SystemCapabilities
+	11, // 6: scte.amp.ControllerGetGroupResponse.power_supply_capabilities:type_name -> scte.amp.PowerSupplyCapabilities
+	12, // 7: scte.amp.ControllerGetGroupResponse.system_status:type_name -> scte.common.SystemStatus
+	13, // 8: scte.amp.ControllerGetGroupResponse.identification:type_name -> scte.common.Identification
+	14, // 9: scte.amp.ControllerGetGroupResponse.vendor:type_name -> scte.common.Vendor
+	15, // 10: scte.amp.ControllerGetGroupResponse.version_summary:type_name -> scte.common.VersionSummary
+	16, // 11: scte.amp.ControllerGetGroupResponse.enclosure_status:type_name -> scte.amp.EnclosureStatus
+	17, // 12: scte.amp.ControllerGetGroupResponse.power_supply_status:type_name -> scte.amp.PowerSupplyStatus
+	18, // 13: scte.amp.ControllerGetGroupResponse.output_rail_status:type_name -> scte.amp.OutputRailStatus
+	19, // 14: scte.amp.ControllerGetGroupResponse.system_cfg:type_name -> scte.common.SystemCfg
 	20, // 15: scte.amp.ControllerGetGroupResponse.reset_capabilities:type_name -> scte.amp.ResetCapabilities
 	21, // 16: scte.amp.ControllerGetGroupResponse.reset_history_status:type_name -> scte.amp.ResetHistoryStatus
 	22, // 17: scte.amp.ControllerGetGroupResponse.reset:type_name -> scte.amp.Reset
 	23, // 18: scte.amp.ControllerGetGroupResponse.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
 	24, // 19: scte.amp.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
 	25, // 20: scte.amp.ControllerGetGroupResponse.event_capabilities:type_name -> scte.common.EventCapabilities
-	26, // 21: scte.amp.ControllerGetGroupResponse.event_status:type_name -> scte.common.EventStatus
-	27, // 22: scte.amp.ControllerGetGroupResponse.event_log:type_name -> scte.common.EventLog
-	28, // 23: scte.amp.ControllerGetGroupResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	29, // 24: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	30, // 25: scte.amp.ControllerGetGroupResponse.spectrum_capture:type_name -> scte.amp.SpectrumCaptureResponse
-	31, // 26: scte.amp.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
-	32, // 27: scte.amp.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
-	33, // 28: scte.amp.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
-	34, // 29: scte.amp.ControllerGetGroupResponse.active_faults:type_name -> scte.common.ActiveFaults
-	35, // 30: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
-	36, // 31: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
-	37, // 32: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	8,  // 33: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
-	3,  // 34: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
-	18, // 35: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
-	19, // 36: scte.amp.ControllerSetRequest.location:type_name -> scte.common.Location
-	22, // 37: scte.amp.ControllerSetRequest.reset:type_name -> scte.amp.Reset
-	23, // 38: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
-	24, // 39: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
-	28, // 40: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	29, // 41: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	37, // 42: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	8,  // 43: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
-	18, // 44: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
-	19, // 45: scte.amp.ControllerSetResponse.location:type_name -> scte.common.Location
-	22, // 46: scte.amp.ControllerSetResponse.reset:type_name -> scte.amp.Reset
-	23, // 47: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
-	24, // 48: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
-	28, // 49: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	29, // 50: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	37, // 51: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	52, // [52:52] is the sub-list for method output_type
-	52, // [52:52] is the sub-list for method input_type
-	52, // [52:52] is the sub-list for extension type_name
-	52, // [52:52] is the sub-list for extension extendee
-	0,  // [0:52] is the sub-list for field type_name
+	26, // 21: scte.amp.ControllerGetGroupResponse.event_notification:type_name -> scte.common.EventNotification
+	27, // 22: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	28, // 23: scte.amp.ControllerGetGroupResponse.spectrum_capture:type_name -> scte.amp.SpectrumCaptureResponse
+	29, // 24: scte.amp.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
+	30, // 25: scte.amp.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
+	31, // 26: scte.amp.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
+	32, // 27: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
+	33, // 28: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
+	34, // 29: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	35, // 30: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtension
+	8,  // 31: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
+	3,  // 32: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
+	19, // 33: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
+	22, // 34: scte.amp.ControllerSetRequest.reset:type_name -> scte.amp.Reset
+	23, // 35: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
+	24, // 36: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
+	36, // 37: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	27, // 38: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	34, // 39: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	35, // 40: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtension
+	8,  // 41: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
+	19, // 42: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
+	22, // 43: scte.amp.ControllerSetResponse.reset:type_name -> scte.amp.Reset
+	23, // 44: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
+	24, // 45: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
+	36, // 46: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	27, // 47: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	34, // 48: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	35, // 49: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtension
+	50, // [50:50] is the sub-list for method output_type
+	50, // [50:50] is the sub-list for method input_type
+	50, // [50:50] is the sub-list for extension type_name
+	50, // [50:50] is the sub-list for extension extendee
+	0,  // [0:50] is the sub-list for field type_name
 }
 
 func init() { file_amps_controller_proto_init() }
@@ -1538,29 +1458,24 @@ func file_amps_controller_proto_init() {
 		(*ControllerGetGroupResponse_PowerSupplyStatus)(nil),
 		(*ControllerGetGroupResponse_OutputRailStatus)(nil),
 		(*ControllerGetGroupResponse_SystemCfg)(nil),
-		(*ControllerGetGroupResponse_Location)(nil),
 		(*ControllerGetGroupResponse_ResetCapabilities)(nil),
 		(*ControllerGetGroupResponse_ResetHistoryStatus)(nil),
 		(*ControllerGetGroupResponse_Reset_)(nil),
 		(*ControllerGetGroupResponse_DisableAutoReboot)(nil),
 		(*ControllerGetGroupResponse_EnableAutoReboot)(nil),
 		(*ControllerGetGroupResponse_EventCapabilities)(nil),
-		(*ControllerGetGroupResponse_EventStatus)(nil),
-		(*ControllerGetGroupResponse_EventLog)(nil),
-		(*ControllerGetGroupResponse_EventReportingCfg)(nil),
+		(*ControllerGetGroupResponse_EventNotification)(nil),
 		(*ControllerGetGroupResponse_TelemetryIntervalConfig)(nil),
 		(*ControllerGetGroupResponse_SpectrumCapture)(nil),
 		(*ControllerGetGroupResponse_Sensors)(nil),
 		(*ControllerGetGroupResponse_SensorDescriptors)(nil),
 		(*ControllerGetGroupResponse_SensorsData)(nil),
-		(*ControllerGetGroupResponse_ActiveFaults)(nil),
 		(*ControllerGetGroupResponse_RfCapabilities)(nil),
 		(*ControllerGetGroupResponse_RfStatusGroup)(nil),
 		(*ControllerGetGroupResponse_RfConfigGrp)(nil),
 	}
 	file_amps_controller_proto_msgTypes[4].OneofWrappers = []any{
 		(*ControllerSetRequest_SystemCfg)(nil),
-		(*ControllerSetRequest_Location)(nil),
 		(*ControllerSetRequest_Reset_)(nil),
 		(*ControllerSetRequest_DisableAutoReboot)(nil),
 		(*ControllerSetRequest_EnableAutoReboot)(nil),
@@ -1570,7 +1485,6 @@ func file_amps_controller_proto_init() {
 	}
 	file_amps_controller_proto_msgTypes[5].OneofWrappers = []any{
 		(*ControllerSetResponse_SystemCfg)(nil),
-		(*ControllerSetResponse_Location)(nil),
 		(*ControllerSetResponse_Reset_)(nil),
 		(*ControllerSetResponse_DisableAutoReboot)(nil),
 		(*ControllerSetResponse_EnableAutoReboot)(nil),

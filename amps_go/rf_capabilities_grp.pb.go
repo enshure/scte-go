@@ -1045,7 +1045,7 @@ type RfCapabilities struct {
 	NumDiplexFilters          *uint32                           `protobuf:"varint,3,opt,name=num_diplex_filters,json=numDiplexFilters" json:"num_diplex_filters,omitempty"`
 	SupportsRfSpectrumCapture *RfSpectrumCaptureTypeE           `protobuf:"varint,4,opt,name=supports_rf_spectrum_capture,json=supportsRfSpectrumCapture,enum=scte.amp.RfSpectrumCaptureTypeE" json:"supports_rf_spectrum_capture,omitempty"`
 	RfPortCapabilities        []*RfPortCapabilities             `protobuf:"bytes,9,rep,name=rf_port_capabilities,json=rfPortCapabilities" json:"rf_port_capabilities,omitempty"`
-	VendorRfCapabilities      []*common_go.VendorSpecificEntry  `protobuf:"bytes,99,rep,name=vendor_rf_capabilities,json=vendorRfCapabilities" json:"vendor_rf_capabilities,omitempty"`
+	VendorRfCapabilities      []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_capabilities,json=vendorRfCapabilities" json:"vendor_rf_capabilities,omitempty"`
 	Page                      *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`
 	unknownFields             protoimpl.UnknownFields
 	sizeCache                 protoimpl.SizeCache
@@ -1116,7 +1116,7 @@ func (x *RfCapabilities) GetRfPortCapabilities() []*RfPortCapabilities {
 	return nil
 }
 
-func (x *RfCapabilities) GetVendorRfCapabilities() []*common_go.VendorSpecificEntry {
+func (x *RfCapabilities) GetVendorRfCapabilities() []*common_go.VendorExtension {
 	if x != nil {
 		return x.VendorRfCapabilities
 	}
@@ -1186,15 +1186,15 @@ const file_amps_rf_capabilities_grp_proto_rawDesc = "" +
 	"\x05index\x18\x01 \x01(\x0e2\x19.scte.amp.rf_port_index_eR\x05index\x12d\n" +
 	"\x1cds_logical_port_capabilities\x18\x02 \x01(\v2#.scte.amp.DsLogicalPortCapabilitiesR\x19dsLogicalPortCapabilities\x12d\n" +
 	"\x1cus_logical_port_capabilities\x18\x03 \x01(\v2#.scte.amp.UsLogicalPortCapabilitiesR\x19usLogicalPortCapabilities\x12m\n" +
-	"\x1fbidir_logical_port_capabilities\x18\x04 \x01(\v2&.scte.amp.BiDirLogicalPortCapabilitiesR\x1cbidirLogicalPortCapabilities\"\xe4\x03\n" +
+	"\x1fbidir_logical_port_capabilities\x18\x04 \x01(\v2&.scte.amp.BiDirLogicalPortCapabilitiesR\x1cbidirLogicalPortCapabilities\"\xe0\x03\n" +
 	"\x0eRfCapabilities\x12 \n" +
 	"\fnum_rf_ports\x18\x01 \x01(\rR\n" +
 	"numRfPorts\x12:\n" +
 	"\x19supports_universal_plugin\x18\x02 \x01(\bR\x17supportsUniversalPlugin\x12,\n" +
 	"\x12num_diplex_filters\x18\x03 \x01(\rR\x10numDiplexFilters\x12e\n" +
 	"\x1csupports_rf_spectrum_capture\x18\x04 \x01(\x0e2$.scte.amp.rf_spectrum_capture_type_eR\x19supportsRfSpectrumCapture\x12N\n" +
-	"\x14rf_port_capabilities\x18\t \x03(\v2\x1c.scte.amp.RfPortCapabilitiesR\x12rfPortCapabilities\x12V\n" +
-	"\x16vendor_rf_capabilities\x18c \x03(\v2 .scte.common.VendorSpecificEntryR\x14vendorRfCapabilities\x127\n" +
+	"\x14rf_port_capabilities\x18\t \x03(\v2\x1c.scte.amp.RfPortCapabilitiesR\x12rfPortCapabilities\x12R\n" +
+	"\x16vendor_rf_capabilities\x18c \x03(\v2\x1c.scte.common.VendorExtensionR\x14vendorRfCapabilities\x127\n" +
 	"\x04page\x18d \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page*\xf7\x01\n" +
 	"\x1arf_spectrum_capture_type_e\x12\x12\n" +
 	"\x0ePORT1_UPSTREAM\x10\x01\x12\x14\n" +
@@ -1272,7 +1272,7 @@ var file_amps_rf_capabilities_grp_proto_goTypes = []any{
 	(*BiDirLogicalPortCapabilities)(nil),     // 11: scte.amp.BiDirLogicalPortCapabilities
 	(*RfPortCapabilities)(nil),               // 12: scte.amp.RfPortCapabilities
 	(*RfCapabilities)(nil),                   // 13: scte.amp.RfCapabilities
-	(*common_go.VendorSpecificEntry)(nil),    // 14: scte.common.VendorSpecificEntry
+	(*common_go.VendorExtension)(nil),        // 14: scte.common.VendorExtension
 	(*common_go.ResponsePaginationInfo)(nil), // 15: scte.common.ResponsePaginationInfo
 }
 var file_amps_rf_capabilities_grp_proto_depIdxs = []int32{
@@ -1287,7 +1287,7 @@ var file_amps_rf_capabilities_grp_proto_depIdxs = []int32{
 	11, // 8: scte.amp.RfPortCapabilities.bidir_logical_port_capabilities:type_name -> scte.amp.BiDirLogicalPortCapabilities
 	0,  // 9: scte.amp.RfCapabilities.supports_rf_spectrum_capture:type_name -> scte.amp.rf_spectrum_capture_type_e
 	12, // 10: scte.amp.RfCapabilities.rf_port_capabilities:type_name -> scte.amp.RfPortCapabilities
-	14, // 11: scte.amp.RfCapabilities.vendor_rf_capabilities:type_name -> scte.common.VendorSpecificEntry
+	14, // 11: scte.amp.RfCapabilities.vendor_rf_capabilities:type_name -> scte.common.VendorExtension
 	15, // 12: scte.amp.RfCapabilities.page:type_name -> scte.common.ResponsePaginationInfo
 	13, // [13:13] is the sub-list for method output_type
 	13, // [13:13] is the sub-list for method input_type

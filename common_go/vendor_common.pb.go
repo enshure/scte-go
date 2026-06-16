@@ -21,35 +21,92 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type VendorSpecificEntry struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	Id    *uint32                `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`    // defined by the vendor, for example aoi_vendor_rf_capability_id_e
-	Name  *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"` // Human-readable hint only; id is the contract, max length of 32 characters.
+type EntityPermissionE int32
+
+const (
+	EntityPermissionE_ENTITY_PERMISSION_READ  EntityPermissionE = 1
+	EntityPermissionE_ENTITY_PERMISSION_WRITE EntityPermissionE = 2
+)
+
+// Enum value maps for EntityPermissionE.
+var (
+	EntityPermissionE_name = map[int32]string{
+		1: "ENTITY_PERMISSION_READ",
+		2: "ENTITY_PERMISSION_WRITE",
+	}
+	EntityPermissionE_value = map[string]int32{
+		"ENTITY_PERMISSION_READ":  1,
+		"ENTITY_PERMISSION_WRITE": 2,
+	}
+)
+
+func (x EntityPermissionE) Enum() *EntityPermissionE {
+	p := new(EntityPermissionE)
+	*p = x
+	return p
+}
+
+func (x EntityPermissionE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EntityPermissionE) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_vendor_common_proto_enumTypes[0].Descriptor()
+}
+
+func (EntityPermissionE) Type() protoreflect.EnumType {
+	return &file_common_vendor_common_proto_enumTypes[0]
+}
+
+func (x EntityPermissionE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *EntityPermissionE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = EntityPermissionE(num)
+	return nil
+}
+
+// Deprecated: Use EntityPermissionE.Descriptor instead.
+func (EntityPermissionE) EnumDescriptor() ([]byte, []int) {
+	return file_common_vendor_common_proto_rawDescGZIP(), []int{0}
+}
+
+type VendorExtension struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          *uint32                `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`                                                      // defined by the vendor, for example aoi_vendor_extn_id_e
+	Name        *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`                                                   // Human-readable hint only; id is the contract, max length of 32 characters.
+	Permissions *EntityPermissionE     `protobuf:"varint,3,opt,name=permissions,enum=scte.common.EntityPermissionE" json:"permissions,omitempty"` // bitfield of entity_permission_e values indicating allowed operations on this entry
 	// Types that are valid to be assigned to Value:
 	//
-	//	*VendorSpecificEntry_BoolValue
-	//	*VendorSpecificEntry_UintValue
-	//	*VendorSpecificEntry_StringValue
-	//	*VendorSpecificEntry_BlobValue
-	Value         isVendorSpecificEntry_Value `protobuf_oneof:"value"`
+	//	*VendorExtension_BoolValue
+	//	*VendorExtension_UintValue
+	//	*VendorExtension_StringValue
+	//	*VendorExtension_BlobValue
+	Value         isVendorExtension_Value `protobuf_oneof:"value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VendorSpecificEntry) Reset() {
-	*x = VendorSpecificEntry{}
+func (x *VendorExtension) Reset() {
+	*x = VendorExtension{}
 	mi := &file_common_vendor_common_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VendorSpecificEntry) String() string {
+func (x *VendorExtension) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VendorSpecificEntry) ProtoMessage() {}
+func (*VendorExtension) ProtoMessage() {}
 
-func (x *VendorSpecificEntry) ProtoReflect() protoreflect.Message {
+func (x *VendorExtension) ProtoReflect() protoreflect.Message {
 	mi := &file_common_vendor_common_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -61,104 +118,112 @@ func (x *VendorSpecificEntry) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VendorSpecificEntry.ProtoReflect.Descriptor instead.
-func (*VendorSpecificEntry) Descriptor() ([]byte, []int) {
+// Deprecated: Use VendorExtension.ProtoReflect.Descriptor instead.
+func (*VendorExtension) Descriptor() ([]byte, []int) {
 	return file_common_vendor_common_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *VendorSpecificEntry) GetId() uint32 {
+func (x *VendorExtension) GetId() uint32 {
 	if x != nil && x.Id != nil {
 		return *x.Id
 	}
 	return 0
 }
 
-func (x *VendorSpecificEntry) GetName() string {
+func (x *VendorExtension) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
 	}
 	return ""
 }
 
-func (x *VendorSpecificEntry) GetValue() isVendorSpecificEntry_Value {
+func (x *VendorExtension) GetPermissions() EntityPermissionE {
+	if x != nil && x.Permissions != nil {
+		return *x.Permissions
+	}
+	return EntityPermissionE_ENTITY_PERMISSION_READ
+}
+
+func (x *VendorExtension) GetValue() isVendorExtension_Value {
 	if x != nil {
 		return x.Value
 	}
 	return nil
 }
 
-func (x *VendorSpecificEntry) GetBoolValue() bool {
+func (x *VendorExtension) GetBoolValue() bool {
 	if x != nil {
-		if x, ok := x.Value.(*VendorSpecificEntry_BoolValue); ok {
+		if x, ok := x.Value.(*VendorExtension_BoolValue); ok {
 			return x.BoolValue
 		}
 	}
 	return false
 }
 
-func (x *VendorSpecificEntry) GetUintValue() uint32 {
+func (x *VendorExtension) GetUintValue() uint32 {
 	if x != nil {
-		if x, ok := x.Value.(*VendorSpecificEntry_UintValue); ok {
+		if x, ok := x.Value.(*VendorExtension_UintValue); ok {
 			return x.UintValue
 		}
 	}
 	return 0
 }
 
-func (x *VendorSpecificEntry) GetStringValue() string {
+func (x *VendorExtension) GetStringValue() string {
 	if x != nil {
-		if x, ok := x.Value.(*VendorSpecificEntry_StringValue); ok {
+		if x, ok := x.Value.(*VendorExtension_StringValue); ok {
 			return x.StringValue
 		}
 	}
 	return ""
 }
 
-func (x *VendorSpecificEntry) GetBlobValue() []byte {
+func (x *VendorExtension) GetBlobValue() []byte {
 	if x != nil {
-		if x, ok := x.Value.(*VendorSpecificEntry_BlobValue); ok {
+		if x, ok := x.Value.(*VendorExtension_BlobValue); ok {
 			return x.BlobValue
 		}
 	}
 	return nil
 }
 
-type isVendorSpecificEntry_Value interface {
-	isVendorSpecificEntry_Value()
+type isVendorExtension_Value interface {
+	isVendorExtension_Value()
 }
 
-type VendorSpecificEntry_BoolValue struct {
+type VendorExtension_BoolValue struct {
 	BoolValue bool `protobuf:"varint,10,opt,name=bool_value,json=boolValue,oneof"`
 }
 
-type VendorSpecificEntry_UintValue struct {
+type VendorExtension_UintValue struct {
 	UintValue uint32 `protobuf:"varint,11,opt,name=uint_value,json=uintValue,oneof"`
 }
 
-type VendorSpecificEntry_StringValue struct {
+type VendorExtension_StringValue struct {
 	StringValue string `protobuf:"bytes,12,opt,name=string_value,json=stringValue,oneof"`
 }
 
-type VendorSpecificEntry_BlobValue struct {
+type VendorExtension_BlobValue struct {
 	BlobValue []byte `protobuf:"bytes,13,opt,name=blob_value,json=blobValue,oneof"`
 }
 
-func (*VendorSpecificEntry_BoolValue) isVendorSpecificEntry_Value() {}
+func (*VendorExtension_BoolValue) isVendorExtension_Value() {}
 
-func (*VendorSpecificEntry_UintValue) isVendorSpecificEntry_Value() {}
+func (*VendorExtension_UintValue) isVendorExtension_Value() {}
 
-func (*VendorSpecificEntry_StringValue) isVendorSpecificEntry_Value() {}
+func (*VendorExtension_StringValue) isVendorExtension_Value() {}
 
-func (*VendorSpecificEntry_BlobValue) isVendorSpecificEntry_Value() {}
+func (*VendorExtension_BlobValue) isVendorExtension_Value() {}
 
 var File_common_vendor_common_proto protoreflect.FileDescriptor
 
 const file_common_vendor_common_proto_rawDesc = "" +
 	"\n" +
-	"\x1acommon/vendor_common.proto\x12\vscte.common\"\xca\x01\n" +
-	"\x13VendorSpecificEntry\x12\x0e\n" +
+	"\x1acommon/vendor_common.proto\x12\vscte.common\"\x8a\x02\n" +
+	"\x0fVendorExtension\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12B\n" +
+	"\vpermissions\x18\x03 \x01(\x0e2 .scte.common.entity_permission_eR\vpermissions\x12\x1f\n" +
 	"\n" +
 	"bool_value\x18\n" +
 	" \x01(\bH\x00R\tboolValue\x12\x1f\n" +
@@ -167,7 +232,10 @@ const file_common_vendor_common_proto_rawDesc = "" +
 	"\fstring_value\x18\f \x01(\tH\x00R\vstringValue\x12\x1f\n" +
 	"\n" +
 	"blob_value\x18\r \x01(\fH\x00R\tblobValueB\a\n" +
-	"\x05valueB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x05value*N\n" +
+	"\x13entity_permission_e\x12\x1a\n" +
+	"\x16ENTITY_PERMISSION_READ\x10\x01\x12\x1b\n" +
+	"\x17ENTITY_PERMISSION_WRITE\x10\x02B1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_vendor_common_proto_rawDescOnce sync.Once
@@ -181,16 +249,19 @@ func file_common_vendor_common_proto_rawDescGZIP() []byte {
 	return file_common_vendor_common_proto_rawDescData
 }
 
+var file_common_vendor_common_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_common_vendor_common_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_common_vendor_common_proto_goTypes = []any{
-	(*VendorSpecificEntry)(nil), // 0: scte.common.VendorSpecificEntry
+	(EntityPermissionE)(0),  // 0: scte.common.entity_permission_e
+	(*VendorExtension)(nil), // 1: scte.common.VendorExtension
 }
 var file_common_vendor_common_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: scte.common.VendorExtension.permissions:type_name -> scte.common.entity_permission_e
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_common_vendor_common_proto_init() }
@@ -199,23 +270,24 @@ func file_common_vendor_common_proto_init() {
 		return
 	}
 	file_common_vendor_common_proto_msgTypes[0].OneofWrappers = []any{
-		(*VendorSpecificEntry_BoolValue)(nil),
-		(*VendorSpecificEntry_UintValue)(nil),
-		(*VendorSpecificEntry_StringValue)(nil),
-		(*VendorSpecificEntry_BlobValue)(nil),
+		(*VendorExtension_BoolValue)(nil),
+		(*VendorExtension_UintValue)(nil),
+		(*VendorExtension_StringValue)(nil),
+		(*VendorExtension_BlobValue)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_vendor_common_proto_rawDesc), len(file_common_vendor_common_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_common_vendor_common_proto_goTypes,
 		DependencyIndexes: file_common_vendor_common_proto_depIdxs,
+		EnumInfos:         file_common_vendor_common_proto_enumTypes,
 		MessageInfos:      file_common_vendor_common_proto_msgTypes,
 	}.Build()
 	File_common_vendor_common_proto = out.File

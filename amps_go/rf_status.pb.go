@@ -658,7 +658,7 @@ type RfStatusGrp struct {
 	UniversalPlugginPresent *bool                             `protobuf:"varint,1,opt,name=universal_pluggin_present,json=universalPlugginPresent" json:"universal_pluggin_present,omitempty"`
 	UniversalPlugginDesc    *string                           `protobuf:"bytes,2,opt,name=universal_pluggin_desc,json=universalPlugginDesc" json:"universal_pluggin_desc,omitempty"`
 	PortStatuses            []*RfPortStatus                   `protobuf:"bytes,3,rep,name=port_statuses,json=portStatuses" json:"port_statuses,omitempty"`
-	VendorRfStatuses        []*common_go.VendorSpecificEntry  `protobuf:"bytes,99,rep,name=vendor_rf_statuses,json=vendorRfStatuses" json:"vendor_rf_statuses,omitempty"`
+	VendorRfStatuses        []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_statuses,json=vendorRfStatuses" json:"vendor_rf_statuses,omitempty"`
 	Page                    *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
@@ -715,7 +715,7 @@ func (x *RfStatusGrp) GetPortStatuses() []*RfPortStatus {
 	return nil
 }
 
-func (x *RfStatusGrp) GetVendorRfStatuses() []*common_go.VendorSpecificEntry {
+func (x *RfStatusGrp) GetVendorRfStatuses() []*common_go.VendorExtension {
 	if x != nil {
 		return x.VendorRfStatuses
 	}
@@ -779,12 +779,12 @@ const file_amps_rf_status_proto_rawDesc = "" +
 	"operStatus\x12>\n" +
 	"\vport_status\x18\x03 \x01(\v2\x1d.scte.amp.UsLogicalPortStatusR\n" +
 	"portStatus\x12L\n" +
-	"\x11bidir_port_status\x18\x04 \x01(\v2 .scte.amp.BiDirLogicalPortStatusR\x0fbidirPortStatus\"\xc5\x02\n" +
+	"\x11bidir_port_status\x18\x04 \x01(\v2 .scte.amp.BiDirLogicalPortStatusR\x0fbidirPortStatus\"\xc1\x02\n" +
 	"\vRfStatusGrp\x12:\n" +
 	"\x19universal_pluggin_present\x18\x01 \x01(\bR\x17universalPlugginPresent\x124\n" +
 	"\x16universal_pluggin_desc\x18\x02 \x01(\tR\x14universalPlugginDesc\x12;\n" +
-	"\rport_statuses\x18\x03 \x03(\v2\x16.scte.amp.RfPortStatusR\fportStatuses\x12N\n" +
-	"\x12vendor_rf_statuses\x18c \x03(\v2 .scte.common.VendorSpecificEntryR\x10vendorRfStatuses\x127\n" +
+	"\rport_statuses\x18\x03 \x03(\v2\x16.scte.amp.RfPortStatusR\fportStatuses\x12J\n" +
+	"\x12vendor_rf_statuses\x18c \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorRfStatuses\x127\n" +
 	"\x04page\x18d \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page*\x9c\x01\n" +
 	"\x13rf_control_method_e\x12\x1b\n" +
 	"\x17RF_CONTROL_METHOD_OTHER\x10\x01\x12\x1d\n" +
@@ -826,7 +826,7 @@ var file_amps_rf_status_proto_goTypes = []any{
 	(*RfStatusGrp)(nil),                      // 10: scte.amp.RfStatusGrp
 	(common_go.OperStatusE)(0),               // 11: scte.common.oper_status_e
 	(*common_go.ResponsePaginationInfo)(nil), // 12: scte.common.ResponsePaginationInfo
-	(*common_go.VendorSpecificEntry)(nil),    // 13: scte.common.VendorSpecificEntry
+	(*common_go.VendorExtension)(nil),        // 13: scte.common.VendorExtension
 }
 var file_amps_rf_status_proto_depIdxs = []int32{
 	11, // 0: scte.amp.LogicalPortStatus.oper_status:type_name -> scte.common.oper_status_e
@@ -844,7 +844,7 @@ var file_amps_rf_status_proto_depIdxs = []int32{
 	6,  // 12: scte.amp.RfPortStatus.port_status:type_name -> scte.amp.UsLogicalPortStatus
 	7,  // 13: scte.amp.RfPortStatus.bidir_port_status:type_name -> scte.amp.BiDirLogicalPortStatus
 	9,  // 14: scte.amp.RfStatusGrp.port_statuses:type_name -> scte.amp.RfPortStatus
-	13, // 15: scte.amp.RfStatusGrp.vendor_rf_statuses:type_name -> scte.common.VendorSpecificEntry
+	13, // 15: scte.amp.RfStatusGrp.vendor_rf_statuses:type_name -> scte.common.VendorExtension
 	12, // 16: scte.amp.RfStatusGrp.page:type_name -> scte.common.ResponsePaginationInfo
 	17, // [17:17] is the sub-list for method output_type
 	17, // [17:17] is the sub-list for method input_type

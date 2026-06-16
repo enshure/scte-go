@@ -39,18 +39,19 @@ var EventPriorityE_value = common_go.EventPriorityE_value
 
 type EventTransitionE = common_go.EventTransitionE
 
-const EventTransitionE_ASSERTED = common_go.EventTransitionE_ASSERTED
-const EventTransitionE_CLEARED = common_go.EventTransitionE_CLEARED
+const EventTransitionE_EVENT_TRANSITION_ASSERT = common_go.EventTransitionE_EVENT_TRANSITION_ASSERT
+const EventTransitionE_EVENT_TRANSITION_CLEAR = common_go.EventTransitionE_EVENT_TRANSITION_CLEAR
+const EventTransitionE_EVENT_TRANSITION_NOTIFICATION_ONLY = common_go.EventTransitionE_EVENT_TRANSITION_NOTIFICATION_ONLY
 
 var EventTransitionE_name = common_go.EventTransitionE_name
 var EventTransitionE_value = common_go.EventTransitionE_value
 
+type EventDefinition = common_go.EventDefinition
 type EventCapabilities = common_go.EventCapabilities
 type EventStatus = common_go.EventStatus
 type Event = common_go.Event
 type EventLog = common_go.EventLog
-type ActiveFault = common_go.ActiveFault
-type ActiveFaults = common_go.ActiveFaults
+type EventNotification = common_go.EventNotification
 type EventThrottleCfg = common_go.EventThrottleCfg
 
 const Default_EventThrottleCfg_Write = common_go.Default_EventThrottleCfg_Write
@@ -59,14 +60,6 @@ type EventReportingCfg = common_go.EventReportingCfg
 
 const Default_EventReportingCfg_Reporting = common_go.Default_EventReportingCfg_Reporting
 const Default_EventReportingCfg_Write = common_go.Default_EventReportingCfg_Write
-
-type Syslog = common_go.Syslog
-type EventSyslogStatus = common_go.EventSyslogStatus
-type SyslogServerCfg = common_go.SyslogServerCfg
-
-const Default_SyslogServerCfg_Write = common_go.Default_SyslogServerCfg_Write
-
-type ResetEventLog = common_go.ResetEventLog
 
 var File_xponder_events_proto protoreflect.FileDescriptor
 

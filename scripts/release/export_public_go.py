@@ -6,6 +6,7 @@ import argparse
 import contextlib
 import importlib.util
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -14,6 +15,7 @@ from pathlib import Path
 DEFAULT_PUBLIC_MODULE_PREFIX = "github.com/enshure/scte-go"
 MODULE_DIRS = ("common_go", "amps_go", "xponder_go")
 REPO_ROOT = Path(__file__).resolve().parents[2]
+GENERATOR_PATH = Path(__file__).with_name("go_protobuf_release.py")
 
 
 README = """# scte-go
@@ -21,8 +23,7 @@ README = """# scte-go
 Generated Go protobuf bindings for Enshure SCTE APIs.
 
 This repository intentionally publishes only generated Go packages. The source
-protobuf files and internal generation tooling are maintained separately in
-`scte-apis`.
+protobuf files are maintained separately in `scte-apis`.
 
 ## Generate
 
@@ -105,18 +106,14 @@ def pushd(path: Path):
         os.chdir(previous)
 
 
-def load_generator(api_repo: Path, public_module_prefix: str):
-    generator_path = api_repo / "scripts" / "release" / "go_protobuf_release.py"
-    if not generator_path.exists():
-        fail(f"Failed to find SCTE API generator: {generator_path}")
-
+def load_generator(source_workspace: Path, public_module_prefix: str):
     os.environ["GO_MODULE_PREFIX"] = public_module_prefix
-    spec = importlib.util.spec_from_file_location("go_protobuf_release_public", generator_path)
+    spec = importlib.util.spec_from_file_location("go_protobuf_release_public", GENERATOR_PATH)
     if spec is None or spec.loader is None:
-        fail(f"Failed to load {generator_path}")
+        fail(f"Failed to load {GENERATOR_PATH}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
-    with pushd(api_repo):
+    with pushd(source_workspace):
         spec.loader.exec_module(module)
     return module
 
@@ -125,10 +122,25 @@ def normalized_version(version: str) -> str:
     return version if version.startswith("v") else f"v{version}"
 
 
+def prepare_source_workspace(dest_root: Path, api_repo: Path) -> Path:
+    workspace = dest_root / ".cache" / "export-public-go"
+    if workspace.exists():
+        shutil.rmtree(workspace)
+    workspace.mkdir(parents=True, exist_ok=True)
+
+    proto_link = workspace / "proto"
+    try:
+        proto_link.symlink_to(api_repo / "proto", target_is_directory=True)
+    except OSError:
+        shutil.copytree(api_repo / "proto", proto_link)
+    return workspace
+
+
 def generate_public_modules(dest_root: Path, api_repo: Path, public_module_prefix: str, version: str) -> None:
-    generator = load_generator(api_repo, public_module_prefix)
+    source_workspace = prepare_source_workspace(dest_root, api_repo)
+    generator = load_generator(source_workspace, public_module_prefix)
     common_version = normalized_version(version)
-    with pushd(api_repo):
+    with pushd(source_workspace):
         generator.build_common_go_output(dest_root / "common_go")
         for tree_spec in generator.TREE_SPECS:
             generator.build_tree_go_output(
@@ -187,6 +199,10 @@ def export_public_go(
 ) -> None:
     if not api_repo.exists():
         fail(f"SCTE API repository does not exist: {api_repo}")
+    if not (api_repo / "proto").is_dir():
+        fail(f"SCTE API repository is missing proto sources: {api_repo / 'proto'}")
+    if not GENERATOR_PATH.exists():
+        fail(f"scte-go is missing the local generator helper: {GENERATOR_PATH}")
     dest_root.mkdir(parents=True, exist_ok=True)
     generate_public_modules(dest_root, api_repo, public_module_prefix, version)
     write_workspace(dest_root, public_module_prefix, version)

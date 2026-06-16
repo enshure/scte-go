@@ -3,8 +3,7 @@
 Generated Go protobuf bindings for Enshure SCTE APIs.
 
 This repository intentionally publishes only generated Go packages. The source
-protobuf files and internal generation tooling are maintained separately in
-`scte-apis`.
+protobuf files are maintained separately in `scte-apis`.
 
 ## Generate
 

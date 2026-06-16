@@ -21,6 +21,71 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type InitializationStateE int32
+
+const (
+	InitializationStateE_LOCATION_NOT_SET_BIT        InitializationStateE = 1
+	InitializationStateE_UPSTREAM_DEVICE_NOT_SET_BIT InitializationStateE = 2
+	InitializationStateE_US_ALIGNMENT_NOT_SET_BIT    InitializationStateE = 4
+	InitializationStateE_DS_ALIGNMENT_NOT_SET_BIT    InitializationStateE = 8
+	InitializationStateE_ALSC_NOT_ENABLED_BIT        InitializationStateE = 16
+)
+
+// Enum value maps for InitializationStateE.
+var (
+	InitializationStateE_name = map[int32]string{
+		1:  "LOCATION_NOT_SET_BIT",
+		2:  "UPSTREAM_DEVICE_NOT_SET_BIT",
+		4:  "US_ALIGNMENT_NOT_SET_BIT",
+		8:  "DS_ALIGNMENT_NOT_SET_BIT",
+		16: "ALSC_NOT_ENABLED_BIT",
+	}
+	InitializationStateE_value = map[string]int32{
+		"LOCATION_NOT_SET_BIT":        1,
+		"UPSTREAM_DEVICE_NOT_SET_BIT": 2,
+		"US_ALIGNMENT_NOT_SET_BIT":    4,
+		"DS_ALIGNMENT_NOT_SET_BIT":    8,
+		"ALSC_NOT_ENABLED_BIT":        16,
+	}
+)
+
+func (x InitializationStateE) Enum() *InitializationStateE {
+	p := new(InitializationStateE)
+	*p = x
+	return p
+}
+
+func (x InitializationStateE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (InitializationStateE) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_system_common_proto_enumTypes[0].Descriptor()
+}
+
+func (InitializationStateE) Type() protoreflect.EnumType {
+	return &file_common_system_common_proto_enumTypes[0]
+}
+
+func (x InitializationStateE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *InitializationStateE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = InitializationStateE(num)
+	return nil
+}
+
+// Deprecated: Use InitializationStateE.Descriptor instead.
+func (InitializationStateE) EnumDescriptor() ([]byte, []int) {
+	return file_common_system_common_proto_rawDescGZIP(), []int{0}
+}
+
 type SystemCfg struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Hostname        *string                `protobuf:"bytes,1,opt,name=hostname" json:"hostname,omitempty"`
@@ -28,8 +93,13 @@ type SystemCfg struct {
 	Description     *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
 	Alias           *string                `protobuf:"bytes,4,opt,name=alias" json:"alias,omitempty"`
 	CascadePosition *uint32                `protobuf:"varint,5,opt,name=cascade_position,json=cascadePosition" json:"cascade_position,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// if this is not 0, then the amplifier is not fully initialized
+	// read-only field
+	InitializationStateBitmask *uint32 `protobuf:"varint,6,opt,name=initialization_state_bitmask,json=initializationStateBitmask" json:"initialization_state_bitmask,omitempty"`
+	// The location of the system
+	Location      *Location `protobuf:"bytes,7,opt,name=location" json:"location,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SystemCfg) Reset() {
@@ -97,6 +167,20 @@ func (x *SystemCfg) GetCascadePosition() uint32 {
 	return 0
 }
 
+func (x *SystemCfg) GetInitializationStateBitmask() uint32 {
+	if x != nil && x.InitializationStateBitmask != nil {
+		return *x.InitializationStateBitmask
+	}
+	return 0
+}
+
+func (x *SystemCfg) GetLocation() *Location {
+	if x != nil {
+		return x.Location
+	}
+	return nil
+}
+
 type SystemStatus struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	UniqueId        []byte                 `protobuf:"bytes,1,opt,name=unique_id,json=uniqueId" json:"unique_id,omitempty"`
@@ -161,17 +245,25 @@ var File_common_system_common_proto protoreflect.FileDescriptor
 
 const file_common_system_common_proto_rawDesc = "" +
 	"\n" +
-	"\x1acommon/system_common.proto\x12\vscte.common\"\xa5\x01\n" +
+	"\x1acommon/system_common.proto\x12\vscte.common\x1a\x1acommon/device_common.proto\"\x9a\x02\n" +
 	"\tSystemCfg\x12\x1a\n" +
 	"\bhostname\x18\x01 \x01(\tR\bhostname\x12\x19\n" +
 	"\basset_id\x18\x02 \x01(\tR\aassetId\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x14\n" +
 	"\x05alias\x18\x04 \x01(\tR\x05alias\x12)\n" +
-	"\x10cascade_position\x18\x05 \x01(\rR\x0fcascadePosition\"p\n" +
+	"\x10cascade_position\x18\x05 \x01(\rR\x0fcascadePosition\x12@\n" +
+	"\x1cinitialization_state_bitmask\x18\x06 \x01(\rR\x1ainitializationStateBitmask\x121\n" +
+	"\blocation\x18\a \x01(\v2\x15.scte.common.LocationR\blocation\"p\n" +
 	"\fSystemStatus\x12\x1b\n" +
 	"\tunique_id\x18\x01 \x01(\fR\buniqueId\x12*\n" +
 	"\x11current_date_time\x18\x02 \x01(\tR\x0fcurrentDateTime\x12\x17\n" +
-	"\aup_time\x18\x03 \x01(\rR\x06upTimeB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\aup_time\x18\x03 \x01(\rR\x06upTime*\xa9\x01\n" +
+	"\x16initialization_state_e\x12\x18\n" +
+	"\x14LOCATION_NOT_SET_BIT\x10\x01\x12\x1f\n" +
+	"\x1bUPSTREAM_DEVICE_NOT_SET_BIT\x10\x02\x12\x1c\n" +
+	"\x18US_ALIGNMENT_NOT_SET_BIT\x10\x04\x12\x1c\n" +
+	"\x18DS_ALIGNMENT_NOT_SET_BIT\x10\b\x12\x18\n" +
+	"\x14ALSC_NOT_ENABLED_BIT\x10\x10B1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_system_common_proto_rawDescOnce sync.Once
@@ -185,17 +277,21 @@ func file_common_system_common_proto_rawDescGZIP() []byte {
 	return file_common_system_common_proto_rawDescData
 }
 
+var file_common_system_common_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_common_system_common_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_common_system_common_proto_goTypes = []any{
-	(*SystemCfg)(nil),    // 0: scte.common.SystemCfg
-	(*SystemStatus)(nil), // 1: scte.common.SystemStatus
+	(InitializationStateE)(0), // 0: scte.common.initialization_state_e
+	(*SystemCfg)(nil),         // 1: scte.common.SystemCfg
+	(*SystemStatus)(nil),      // 2: scte.common.SystemStatus
+	(*Location)(nil),          // 3: scte.common.Location
 }
 var file_common_system_common_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	3, // 0: scte.common.SystemCfg.location:type_name -> scte.common.Location
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_common_system_common_proto_init() }
@@ -203,18 +299,20 @@ func file_common_system_common_proto_init() {
 	if File_common_system_common_proto != nil {
 		return
 	}
+	file_common_device_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_system_common_proto_rawDesc), len(file_common_system_common_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_common_system_common_proto_goTypes,
 		DependencyIndexes: file_common_system_common_proto_depIdxs,
+		EnumInfos:         file_common_system_common_proto_enumTypes,
 		MessageInfos:      file_common_system_common_proto_msgTypes,
 	}.Build()
 	File_common_system_common_proto = out.File

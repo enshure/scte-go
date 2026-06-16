@@ -692,7 +692,7 @@ func (x *RfPortCfg) GetDsLogicalPortConfig() *DsLogicalPortCfg {
 type RfCfgGrp struct {
 	state         protoimpl.MessageState            `protogen:"open.v1"`
 	RfPortConfigs []*RfPortCfg                      `protobuf:"bytes,1,rep,name=rf_port_configs,json=rfPortConfigs" json:"rf_port_configs,omitempty"`
-	VendorRfCfgs  []*common_go.VendorSpecificEntry  `protobuf:"bytes,99,rep,name=vendor_rf_cfgs,json=vendorRfCfgs" json:"vendor_rf_cfgs,omitempty"`
+	VendorRfCfgs  []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_cfgs,json=vendorRfCfgs" json:"vendor_rf_cfgs,omitempty"`
 	Page          *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -735,7 +735,7 @@ func (x *RfCfgGrp) GetRfPortConfigs() []*RfPortCfg {
 	return nil
 }
 
-func (x *RfCfgGrp) GetVendorRfCfgs() []*common_go.VendorSpecificEntry {
+func (x *RfCfgGrp) GetVendorRfCfgs() []*common_go.VendorExtension {
 	if x != nil {
 		return x.VendorRfCfgs
 	}
@@ -791,10 +791,10 @@ const file_amps_rf_cfg_proto_rawDesc = "" +
 	"\tRfPortCfg\x12O\n" +
 	"\x16us_logical_port_config\x18\x01 \x01(\v2\x1a.scte.amp.UsLogicalPortCfgR\x13usLogicalPortConfig\x12X\n" +
 	"\x19bidir_logical_port_config\x18\x02 \x01(\v2\x1d.scte.amp.BiDirLogicalPortCfgR\x16bidirLogicalPortConfig\x12O\n" +
-	"\x16ds_logical_port_config\x18\x03 \x01(\v2\x1a.scte.amp.DsLogicalPortCfgR\x13dsLogicalPortConfig\"\xc8\x01\n" +
+	"\x16ds_logical_port_config\x18\x03 \x01(\v2\x1a.scte.amp.DsLogicalPortCfgR\x13dsLogicalPortConfig\"\xc4\x01\n" +
 	"\bRfCfgGrp\x12;\n" +
-	"\x0frf_port_configs\x18\x01 \x03(\v2\x13.scte.amp.RfPortCfgR\rrfPortConfigs\x12F\n" +
-	"\x0evendor_rf_cfgs\x18c \x03(\v2 .scte.common.VendorSpecificEntryR\fvendorRfCfgs\x127\n" +
+	"\x0frf_port_configs\x18\x01 \x03(\v2\x13.scte.amp.RfPortCfgR\rrfPortConfigs\x12B\n" +
+	"\x0evendor_rf_cfgs\x18c \x03(\v2\x1c.scte.common.VendorExtensionR\fvendorRfCfgs\x127\n" +
 	"\x04page\x18d \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page*\"\n" +
 	"\x0eadmin_status_e\x12\x06\n" +
 	"\x02UP\x10\x01\x12\b\n" +
@@ -832,7 +832,7 @@ var file_amps_rf_cfg_proto_goTypes = []any{
 	(*DsLogicalPortCfg)(nil),                 // 10: scte.amp.DsLogicalPortCfg
 	(*RfPortCfg)(nil),                        // 11: scte.amp.RfPortCfg
 	(*RfCfgGrp)(nil),                         // 12: scte.amp.RfCfgGrp
-	(*common_go.VendorSpecificEntry)(nil),    // 13: scte.common.VendorSpecificEntry
+	(*common_go.VendorExtension)(nil),        // 13: scte.common.VendorExtension
 	(*common_go.ResponsePaginationInfo)(nil), // 14: scte.common.ResponsePaginationInfo
 }
 var file_amps_rf_cfg_proto_depIdxs = []int32{
@@ -850,7 +850,7 @@ var file_amps_rf_cfg_proto_depIdxs = []int32{
 	7,  // 11: scte.amp.RfPortCfg.bidir_logical_port_config:type_name -> scte.amp.BiDirLogicalPortCfg
 	10, // 12: scte.amp.RfPortCfg.ds_logical_port_config:type_name -> scte.amp.DsLogicalPortCfg
 	11, // 13: scte.amp.RfCfgGrp.rf_port_configs:type_name -> scte.amp.RfPortCfg
-	13, // 14: scte.amp.RfCfgGrp.vendor_rf_cfgs:type_name -> scte.common.VendorSpecificEntry
+	13, // 14: scte.amp.RfCfgGrp.vendor_rf_cfgs:type_name -> scte.common.VendorExtension
 	14, // 15: scte.amp.RfCfgGrp.page:type_name -> scte.common.ResponsePaginationInfo
 	16, // [16:16] is the sub-list for method output_type
 	16, // [16:16] is the sub-list for method input_type

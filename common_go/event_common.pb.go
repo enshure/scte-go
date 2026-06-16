@@ -98,19 +98,22 @@ func (EventPriorityE) EnumDescriptor() ([]byte, []int) {
 type EventTransitionE int32
 
 const (
-	EventTransitionE_ASSERTED EventTransitionE = 1
-	EventTransitionE_CLEARED  EventTransitionE = 2
+	EventTransitionE_EVENT_TRANSITION_ASSERT            EventTransitionE = 1
+	EventTransitionE_EVENT_TRANSITION_CLEAR             EventTransitionE = 2
+	EventTransitionE_EVENT_TRANSITION_NOTIFICATION_ONLY EventTransitionE = 3
 )
 
 // Enum value maps for EventTransitionE.
 var (
 	EventTransitionE_name = map[int32]string{
-		1: "ASSERTED",
-		2: "CLEARED",
+		1: "EVENT_TRANSITION_ASSERT",
+		2: "EVENT_TRANSITION_CLEAR",
+		3: "EVENT_TRANSITION_NOTIFICATION_ONLY",
 	}
 	EventTransitionE_value = map[string]int32{
-		"ASSERTED": 1,
-		"CLEARED":  2,
+		"EVENT_TRANSITION_ASSERT":            1,
+		"EVENT_TRANSITION_CLEAR":             2,
+		"EVENT_TRANSITION_NOTIFICATION_ONLY": 3,
 	}
 )
 
@@ -151,21 +154,77 @@ func (EventTransitionE) EnumDescriptor() ([]byte, []int) {
 	return file_common_event_common_proto_rawDescGZIP(), []int{1}
 }
 
+type EventDefinition struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	EventId       *uint32                `protobuf:"varint,1,opt,name=event_id,json=eventId" json:"event_id,omitempty"`             // The unique identifier for the event
+	BitPosition   []uint32               `protobuf:"varint,2,rep,name=bit_position,json=bitPosition" json:"bit_position,omitempty"` // The bit positions in the active_event_bitmasks when the EventNotification is generated
+	Description   *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`                     // A description of the event
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EventDefinition) Reset() {
+	*x = EventDefinition{}
+	mi := &file_common_event_common_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EventDefinition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventDefinition) ProtoMessage() {}
+
+func (x *EventDefinition) ProtoReflect() protoreflect.Message {
+	mi := &file_common_event_common_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EventDefinition.ProtoReflect.Descriptor instead.
+func (*EventDefinition) Descriptor() ([]byte, []int) {
+	return file_common_event_common_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *EventDefinition) GetEventId() uint32 {
+	if x != nil && x.EventId != nil {
+		return *x.EventId
+	}
+	return 0
+}
+
+func (x *EventDefinition) GetBitPosition() []uint32 {
+	if x != nil {
+		return x.BitPosition
+	}
+	return nil
+}
+
+func (x *EventDefinition) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
 type EventCapabilities struct {
-	state                     protoimpl.MessageState `protogen:"open.v1"`
-	LocalEventLogMaxSize      *uint32                `protobuf:"varint,1,opt,name=local_event_log_max_size,json=localEventLogMaxSize" json:"local_event_log_max_size,omitempty"`
-	SupportsSyslog            *bool                  `protobuf:"varint,2,opt,name=supports_syslog,json=supportsSyslog" json:"supports_syslog,omitempty"`
-	SupportsEventReportingCfg *bool                  `protobuf:"varint,3,opt,name=supports_event_reporting_cfg,json=supportsEventReportingCfg" json:"supports_event_reporting_cfg,omitempty"`
-	SupportsEventThrottleCfg  *bool                  `protobuf:"varint,4,opt,name=supports_event_throttle_cfg,json=supportsEventThrottleCfg" json:"supports_event_throttle_cfg,omitempty"`
-	SupportsSyslogServerCfg   *bool                  `protobuf:"varint,5,opt,name=supports_syslog_server_cfg,json=supportsSyslogServerCfg" json:"supports_syslog_server_cfg,omitempty"`
-	SupportsResetEventLog     *bool                  `protobuf:"varint,6,opt,name=supports_reset_event_log,json=supportsResetEventLog" json:"supports_reset_event_log,omitempty"`
-	unknownFields             protoimpl.UnknownFields
-	sizeCache                 protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	LocalEventLogMaxSize *uint32                `protobuf:"varint,1,opt,name=local_event_log_max_size,json=localEventLogMaxSize" json:"local_event_log_max_size,omitempty"`
+	EventDefinitions     []*EventDefinition     `protobuf:"bytes,2,rep,name=event_definitions,json=eventDefinitions" json:"event_definitions,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *EventCapabilities) Reset() {
 	*x = EventCapabilities{}
-	mi := &file_common_event_common_proto_msgTypes[0]
+	mi := &file_common_event_common_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -177,7 +236,7 @@ func (x *EventCapabilities) String() string {
 func (*EventCapabilities) ProtoMessage() {}
 
 func (x *EventCapabilities) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[0]
+	mi := &file_common_event_common_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -190,7 +249,7 @@ func (x *EventCapabilities) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventCapabilities.ProtoReflect.Descriptor instead.
 func (*EventCapabilities) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{0}
+	return file_common_event_common_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *EventCapabilities) GetLocalEventLogMaxSize() uint32 {
@@ -200,39 +259,11 @@ func (x *EventCapabilities) GetLocalEventLogMaxSize() uint32 {
 	return 0
 }
 
-func (x *EventCapabilities) GetSupportsSyslog() bool {
-	if x != nil && x.SupportsSyslog != nil {
-		return *x.SupportsSyslog
+func (x *EventCapabilities) GetEventDefinitions() []*EventDefinition {
+	if x != nil {
+		return x.EventDefinitions
 	}
-	return false
-}
-
-func (x *EventCapabilities) GetSupportsEventReportingCfg() bool {
-	if x != nil && x.SupportsEventReportingCfg != nil {
-		return *x.SupportsEventReportingCfg
-	}
-	return false
-}
-
-func (x *EventCapabilities) GetSupportsEventThrottleCfg() bool {
-	if x != nil && x.SupportsEventThrottleCfg != nil {
-		return *x.SupportsEventThrottleCfg
-	}
-	return false
-}
-
-func (x *EventCapabilities) GetSupportsSyslogServerCfg() bool {
-	if x != nil && x.SupportsSyslogServerCfg != nil {
-		return *x.SupportsSyslogServerCfg
-	}
-	return false
-}
-
-func (x *EventCapabilities) GetSupportsResetEventLog() bool {
-	if x != nil && x.SupportsResetEventLog != nil {
-		return *x.SupportsResetEventLog
-	}
-	return false
+	return nil
 }
 
 type EventStatus struct {
@@ -244,7 +275,7 @@ type EventStatus struct {
 
 func (x *EventStatus) Reset() {
 	*x = EventStatus{}
-	mi := &file_common_event_common_proto_msgTypes[1]
+	mi := &file_common_event_common_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -256,7 +287,7 @@ func (x *EventStatus) String() string {
 func (*EventStatus) ProtoMessage() {}
 
 func (x *EventStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[1]
+	mi := &file_common_event_common_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -269,7 +300,7 @@ func (x *EventStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventStatus.ProtoReflect.Descriptor instead.
 func (*EventStatus) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{1}
+	return file_common_event_common_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *EventStatus) GetThrottleThresholdExceeded() bool {
@@ -281,20 +312,19 @@ func (x *EventStatus) GetThrottleThresholdExceeded() bool {
 
 type Event struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Index         *uint32                `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
+	EventId       *uint32                `protobuf:"varint,1,opt,name=event_id,json=eventId" json:"event_id,omitempty"`
 	FirstTime     *string                `protobuf:"bytes,2,opt,name=first_time,json=firstTime" json:"first_time,omitempty"`
 	LastTime      *string                `protobuf:"bytes,3,opt,name=last_time,json=lastTime" json:"last_time,omitempty"`
 	Count         *uint32                `protobuf:"varint,4,opt,name=count" json:"count,omitempty"`
 	Level         *EventPriorityE        `protobuf:"varint,5,opt,name=level,enum=scte.common.EventPriorityE" json:"level,omitempty"`
-	EventId       *uint32                `protobuf:"varint,6,opt,name=event_id,json=eventId" json:"event_id,omitempty"`
-	Text          *string                `protobuf:"bytes,7,opt,name=text" json:"text,omitempty"`
+	Text          *string                `protobuf:"bytes,6,opt,name=text" json:"text,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Event) Reset() {
 	*x = Event{}
-	mi := &file_common_event_common_proto_msgTypes[2]
+	mi := &file_common_event_common_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -306,7 +336,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[2]
+	mi := &file_common_event_common_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -319,12 +349,12 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{2}
+	return file_common_event_common_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Event) GetIndex() uint32 {
-	if x != nil && x.Index != nil {
-		return *x.Index
+func (x *Event) GetEventId() uint32 {
+	if x != nil && x.EventId != nil {
+		return *x.EventId
 	}
 	return 0
 }
@@ -357,13 +387,6 @@ func (x *Event) GetLevel() EventPriorityE {
 	return EventPriorityE_EVENT_PRIORITY_EMERGENCY
 }
 
-func (x *Event) GetEventId() uint32 {
-	if x != nil && x.EventId != nil {
-		return *x.EventId
-	}
-	return 0
-}
-
 func (x *Event) GetText() string {
 	if x != nil && x.Text != nil {
 		return *x.Text
@@ -381,7 +404,7 @@ type EventLog struct {
 
 func (x *EventLog) Reset() {
 	*x = EventLog{}
-	mi := &file_common_event_common_proto_msgTypes[3]
+	mi := &file_common_event_common_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -393,7 +416,7 @@ func (x *EventLog) String() string {
 func (*EventLog) ProtoMessage() {}
 
 func (x *EventLog) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[3]
+	mi := &file_common_event_common_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -406,7 +429,7 @@ func (x *EventLog) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLog.ProtoReflect.Descriptor instead.
 func (*EventLog) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{3}
+	return file_common_event_common_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *EventLog) GetEvents() []*Event {
@@ -423,88 +446,33 @@ func (x *EventLog) GetPage() *ResponsePaginationInfo {
 	return nil
 }
 
-type ActiveFault struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	EventId       *uint32                `protobuf:"varint,1,opt,name=event_id,json=eventId" json:"event_id,omitempty"`
-	Level         *EventPriorityE        `protobuf:"varint,2,opt,name=level,enum=scte.common.EventPriorityE" json:"level,omitempty"`
-	Transition    *EventTransitionE      `protobuf:"varint,3,opt,name=transition,enum=scte.common.EventTransitionE" json:"transition,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type EventNotification struct {
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Event        *Event                 `protobuf:"bytes,1,opt,name=event" json:"event,omitempty"`
+	EventVersion *uint32                `protobuf:"varint,2,opt,name=event_version,json=eventVersion" json:"event_version,omitempty"`
+	Transition   *EventTransitionE      `protobuf:"varint,3,opt,name=transition,enum=scte.common.EventTransitionE" json:"transition,omitempty"`
+	// the active events bitmask is a bitmask containing the active event bit positions set in the active_event_bitmasks array
+	// if an active alert's bit position is beyond 32, then the subsequent array entries will be used.
+	// this includes the current event bitmask changes
+	ActiveEventsBitmask []uint32 `protobuf:"varint,4,rep,name=active_events_bitmask,json=activeEventsBitmask" json:"active_events_bitmask,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
-func (x *ActiveFault) Reset() {
-	*x = ActiveFault{}
-	mi := &file_common_event_common_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ActiveFault) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ActiveFault) ProtoMessage() {}
-
-func (x *ActiveFault) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ActiveFault.ProtoReflect.Descriptor instead.
-func (*ActiveFault) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *ActiveFault) GetEventId() uint32 {
-	if x != nil && x.EventId != nil {
-		return *x.EventId
-	}
-	return 0
-}
-
-func (x *ActiveFault) GetLevel() EventPriorityE {
-	if x != nil && x.Level != nil {
-		return *x.Level
-	}
-	return EventPriorityE_EVENT_PRIORITY_EMERGENCY
-}
-
-func (x *ActiveFault) GetTransition() EventTransitionE {
-	if x != nil && x.Transition != nil {
-		return *x.Transition
-	}
-	return EventTransitionE_ASSERTED
-}
-
-type ActiveFaults struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	StateVersion  *uint64                `protobuf:"varint,1,opt,name=state_version,json=stateVersion" json:"state_version,omitempty"`
-	Faults        []*ActiveFault         `protobuf:"bytes,2,rep,name=faults" json:"faults,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ActiveFaults) Reset() {
-	*x = ActiveFaults{}
+func (x *EventNotification) Reset() {
+	*x = EventNotification{}
 	mi := &file_common_event_common_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ActiveFaults) String() string {
+func (x *EventNotification) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ActiveFaults) ProtoMessage() {}
+func (*EventNotification) ProtoMessage() {}
 
-func (x *ActiveFaults) ProtoReflect() protoreflect.Message {
+func (x *EventNotification) ProtoReflect() protoreflect.Message {
 	mi := &file_common_event_common_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -516,21 +484,35 @@ func (x *ActiveFaults) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ActiveFaults.ProtoReflect.Descriptor instead.
-func (*ActiveFaults) Descriptor() ([]byte, []int) {
+// Deprecated: Use EventNotification.ProtoReflect.Descriptor instead.
+func (*EventNotification) Descriptor() ([]byte, []int) {
 	return file_common_event_common_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *ActiveFaults) GetStateVersion() uint64 {
-	if x != nil && x.StateVersion != nil {
-		return *x.StateVersion
+func (x *EventNotification) GetEvent() *Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *EventNotification) GetEventVersion() uint32 {
+	if x != nil && x.EventVersion != nil {
+		return *x.EventVersion
 	}
 	return 0
 }
 
-func (x *ActiveFaults) GetFaults() []*ActiveFault {
+func (x *EventNotification) GetTransition() EventTransitionE {
+	if x != nil && x.Transition != nil {
+		return *x.Transition
+	}
+	return EventTransitionE_EVENT_TRANSITION_ASSERT
+}
+
+func (x *EventNotification) GetActiveEventsBitmask() []uint32 {
 	if x != nil {
-		return x.Faults
+		return x.ActiveEventsBitmask
 	}
 	return nil
 }
@@ -666,334 +648,38 @@ func (x *EventReportingCfg) GetWrite() bool {
 	return Default_EventReportingCfg_Write
 }
 
-type Syslog struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Index         *uint32                `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
-	Timestamp     *string                `protobuf:"bytes,2,opt,name=timestamp" json:"timestamp,omitempty"`
-	HostName      *string                `protobuf:"bytes,3,opt,name=host_name,json=hostName" json:"host_name,omitempty"`
-	AppName       *string                `protobuf:"bytes,4,opt,name=app_name,json=appName" json:"app_name,omitempty"`
-	Level         *EventPriorityE        `protobuf:"varint,5,opt,name=level,enum=scte.common.EventPriorityE" json:"level,omitempty"`
-	Text          *string                `protobuf:"bytes,6,opt,name=text" json:"text,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Syslog) Reset() {
-	*x = Syslog{}
-	mi := &file_common_event_common_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Syslog) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Syslog) ProtoMessage() {}
-
-func (x *Syslog) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Syslog.ProtoReflect.Descriptor instead.
-func (*Syslog) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *Syslog) GetIndex() uint32 {
-	if x != nil && x.Index != nil {
-		return *x.Index
-	}
-	return 0
-}
-
-func (x *Syslog) GetTimestamp() string {
-	if x != nil && x.Timestamp != nil {
-		return *x.Timestamp
-	}
-	return ""
-}
-
-func (x *Syslog) GetHostName() string {
-	if x != nil && x.HostName != nil {
-		return *x.HostName
-	}
-	return ""
-}
-
-func (x *Syslog) GetAppName() string {
-	if x != nil && x.AppName != nil {
-		return *x.AppName
-	}
-	return ""
-}
-
-func (x *Syslog) GetLevel() EventPriorityE {
-	if x != nil && x.Level != nil {
-		return *x.Level
-	}
-	return EventPriorityE_EVENT_PRIORITY_EMERGENCY
-}
-
-func (x *Syslog) GetText() string {
-	if x != nil && x.Text != nil {
-		return *x.Text
-	}
-	return ""
-}
-
-type EventSyslogStatus struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	Enabled         *bool                  `protobuf:"varint,1,opt,name=enabled" json:"enabled,omitempty"`
-	DroppedCount    *uint32                `protobuf:"varint,2,opt,name=dropped_count,json=droppedCount" json:"dropped_count,omitempty"`
-	LastSuccessTime *string                `protobuf:"bytes,3,opt,name=last_success_time,json=lastSuccessTime" json:"last_success_time,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
-}
-
-func (x *EventSyslogStatus) Reset() {
-	*x = EventSyslogStatus{}
-	mi := &file_common_event_common_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EventSyslogStatus) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EventSyslogStatus) ProtoMessage() {}
-
-func (x *EventSyslogStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EventSyslogStatus.ProtoReflect.Descriptor instead.
-func (*EventSyslogStatus) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *EventSyslogStatus) GetEnabled() bool {
-	if x != nil && x.Enabled != nil {
-		return *x.Enabled
-	}
-	return false
-}
-
-func (x *EventSyslogStatus) GetDroppedCount() uint32 {
-	if x != nil && x.DroppedCount != nil {
-		return *x.DroppedCount
-	}
-	return 0
-}
-
-func (x *EventSyslogStatus) GetLastSuccessTime() string {
-	if x != nil && x.LastSuccessTime != nil {
-		return *x.LastSuccessTime
-	}
-	return ""
-}
-
-type SyslogServerCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Index         *uint32                `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
-	Host          *string                `protobuf:"bytes,2,opt,name=host" json:"host,omitempty"`
-	Port          *uint32                `protobuf:"varint,3,opt,name=port" json:"port,omitempty"`
-	Transport     *string                `protobuf:"bytes,4,opt,name=transport" json:"transport,omitempty"`
-	Enabled       *bool                  `protobuf:"varint,5,opt,name=enabled" json:"enabled,omitempty"`
-	Write         *bool                  `protobuf:"varint,6,opt,name=write,def=0" json:"write,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-// Default values for SyslogServerCfg fields.
-const (
-	Default_SyslogServerCfg_Write = bool(false)
-)
-
-func (x *SyslogServerCfg) Reset() {
-	*x = SyslogServerCfg{}
-	mi := &file_common_event_common_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SyslogServerCfg) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SyslogServerCfg) ProtoMessage() {}
-
-func (x *SyslogServerCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SyslogServerCfg.ProtoReflect.Descriptor instead.
-func (*SyslogServerCfg) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *SyslogServerCfg) GetIndex() uint32 {
-	if x != nil && x.Index != nil {
-		return *x.Index
-	}
-	return 0
-}
-
-func (x *SyslogServerCfg) GetHost() string {
-	if x != nil && x.Host != nil {
-		return *x.Host
-	}
-	return ""
-}
-
-func (x *SyslogServerCfg) GetPort() uint32 {
-	if x != nil && x.Port != nil {
-		return *x.Port
-	}
-	return 0
-}
-
-func (x *SyslogServerCfg) GetTransport() string {
-	if x != nil && x.Transport != nil {
-		return *x.Transport
-	}
-	return ""
-}
-
-func (x *SyslogServerCfg) GetEnabled() bool {
-	if x != nil && x.Enabled != nil {
-		return *x.Enabled
-	}
-	return false
-}
-
-func (x *SyslogServerCfg) GetWrite() bool {
-	if x != nil && x.Write != nil {
-		return *x.Write
-	}
-	return Default_SyslogServerCfg_Write
-}
-
-type ResetEventLog struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Result        *bool                  `protobuf:"varint,1,opt,name=result" json:"result,omitempty"`
-	ErrorCode     *uint32                `protobuf:"varint,2,opt,name=error_code,json=errorCode" json:"error_code,omitempty"`
-	ErrorMessage  *string                `protobuf:"bytes,3,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ResetEventLog) Reset() {
-	*x = ResetEventLog{}
-	mi := &file_common_event_common_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResetEventLog) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResetEventLog) ProtoMessage() {}
-
-func (x *ResetEventLog) ProtoReflect() protoreflect.Message {
-	mi := &file_common_event_common_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResetEventLog.ProtoReflect.Descriptor instead.
-func (*ResetEventLog) Descriptor() ([]byte, []int) {
-	return file_common_event_common_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *ResetEventLog) GetResult() bool {
-	if x != nil && x.Result != nil {
-		return *x.Result
-	}
-	return false
-}
-
-func (x *ResetEventLog) GetErrorCode() uint32 {
-	if x != nil && x.ErrorCode != nil {
-		return *x.ErrorCode
-	}
-	return 0
-}
-
-func (x *ResetEventLog) GetErrorMessage() string {
-	if x != nil && x.ErrorMessage != nil {
-		return *x.ErrorMessage
-	}
-	return ""
-}
-
 var File_common_event_common_proto protoreflect.FileDescriptor
 
 const file_common_event_common_proto_rawDesc = "" +
 	"\n" +
-	"\x19common/event_common.proto\x12\vscte.common\x1a\x17common/pagination.proto\"\xea\x02\n" +
+	"\x19common/event_common.proto\x12\vscte.common\x1a\x17common/pagination.proto\"q\n" +
+	"\x0fEventDefinition\x12\x19\n" +
+	"\bevent_id\x18\x01 \x01(\rR\aeventId\x12!\n" +
+	"\fbit_position\x18\x02 \x03(\rR\vbitPosition\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\"\x96\x01\n" +
 	"\x11EventCapabilities\x126\n" +
-	"\x18local_event_log_max_size\x18\x01 \x01(\rR\x14localEventLogMaxSize\x12'\n" +
-	"\x0fsupports_syslog\x18\x02 \x01(\bR\x0esupportsSyslog\x12?\n" +
-	"\x1csupports_event_reporting_cfg\x18\x03 \x01(\bR\x19supportsEventReportingCfg\x12=\n" +
-	"\x1bsupports_event_throttle_cfg\x18\x04 \x01(\bR\x18supportsEventThrottleCfg\x12;\n" +
-	"\x1asupports_syslog_server_cfg\x18\x05 \x01(\bR\x17supportsSyslogServerCfg\x127\n" +
-	"\x18supports_reset_event_log\x18\x06 \x01(\bR\x15supportsResetEventLog\"M\n" +
+	"\x18local_event_log_max_size\x18\x01 \x01(\rR\x14localEventLogMaxSize\x12I\n" +
+	"\x11event_definitions\x18\x02 \x03(\v2\x1c.scte.common.EventDefinitionR\x10eventDefinitions\"M\n" +
 	"\vEventStatus\x12>\n" +
-	"\x1bthrottle_threshold_exceeded\x18\x01 \x01(\bR\x19throttleThresholdExceeded\"\xd3\x01\n" +
-	"\x05Event\x12\x14\n" +
-	"\x05index\x18\x01 \x01(\rR\x05index\x12\x1d\n" +
+	"\x1bthrottle_threshold_exceeded\x18\x01 \x01(\bR\x19throttleThresholdExceeded\"\xbd\x01\n" +
+	"\x05Event\x12\x19\n" +
+	"\bevent_id\x18\x01 \x01(\rR\aeventId\x12\x1d\n" +
 	"\n" +
 	"first_time\x18\x02 \x01(\tR\tfirstTime\x12\x1b\n" +
 	"\tlast_time\x18\x03 \x01(\tR\blastTime\x12\x14\n" +
 	"\x05count\x18\x04 \x01(\rR\x05count\x123\n" +
-	"\x05level\x18\x05 \x01(\x0e2\x1d.scte.common.event_priority_eR\x05level\x12\x19\n" +
-	"\bevent_id\x18\x06 \x01(\rR\aeventId\x12\x12\n" +
-	"\x04text\x18\a \x01(\tR\x04text\"o\n" +
+	"\x05level\x18\x05 \x01(\x0e2\x1d.scte.common.event_priority_eR\x05level\x12\x12\n" +
+	"\x04text\x18\x06 \x01(\tR\x04text\"o\n" +
 	"\bEventLog\x12*\n" +
 	"\x06events\x18\x01 \x03(\v2\x12.scte.common.EventR\x06events\x127\n" +
-	"\x04page\x18\x02 \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\x9e\x01\n" +
-	"\vActiveFault\x12\x19\n" +
-	"\bevent_id\x18\x01 \x01(\rR\aeventId\x123\n" +
-	"\x05level\x18\x02 \x01(\x0e2\x1d.scte.common.event_priority_eR\x05level\x12?\n" +
+	"\x04page\x18\x02 \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\xd7\x01\n" +
+	"\x11EventNotification\x12(\n" +
+	"\x05event\x18\x01 \x01(\v2\x12.scte.common.EventR\x05event\x12#\n" +
+	"\revent_version\x18\x02 \x01(\rR\feventVersion\x12?\n" +
 	"\n" +
 	"transition\x18\x03 \x01(\x0e2\x1f.scte.common.event_transition_eR\n" +
-	"transition\"e\n" +
-	"\fActiveFaults\x12#\n" +
-	"\rstate_version\x18\x01 \x01(\x04R\fstateVersion\x120\n" +
-	"\x06faults\x18\x02 \x03(\v2\x18.scte.common.ActiveFaultR\x06faults\"i\n" +
+	"transition\x122\n" +
+	"\x15active_events_bitmask\x18\x04 \x03(\rR\x13activeEventsBitmask\"i\n" +
 	"\x10EventThrottleCfg\x12\x1c\n" +
 	"\tthreshold\x18\x01 \x01(\rR\tthreshold\x12\x1a\n" +
 	"\binterval\x18\x02 \x01(\rR\binterval\x12\x1b\n" +
@@ -1001,30 +687,7 @@ const file_common_event_common_proto_rawDesc = "" +
 	"\x11EventReportingCfg\x129\n" +
 	"\bpriority\x18\x01 \x01(\x0e2\x1d.scte.common.event_priority_eR\bpriority\x12\x1f\n" +
 	"\treporting\x18\x02 \x01(\r:\x010R\treporting\x12\x1b\n" +
-	"\x05write\x18\x03 \x01(\b:\x05falseR\x05write\"\xbd\x01\n" +
-	"\x06Syslog\x12\x14\n" +
-	"\x05index\x18\x01 \x01(\rR\x05index\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\tR\ttimestamp\x12\x1b\n" +
-	"\thost_name\x18\x03 \x01(\tR\bhostName\x12\x19\n" +
-	"\bapp_name\x18\x04 \x01(\tR\aappName\x123\n" +
-	"\x05level\x18\x05 \x01(\x0e2\x1d.scte.common.event_priority_eR\x05level\x12\x12\n" +
-	"\x04text\x18\x06 \x01(\tR\x04text\"~\n" +
-	"\x11EventSyslogStatus\x12\x18\n" +
-	"\aenabled\x18\x01 \x01(\bR\aenabled\x12#\n" +
-	"\rdropped_count\x18\x02 \x01(\rR\fdroppedCount\x12*\n" +
-	"\x11last_success_time\x18\x03 \x01(\tR\x0flastSuccessTime\"\xa4\x01\n" +
-	"\x0fSyslogServerCfg\x12\x14\n" +
-	"\x05index\x18\x01 \x01(\rR\x05index\x12\x12\n" +
-	"\x04host\x18\x02 \x01(\tR\x04host\x12\x12\n" +
-	"\x04port\x18\x03 \x01(\rR\x04port\x12\x1c\n" +
-	"\ttransport\x18\x04 \x01(\tR\ttransport\x12\x18\n" +
-	"\aenabled\x18\x05 \x01(\bR\aenabled\x12\x1b\n" +
-	"\x05write\x18\x06 \x01(\b:\x05falseR\x05write\"k\n" +
-	"\rResetEventLog\x12\x16\n" +
-	"\x06result\x18\x01 \x01(\bR\x06result\x12\x1d\n" +
-	"\n" +
-	"error_code\x18\x02 \x01(\rR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage*\xeb\x01\n" +
+	"\x05write\x18\x03 \x01(\b:\x05falseR\x05write*\xeb\x01\n" +
 	"\x10event_priority_e\x12\x1c\n" +
 	"\x18EVENT_PRIORITY_EMERGENCY\x10\x01\x12\x18\n" +
 	"\x14EVENT_PRIORITY_ALERT\x10\x02\x12\x1b\n" +
@@ -1033,10 +696,11 @@ const file_common_event_common_proto_rawDesc = "" +
 	"\x16EVENT_PRIORITY_WARNING\x10\x05\x12\x19\n" +
 	"\x15EVENT_PRIORITY_NOTICE\x10\x06\x12\x17\n" +
 	"\x13EVENT_PRIORITY_INFO\x10\a\x12\x18\n" +
-	"\x14EVENT_PRIORITY_DEBUG\x10\b*/\n" +
-	"\x12event_transition_e\x12\f\n" +
-	"\bASSERTED\x10\x01\x12\v\n" +
-	"\aCLEARED\x10\x02B1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x14EVENT_PRIORITY_DEBUG\x10\b*u\n" +
+	"\x12event_transition_e\x12\x1b\n" +
+	"\x17EVENT_TRANSITION_ASSERT\x10\x01\x12\x1a\n" +
+	"\x16EVENT_TRANSITION_CLEAR\x10\x02\x12&\n" +
+	"\"EVENT_TRANSITION_NOTIFICATION_ONLY\x10\x03B1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_event_common_proto_rawDescOnce sync.Once
@@ -1051,38 +715,33 @@ func file_common_event_common_proto_rawDescGZIP() []byte {
 }
 
 var file_common_event_common_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_common_event_common_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_common_event_common_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_common_event_common_proto_goTypes = []any{
 	(EventPriorityE)(0),            // 0: scte.common.event_priority_e
 	(EventTransitionE)(0),          // 1: scte.common.event_transition_e
-	(*EventCapabilities)(nil),      // 2: scte.common.EventCapabilities
-	(*EventStatus)(nil),            // 3: scte.common.EventStatus
-	(*Event)(nil),                  // 4: scte.common.Event
-	(*EventLog)(nil),               // 5: scte.common.EventLog
-	(*ActiveFault)(nil),            // 6: scte.common.ActiveFault
-	(*ActiveFaults)(nil),           // 7: scte.common.ActiveFaults
+	(*EventDefinition)(nil),        // 2: scte.common.EventDefinition
+	(*EventCapabilities)(nil),      // 3: scte.common.EventCapabilities
+	(*EventStatus)(nil),            // 4: scte.common.EventStatus
+	(*Event)(nil),                  // 5: scte.common.Event
+	(*EventLog)(nil),               // 6: scte.common.EventLog
+	(*EventNotification)(nil),      // 7: scte.common.EventNotification
 	(*EventThrottleCfg)(nil),       // 8: scte.common.EventThrottleCfg
 	(*EventReportingCfg)(nil),      // 9: scte.common.EventReportingCfg
-	(*Syslog)(nil),                 // 10: scte.common.Syslog
-	(*EventSyslogStatus)(nil),      // 11: scte.common.EventSyslogStatus
-	(*SyslogServerCfg)(nil),        // 12: scte.common.SyslogServerCfg
-	(*ResetEventLog)(nil),          // 13: scte.common.ResetEventLog
-	(*ResponsePaginationInfo)(nil), // 14: scte.common.ResponsePaginationInfo
+	(*ResponsePaginationInfo)(nil), // 10: scte.common.ResponsePaginationInfo
 }
 var file_common_event_common_proto_depIdxs = []int32{
-	0,  // 0: scte.common.Event.level:type_name -> scte.common.event_priority_e
-	4,  // 1: scte.common.EventLog.events:type_name -> scte.common.Event
-	14, // 2: scte.common.EventLog.page:type_name -> scte.common.ResponsePaginationInfo
-	0,  // 3: scte.common.ActiveFault.level:type_name -> scte.common.event_priority_e
-	1,  // 4: scte.common.ActiveFault.transition:type_name -> scte.common.event_transition_e
-	6,  // 5: scte.common.ActiveFaults.faults:type_name -> scte.common.ActiveFault
+	2,  // 0: scte.common.EventCapabilities.event_definitions:type_name -> scte.common.EventDefinition
+	0,  // 1: scte.common.Event.level:type_name -> scte.common.event_priority_e
+	5,  // 2: scte.common.EventLog.events:type_name -> scte.common.Event
+	10, // 3: scte.common.EventLog.page:type_name -> scte.common.ResponsePaginationInfo
+	5,  // 4: scte.common.EventNotification.event:type_name -> scte.common.Event
+	1,  // 5: scte.common.EventNotification.transition:type_name -> scte.common.event_transition_e
 	0,  // 6: scte.common.EventReportingCfg.priority:type_name -> scte.common.event_priority_e
-	0,  // 7: scte.common.Syslog.level:type_name -> scte.common.event_priority_e
-	8,  // [8:8] is the sub-list for method output_type
-	8,  // [8:8] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	7,  // [7:7] is the sub-list for method output_type
+	7,  // [7:7] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_common_event_common_proto_init() }
@@ -1097,7 +756,7 @@ func file_common_event_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_event_common_proto_rawDesc), len(file_common_event_common_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   12,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
