@@ -340,8 +340,8 @@ func (x *UpstreamDevice) GetUsDevicePort() uint32 {
 type Location struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Description    *string                `protobuf:"bytes,1,opt,name=description" json:"description,omitempty"`
-	Latitude       *string                `protobuf:"bytes,2,opt,name=latitude" json:"latitude,omitempty"`
-	Longitude      *string                `protobuf:"bytes,3,opt,name=longitude" json:"longitude,omitempty"`
+	Latitude       *float64               `protobuf:"fixed64,2,opt,name=latitude" json:"latitude,omitempty"`
+	Longitude      *float64               `protobuf:"fixed64,3,opt,name=longitude" json:"longitude,omitempty"`
 	DeviceLocation *DeviceLocationTypeE   `protobuf:"varint,4,opt,name=device_location,json=deviceLocation,enum=scte.common.DeviceLocationTypeE" json:"device_location,omitempty"`
 	UsDevice       *UpstreamDevice        `protobuf:"bytes,5,opt,name=us_device,json=usDevice" json:"us_device,omitempty"`
 	unknownFields  protoimpl.UnknownFields
@@ -385,18 +385,18 @@ func (x *Location) GetDescription() string {
 	return ""
 }
 
-func (x *Location) GetLatitude() string {
+func (x *Location) GetLatitude() float64 {
 	if x != nil && x.Latitude != nil {
 		return *x.Latitude
 	}
-	return ""
+	return 0
 }
 
-func (x *Location) GetLongitude() string {
+func (x *Location) GetLongitude() float64 {
 	if x != nil && x.Longitude != nil {
 		return *x.Longitude
 	}
-	return ""
+	return 0
 }
 
 func (x *Location) GetDeviceLocation() DeviceLocationTypeE {
@@ -435,8 +435,8 @@ const file_common_device_common_proto_rawDesc = "" +
 	"\x0eus_device_port\x18\x03 \x01(\rR\fusDevicePort\"\xee\x01\n" +
 	"\bLocation\x12 \n" +
 	"\vdescription\x18\x01 \x01(\tR\vdescription\x12\x1a\n" +
-	"\blatitude\x18\x02 \x01(\tR\blatitude\x12\x1c\n" +
-	"\tlongitude\x18\x03 \x01(\tR\tlongitude\x12L\n" +
+	"\blatitude\x18\x02 \x01(\x01R\blatitude\x12\x1c\n" +
+	"\tlongitude\x18\x03 \x01(\x01R\tlongitude\x12L\n" +
 	"\x0fdevice_location\x18\x04 \x01(\x0e2#.scte.common.device_location_type_eR\x0edeviceLocation\x128\n" +
 	"\tus_device\x18\x05 \x01(\v2\x1b.scte.common.UpstreamDeviceR\busDevice*u\n" +
 	"\x16device_location_type_e\x12\v\n" +
