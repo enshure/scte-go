@@ -22,6 +22,13 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// --------------------------------
+// SCTE-283 Section 7.2.3 RF Configuration Group data-model/API represented as protobuf messages.
+// This section defines messages related to the RF Configuration Group (RfCfgGrp) of the amplifier API.
+// These messages would be the payload of HRDC_SetAPI when configuring the RF settings of the amplifier.
+// It also uses the scte.common.VendorExtensions protobuf message to extend the RF configuration data model with vendor-specific information without modifying the core API,
+// allowing for flexibility and future expansion.
+// --------------------------------
 type AdminStatusE int32
 
 const (
@@ -692,8 +699,8 @@ func (x *RfPortCfg) GetDsLogicalPortConfig() *DsLogicalPortCfg {
 type RfCfgGrp struct {
 	state         protoimpl.MessageState            `protogen:"open.v1"`
 	RfPortConfigs []*RfPortCfg                      `protobuf:"bytes,1,rep,name=rf_port_configs,json=rfPortConfigs" json:"rf_port_configs,omitempty"`
-	VendorRfCfgs  []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_cfgs,json=vendorRfCfgs" json:"vendor_rf_cfgs,omitempty"`
-	Page          *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`
+	VendorRfCfgs  []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_cfgs,json=vendorRfCfgs" json:"vendor_rf_cfgs,omitempty"` //scte.common.Vendor extensions for RF configuration, allowing for future expansion without modifying the core API.
+	Page          *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`                                      //Pagination info for cases where the response cannot fit in one packet and needs to be paginated in the API response.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

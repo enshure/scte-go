@@ -59,6 +59,7 @@ COMMON_PROTO_FILES = [
     "error_common.proto",
     "event_common.proto",
     "pagination.proto",
+    "reset_common.proto",
     "sensor_common.proto",
     "status_common.proto",
     "system_common.proto",
@@ -85,12 +86,9 @@ TREE_SPECS = [
         "tree_proto_files": [
             "common.proto",
             "debug.proto",
-            "controller.proto",
             "transport.proto",
+            "controller.proto",
             "api.proto",
-            "reset.proto",
-            "events.proto",
-            "sensor.proto",
             "system_grp.proto",
             "rf_cfg.proto",
             "rf_status.proto",
@@ -105,13 +103,10 @@ TREE_SPECS = [
         "go_output_dir": "xponder_go",
         "module_path": f"{GO_MODULE_PREFIX}/xponder_go",
         "tree_proto_files": [
-            "common.proto",
-            "controller.proto",
             "transport.proto",
+            "controller.proto",
             "api.proto",
             "system.proto",
-            "reset.proto",
-            "events.proto",
         ],
     },
 ]
@@ -350,8 +345,10 @@ def build_tree_stage(stage_root: Path, spec: dict[str, object], shared_symbols: 
     staged_files: list[Path] = []
     for proto_name in spec["tree_proto_files"]:
         dest = tree_root / proto_name
-        if proto_name == "transport.proto":
+        if proto_name in {"api.proto", "transport.proto"}:
             content = Path("proto/common/transport.proto").read_text()
+            if proto_name == "api.proto":
+                content = Path("proto/common/api.proto").read_text()
         else:
             content = spec["source_dir"].joinpath(proto_name).read_text()
         content = rewrite_tree_imports(content, tree_name, spec["tree_proto_files"])

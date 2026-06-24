@@ -1513,68 +1513,6 @@ func (PwrSupplyRedundancyModeE) EnumDescriptor() ([]byte, []int) {
 	return file_amps_common_proto_rawDescGZIP(), []int{23}
 }
 
-type ResetTypeE int32
-
-const (
-	ResetTypeE_SOFT_RESET    ResetTypeE = 1
-	ResetTypeE_HARD_RESET    ResetTypeE = 2
-	ResetTypeE_NV_RESET      ResetTypeE = 4
-	ResetTypeE_FACTORY_RESET ResetTypeE = 8
-)
-
-// Enum value maps for ResetTypeE.
-var (
-	ResetTypeE_name = map[int32]string{
-		1: "SOFT_RESET",
-		2: "HARD_RESET",
-		4: "NV_RESET",
-		8: "FACTORY_RESET",
-	}
-	ResetTypeE_value = map[string]int32{
-		"SOFT_RESET":    1,
-		"HARD_RESET":    2,
-		"NV_RESET":      4,
-		"FACTORY_RESET": 8,
-	}
-)
-
-func (x ResetTypeE) Enum() *ResetTypeE {
-	p := new(ResetTypeE)
-	*p = x
-	return p
-}
-
-func (x ResetTypeE) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (ResetTypeE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[24].Descriptor()
-}
-
-func (ResetTypeE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[24]
-}
-
-func (x ResetTypeE) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Do not use.
-func (x *ResetTypeE) UnmarshalJSON(b []byte) error {
-	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
-	if err != nil {
-		return err
-	}
-	*x = ResetTypeE(num)
-	return nil
-}
-
-// Deprecated: Use ResetTypeE.Descriptor instead.
-func (ResetTypeE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{24}
-}
-
 type EvPriorityE int32
 
 const (
@@ -1623,11 +1561,11 @@ func (x EvPriorityE) String() string {
 }
 
 func (EvPriorityE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[25].Descriptor()
+	return file_amps_common_proto_enumTypes[24].Descriptor()
 }
 
 func (EvPriorityE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[25]
+	return &file_amps_common_proto_enumTypes[24]
 }
 
 func (x EvPriorityE) Number() protoreflect.EnumNumber {
@@ -1646,7 +1584,7 @@ func (x *EvPriorityE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use EvPriorityE.Descriptor instead.
 func (EvPriorityE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{25}
+	return file_amps_common_proto_rawDescGZIP(), []int{24}
 }
 
 type AnalogOutRead struct {
@@ -2040,14 +1978,7 @@ const file_amps_common_proto_rawDesc = "" +
 	"\x18PS_REDUNDANCY_MODE_OTHER\x10\x01\x12\x1e\n" +
 	"\x1aPS_REDUNDANCY_MODE_UNKNOWN\x10\x02\x12\"\n" +
 	"\x1ePS_REDUNDANCY_MODE_LOADSHARING\x10\x03\x12(\n" +
-	"$PS_REDUNDANCY_MODE_SWITCHEDREDUNDANT\x10\x04*O\n" +
-	"\freset_type_e\x12\x0e\n" +
-	"\n" +
-	"SOFT_RESET\x10\x01\x12\x0e\n" +
-	"\n" +
-	"HARD_RESET\x10\x02\x12\f\n" +
-	"\bNV_RESET\x10\x04\x12\x11\n" +
-	"\rFACTORY_RESET\x10\b*\x88\x01\n" +
+	"$PS_REDUNDANCY_MODE_SWITCHEDREDUNDANT\x10\x04*\x88\x01\n" +
 	"\rev_priority_e\x12\x10\n" +
 	"\fEV_EMERGENCY\x10\x01\x12\f\n" +
 	"\bEV_ALERT\x10\x02\x12\x0f\n" +
@@ -2071,7 +2002,7 @@ func file_amps_common_proto_rawDescGZIP() []byte {
 	return file_amps_common_proto_rawDescData
 }
 
-var file_amps_common_proto_enumTypes = make([]protoimpl.EnumInfo, 26)
+var file_amps_common_proto_enumTypes = make([]protoimpl.EnumInfo, 25)
 var file_amps_common_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_amps_common_proto_goTypes = []any{
 	(PathSelectorE)(0),            // 0: scte.amp.path_selector_e
@@ -2098,12 +2029,11 @@ var file_amps_common_proto_goTypes = []any{
 	(ErrorCodeE)(0),               // 21: scte.amp.error_code_e
 	(AmplifierTypeE)(0),           // 22: scte.amp.amplifier_type_e
 	(PwrSupplyRedundancyModeE)(0), // 23: scte.amp.pwr_supply_redundancy_mode_e
-	(ResetTypeE)(0),               // 24: scte.amp.reset_type_e
-	(EvPriorityE)(0),              // 25: scte.amp.ev_priority_e
-	(*AnalogOutRead)(nil),         // 26: scte.amp.AnalogOutRead
-	(*AnalogOutWrite)(nil),        // 27: scte.amp.AnalogOutWrite
-	(*AnalogInRead)(nil),          // 28: scte.amp.AnalogInRead
-	(*FragmentInfo)(nil),          // 29: scte.amp.FragmentInfo
+	(EvPriorityE)(0),              // 24: scte.amp.ev_priority_e
+	(*AnalogOutRead)(nil),         // 25: scte.amp.AnalogOutRead
+	(*AnalogOutWrite)(nil),        // 26: scte.amp.AnalogOutWrite
+	(*AnalogInRead)(nil),          // 27: scte.amp.AnalogInRead
+	(*FragmentInfo)(nil),          // 28: scte.amp.FragmentInfo
 }
 var file_amps_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -2123,7 +2053,7 @@ func file_amps_common_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_common_proto_rawDesc), len(file_amps_common_proto_rawDesc)),
-			NumEnums:      26,
+			NumEnums:      25,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,

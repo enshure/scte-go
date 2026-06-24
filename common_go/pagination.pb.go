@@ -23,7 +23,7 @@ const (
 
 type ResponsePaginationInfo struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	NextPageCursor *uint32                `protobuf:"varint,1,opt,name=next_page_cursor,json=nextPageCursor" json:"next_page_cursor,omitempty"`
+	NextPageCursor *uint32                `protobuf:"varint,1,opt,name=next_page_cursor,json=nextPageCursor" json:"next_page_cursor,omitempty"` // Cursor for the next page or byte/buffer position of results, if any.
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }

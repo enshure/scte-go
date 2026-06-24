@@ -7,7 +7,6 @@
 package sctexponder
 
 import (
-	_ "github.com/enshure/scte-go/common_go"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -22,6 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Envelope-level response status for a processed Msg.
 type ResponseStatus int32
 
 const (
@@ -78,11 +78,15 @@ func (ResponseStatus) EnumDescriptor() ([]byte, []int) {
 	return file_xponder_api_proto_rawDescGZIP(), []int{0}
 }
 
+// Envelope-level result returned with a Msg response.
 type Result struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        *ResponseStatus        `protobuf:"varint,1,req,name=status,enum=scte.xponder.ResponseStatus" json:"status,omitempty"`
-	Code          *uint32                `protobuf:"varint,2,opt,name=code" json:"code,omitempty"`
-	Message       *string                `protobuf:"bytes,3,opt,name=message" json:"message,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Overall success or failure of processing the Msg envelope.
+	Status *ResponseStatus `protobuf:"varint,1,req,name=status,enum=scte.xponder.ResponseStatus" json:"status,omitempty"`
+	// Optional implementation-specific status or error code.
+	Code *uint32 `protobuf:"varint,2,opt,name=code" json:"code,omitempty"`
+	// Optional human-readable status or error detail.
+	Message       *string `protobuf:"bytes,3,opt,name=message" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -138,15 +142,18 @@ func (x *Result) GetMessage() string {
 	return ""
 }
 
+// Top-level protobuf API envelope exchanged between HRDC and a managed device.
 type Msg struct {
-	state  protoimpl.MessageState `protogen:"open.v1"`
-	Cookie *uint32                `protobuf:"varint,1,opt,name=cookie" json:"cookie,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Opaque sender-chosen correlation value echoed by the response.
+	Cookie *uint32 `protobuf:"varint,1,opt,name=cookie" json:"cookie,omitempty"`
 	// Types that are valid to be assigned to Id:
 	//
 	//	*Msg_HRDCGet
 	//	*Msg_HRDCSet
-	Id            isMsg_Id `protobuf_oneof:"id"`
-	Result        *Result  `protobuf:"bytes,3,opt,name=result" json:"result,omitempty"`
+	Id isMsg_Id `protobuf_oneof:"id"`
+	// Envelope-level processing result for response messages.
+	Result        *Result `protobuf:"bytes,3,opt,name=result" json:"result,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -225,10 +232,12 @@ type isMsg_Id interface {
 }
 
 type Msg_HRDCGet struct {
+	// Get request/response envelope for reading controller groups.
 	HRDCGet *HRDC_GetAPI `protobuf:"bytes,1900,opt,name=HRDCGet,oneof"`
 }
 
 type Msg_HRDCSet struct {
+	// Set request/response envelope for updating controller groups or operations.
 	HRDCSet *HRDC_SetAPI `protobuf:"bytes,1901,opt,name=HRDCSet,oneof"`
 }
 
@@ -240,7 +249,7 @@ var File_xponder_api_proto protoreflect.FileDescriptor
 
 const file_xponder_api_proto_rawDesc = "" +
 	"\n" +
-	"\x11xponder/api.proto\x12\fscte.xponder\x1a\x14xponder/common.proto\x1a\x1acommon/device_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/status_common.proto\x1a\x1acommon/sensor_common.proto\x1a\x17xponder/transport.proto\x1a\x1bcommon/version_common.proto\x1a\x17common/pagination.proto\x1a\x18xponder/controller.proto\x1a\x14xponder/system.proto\x1a\x13xponder/reset.proto\x1a\x14xponder/events.proto\"m\n" +
+	"\x11xponder/api.proto\x12\fscte.xponder\x1a\x17xponder/transport.proto\"m\n" +
 	"\x06Result\x125\n" +
 	"\x06status\x18\x01 \x02(\x0e2\x1d.scte.xponder.response_statusR\x06status\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\rR\x04code\x12\x18\n" +
@@ -293,12 +302,7 @@ func file_xponder_api_proto_init() {
 	if File_xponder_api_proto != nil {
 		return
 	}
-	file_xponder_common_proto_init()
 	file_xponder_transport_proto_init()
-	file_xponder_controller_proto_init()
-	file_xponder_system_proto_init()
-	file_xponder_reset_proto_init()
-	file_xponder_events_proto_init()
 	file_xponder_api_proto_msgTypes[1].OneofWrappers = []any{
 		(*Msg_HRDCGet)(nil),
 		(*Msg_HRDCSet)(nil),

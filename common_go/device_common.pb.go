@@ -343,7 +343,7 @@ type Location struct {
 	Latitude       *float64               `protobuf:"fixed64,2,opt,name=latitude" json:"latitude,omitempty"`
 	Longitude      *float64               `protobuf:"fixed64,3,opt,name=longitude" json:"longitude,omitempty"`
 	DeviceLocation *DeviceLocationTypeE   `protobuf:"varint,4,opt,name=device_location,json=deviceLocation,enum=scte.common.DeviceLocationTypeE" json:"device_location,omitempty"`
-	UsDevice       *UpstreamDevice        `protobuf:"bytes,5,opt,name=us_device,json=usDevice" json:"us_device,omitempty"`
+	UsDevice       *UpstreamDevice        `protobuf:"bytes,5,opt,name=us_device,json=usDevice" json:"us_device,omitempty"` //This should be configured along with location.  It will be used by HRDC for topology purposes.
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }

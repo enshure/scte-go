@@ -22,6 +22,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// --------------------------------
+// SCTE-283 Section 7.2.1 RF Capabilities Group data-model/API represented as protobuf messages.
+// This section defines messages related to the RF Capabilities Group (RfCapabilitiesGrp) of the amplifier API.
+// These messages would be the payload of HRDC_GetAPI when retrieving the RF capabilities information of the amplifier.
+// It includes messages for RF spectrum capture types, RF port indices, alignment types, RF level control types, stage types, stage locations, and AGC types.
+// It also uses the scte.common.VendorExtensions protobuf message to extend the RF capabilities data model with vendor-specific information without modifying the core API,
+// allowing for flexibility and future expansion.
+// --------------------------------
 type RfSpectrumCaptureTypeE int32
 
 const (
@@ -33,8 +41,8 @@ const (
 	RfSpectrumCaptureTypeE_PORT3_DOWNSTREAM    RfSpectrumCaptureTypeE = 32
 	RfSpectrumCaptureTypeE_PORT4_UPSTREAM      RfSpectrumCaptureTypeE = 64
 	RfSpectrumCaptureTypeE_PORT4_DOWNSTREAM    RfSpectrumCaptureTypeE = 128
-	RfSpectrumCaptureTypeE_PORT_UPSTREAM_ALL   RfSpectrumCaptureTypeE = 256
-	RfSpectrumCaptureTypeE_PORT_DOWNSTREAM_ALL RfSpectrumCaptureTypeE = 512
+	RfSpectrumCaptureTypeE_PORT_UPSTREAM_ALL   RfSpectrumCaptureTypeE = 256 //Extend SCTE-283 info model to include support for all upstream ports.
+	RfSpectrumCaptureTypeE_PORT_DOWNSTREAM_ALL RfSpectrumCaptureTypeE = 512 //Extend SCTE-283 info model to include support for all upstream ports.
 )
 
 // Enum value maps for RfSpectrumCaptureTypeE.
@@ -108,7 +116,7 @@ const (
 	RfPortIndexE_RF_PORT_INDEX_2 RfPortIndexE = 2
 	RfPortIndexE_RF_PORT_INDEX_3 RfPortIndexE = 3
 	RfPortIndexE_RF_PORT_INDEX_4 RfPortIndexE = 4
-	RfPortIndexE_RF_PORT_ALL     RfPortIndexE = 255
+	RfPortIndexE_RF_PORT_ALL     RfPortIndexE = 255 //Extend SCTE-283 info model to include support for all ports.
 )
 
 // Enum value maps for RfPortIndexE.
@@ -1045,8 +1053,8 @@ type RfCapabilities struct {
 	NumDiplexFilters          *uint32                           `protobuf:"varint,3,opt,name=num_diplex_filters,json=numDiplexFilters" json:"num_diplex_filters,omitempty"`
 	SupportsRfSpectrumCapture *RfSpectrumCaptureTypeE           `protobuf:"varint,4,opt,name=supports_rf_spectrum_capture,json=supportsRfSpectrumCapture,enum=scte.amp.RfSpectrumCaptureTypeE" json:"supports_rf_spectrum_capture,omitempty"`
 	RfPortCapabilities        []*RfPortCapabilities             `protobuf:"bytes,9,rep,name=rf_port_capabilities,json=rfPortCapabilities" json:"rf_port_capabilities,omitempty"`
-	VendorRfCapabilities      []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_capabilities,json=vendorRfCapabilities" json:"vendor_rf_capabilities,omitempty"`
-	Page                      *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`
+	VendorRfCapabilities      []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_capabilities,json=vendorRfCapabilities" json:"vendor_rf_capabilities,omitempty"` //scte.common.Vendor extensions for RF capabilities, allowing for future expansion without modifying the core API.
+	Page                      *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`                                                              //Pagination info for cases where the response cannot fit in one packet and needs to be paginated in the API response.
 	unknownFields             protoimpl.UnknownFields
 	sizeCache                 protoimpl.SizeCache
 }

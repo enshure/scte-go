@@ -21,70 +21,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ManagedDevice struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Beid          []byte                 `protobuf:"bytes,1,opt,name=beid" json:"beid,omitempty"`
-	Name          *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ManagedDevice) Reset() {
-	*x = ManagedDevice{}
-	mi := &file_xponder_system_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ManagedDevice) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ManagedDevice) ProtoMessage() {}
-
-func (x *ManagedDevice) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_system_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ManagedDevice.ProtoReflect.Descriptor instead.
-func (*ManagedDevice) Descriptor() ([]byte, []int) {
-	return file_xponder_system_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *ManagedDevice) GetBeid() []byte {
-	if x != nil {
-		return x.Beid
-	}
-	return nil
-}
-
-func (x *ManagedDevice) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
-}
-
 type InfoModelSupport struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *uint32                `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
-	ModelId       *string                `protobuf:"bytes,2,opt,name=model_id,json=modelId" json:"model_id,omitempty"`
-	Index         *uint32                `protobuf:"varint,3,opt,name=index" json:"index,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Index *uint32                `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
+	Beid  []byte                 `protobuf:"bytes,2,opt,name=beid" json:"beid,omitempty"`
+	Name  *string                `protobuf:"bytes,3,opt,name=name" json:"name,omitempty"`
+	// Following information_model_id values are supported:
+	// - transponder - "opt.scte.transponder.v1"
+	// - amplifier - "opt.scte.amp.v1"
+	InformationModelId *string `protobuf:"bytes,4,opt,name=information_model_id,json=informationModelId" json:"information_model_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *InfoModelSupport) Reset() {
 	*x = InfoModelSupport{}
-	mi := &file_xponder_system_proto_msgTypes[1]
+	mi := &file_xponder_system_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -96,7 +48,7 @@ func (x *InfoModelSupport) String() string {
 func (*InfoModelSupport) ProtoMessage() {}
 
 func (x *InfoModelSupport) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_system_proto_msgTypes[1]
+	mi := &file_xponder_system_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -109,21 +61,7 @@ func (x *InfoModelSupport) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfoModelSupport.ProtoReflect.Descriptor instead.
 func (*InfoModelSupport) Descriptor() ([]byte, []int) {
-	return file_xponder_system_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *InfoModelSupport) GetId() uint32 {
-	if x != nil && x.Id != nil {
-		return *x.Id
-	}
-	return 0
-}
-
-func (x *InfoModelSupport) GetModelId() string {
-	if x != nil && x.ModelId != nil {
-		return *x.ModelId
-	}
-	return ""
+	return file_xponder_system_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *InfoModelSupport) GetIndex() uint32 {
@@ -133,18 +71,84 @@ func (x *InfoModelSupport) GetIndex() uint32 {
 	return 0
 }
 
+func (x *InfoModelSupport) GetBeid() []byte {
+	if x != nil {
+		return x.Beid
+	}
+	return nil
+}
+
+func (x *InfoModelSupport) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *InfoModelSupport) GetInformationModelId() string {
+	if x != nil && x.InformationModelId != nil {
+		return *x.InformationModelId
+	}
+	return ""
+}
+
+type ManagedDevices struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InfoModels    []*InfoModelSupport    `protobuf:"bytes,1,rep,name=info_models,json=infoModels" json:"info_models,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ManagedDevices) Reset() {
+	*x = ManagedDevices{}
+	mi := &file_xponder_system_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ManagedDevices) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ManagedDevices) ProtoMessage() {}
+
+func (x *ManagedDevices) ProtoReflect() protoreflect.Message {
+	mi := &file_xponder_system_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ManagedDevices.ProtoReflect.Descriptor instead.
+func (*ManagedDevices) Descriptor() ([]byte, []int) {
+	return file_xponder_system_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ManagedDevices) GetInfoModels() []*InfoModelSupport {
+	if x != nil {
+		return x.InfoModels
+	}
+	return nil
+}
+
 var File_xponder_system_proto protoreflect.FileDescriptor
 
 const file_xponder_system_proto_rawDesc = "" +
 	"\n" +
-	"\x14xponder/system.proto\x12\fscte.xponder\"7\n" +
-	"\rManagedDevice\x12\x12\n" +
-	"\x04beid\x18\x01 \x01(\fR\x04beid\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\"S\n" +
-	"\x10InfoModelSupport\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x19\n" +
-	"\bmodel_id\x18\x02 \x01(\tR\amodelId\x12\x14\n" +
-	"\x05index\x18\x03 \x01(\rR\x05indexB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x14xponder/system.proto\x12\fscte.xponder\"\x82\x01\n" +
+	"\x10InfoModelSupport\x12\x14\n" +
+	"\x05index\x18\x01 \x01(\rR\x05index\x12\x12\n" +
+	"\x04beid\x18\x02 \x01(\fR\x04beid\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x120\n" +
+	"\x14information_model_id\x18\x04 \x01(\tR\x12informationModelId\"Q\n" +
+	"\x0eManagedDevices\x12?\n" +
+	"\vinfo_models\x18\x01 \x03(\v2\x1e.scte.xponder.InfoModelSupportR\n" +
+	"infoModelsB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_system_proto_rawDescOnce sync.Once
@@ -160,15 +164,16 @@ func file_xponder_system_proto_rawDescGZIP() []byte {
 
 var file_xponder_system_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_xponder_system_proto_goTypes = []any{
-	(*ManagedDevice)(nil),    // 0: scte.xponder.ManagedDevice
-	(*InfoModelSupport)(nil), // 1: scte.xponder.InfoModelSupport
+	(*InfoModelSupport)(nil), // 0: scte.xponder.InfoModelSupport
+	(*ManagedDevices)(nil),   // 1: scte.xponder.ManagedDevices
 }
 var file_xponder_system_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: scte.xponder.ManagedDevices.info_models:type_name -> scte.xponder.InfoModelSupport
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_xponder_system_proto_init() }

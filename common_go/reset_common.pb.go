@@ -2,12 +2,11 @@
 // versions:
 // 	protoc-gen-go v1.36.9
 // 	protoc        v5.29.3
-// source: xponder/reset.proto
+// source: common/reset_common.proto
 
-package sctexponder
+package sctecommon
 
 import (
-	common_go "github.com/enshure/scte-go/common_go"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -22,9 +21,72 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Reset type bit values used by reset capability and reset request payloads.
+type ResetTypeE int32
+
+const (
+	ResetTypeE_SOFT_RESET    ResetTypeE = 1
+	ResetTypeE_HARD_RESET    ResetTypeE = 2
+	ResetTypeE_NV_RESET      ResetTypeE = 4
+	ResetTypeE_FACTORY_RESET ResetTypeE = 8
+)
+
+// Enum value maps for ResetTypeE.
+var (
+	ResetTypeE_name = map[int32]string{
+		1: "SOFT_RESET",
+		2: "HARD_RESET",
+		4: "NV_RESET",
+		8: "FACTORY_RESET",
+	}
+	ResetTypeE_value = map[string]int32{
+		"SOFT_RESET":    1,
+		"HARD_RESET":    2,
+		"NV_RESET":      4,
+		"FACTORY_RESET": 8,
+	}
+)
+
+func (x ResetTypeE) Enum() *ResetTypeE {
+	p := new(ResetTypeE)
+	*p = x
+	return p
+}
+
+func (x ResetTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ResetTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_reset_common_proto_enumTypes[0].Descriptor()
+}
+
+func (ResetTypeE) Type() protoreflect.EnumType {
+	return &file_common_reset_common_proto_enumTypes[0]
+}
+
+func (x ResetTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *ResetTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = ResetTypeE(num)
+	return nil
+}
+
+// Deprecated: Use ResetTypeE.Descriptor instead.
+func (ResetTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_common_reset_common_proto_rawDescGZIP(), []int{0}
+}
+
 type ResetCapabilities struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
-	ResetTypesSupported *uint32                `protobuf:"varint,1,opt,name=reset_types_supported,json=resetTypesSupported" json:"reset_types_supported,omitempty"` // One or more bits defined in scte_reset_type_e
+	ResetTypesSupported *uint32                `protobuf:"varint,1,opt,name=reset_types_supported,json=resetTypesSupported" json:"reset_types_supported,omitempty"`
 	ResetHistorySize    *uint32                `protobuf:"varint,2,opt,name=reset_history_size,json=resetHistorySize" json:"reset_history_size,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
@@ -32,7 +94,7 @@ type ResetCapabilities struct {
 
 func (x *ResetCapabilities) Reset() {
 	*x = ResetCapabilities{}
-	mi := &file_xponder_reset_proto_msgTypes[0]
+	mi := &file_common_reset_common_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +106,7 @@ func (x *ResetCapabilities) String() string {
 func (*ResetCapabilities) ProtoMessage() {}
 
 func (x *ResetCapabilities) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_reset_proto_msgTypes[0]
+	mi := &file_common_reset_common_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +119,7 @@ func (x *ResetCapabilities) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResetCapabilities.ProtoReflect.Descriptor instead.
 func (*ResetCapabilities) Descriptor() ([]byte, []int) {
-	return file_xponder_reset_proto_rawDescGZIP(), []int{0}
+	return file_common_reset_common_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ResetCapabilities) GetResetTypesSupported() uint32 {
@@ -78,7 +140,7 @@ type ResetHistoryStatus struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Index            *uint32                `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
 	ResetTimestamp   *string                `protobuf:"bytes,2,opt,name=reset_timestamp,json=resetTimestamp" json:"reset_timestamp,omitempty"`
-	Type             *ScteResetTypeE        `protobuf:"varint,3,opt,name=type,enum=scte.xponder.ScteResetTypeE" json:"type,omitempty"`
+	Type             *ResetTypeE            `protobuf:"varint,3,opt,name=type,enum=scte.common.ResetTypeE" json:"type,omitempty"`
 	Reason           *string                `protobuf:"bytes,4,opt,name=reason" json:"reason,omitempty"`
 	EventIdRef       *uint32                `protobuf:"varint,5,opt,name=event_id_ref,json=eventIdRef" json:"event_id_ref,omitempty"`
 	EventDescription *string                `protobuf:"bytes,6,opt,name=event_description,json=eventDescription" json:"event_description,omitempty"`
@@ -89,7 +151,7 @@ type ResetHistoryStatus struct {
 
 func (x *ResetHistoryStatus) Reset() {
 	*x = ResetHistoryStatus{}
-	mi := &file_xponder_reset_proto_msgTypes[1]
+	mi := &file_common_reset_common_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -101,7 +163,7 @@ func (x *ResetHistoryStatus) String() string {
 func (*ResetHistoryStatus) ProtoMessage() {}
 
 func (x *ResetHistoryStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_reset_proto_msgTypes[1]
+	mi := &file_common_reset_common_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -114,7 +176,7 @@ func (x *ResetHistoryStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResetHistoryStatus.ProtoReflect.Descriptor instead.
 func (*ResetHistoryStatus) Descriptor() ([]byte, []int) {
-	return file_xponder_reset_proto_rawDescGZIP(), []int{1}
+	return file_common_reset_common_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ResetHistoryStatus) GetIndex() uint32 {
@@ -131,11 +193,11 @@ func (x *ResetHistoryStatus) GetResetTimestamp() string {
 	return ""
 }
 
-func (x *ResetHistoryStatus) GetType() ScteResetTypeE {
+func (x *ResetHistoryStatus) GetType() ResetTypeE {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
-	return ScteResetTypeE_SCTE_SOFT_RESET
+	return ResetTypeE_SOFT_RESET
 }
 
 func (x *ResetHistoryStatus) GetReason() string {
@@ -166,79 +228,19 @@ func (x *ResetHistoryStatus) GetRecoveryTime() uint32 {
 	return 0
 }
 
-type ResetNotification struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	Type             *ScteResetTypeE        `protobuf:"varint,1,opt,name=type,enum=scte.xponder.ScteResetTypeE" json:"type,omitempty"`
-	Reason           *string                `protobuf:"bytes,2,opt,name=reason" json:"reason,omitempty"`
-	CurrentSwVersion *string                `protobuf:"bytes,3,opt,name=current_sw_version,json=currentSwVersion" json:"current_sw_version,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
-}
-
-func (x *ResetNotification) Reset() {
-	*x = ResetNotification{}
-	mi := &file_xponder_reset_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ResetNotification) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ResetNotification) ProtoMessage() {}
-
-func (x *ResetNotification) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_reset_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ResetNotification.ProtoReflect.Descriptor instead.
-func (*ResetNotification) Descriptor() ([]byte, []int) {
-	return file_xponder_reset_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ResetNotification) GetType() ScteResetTypeE {
-	if x != nil && x.Type != nil {
-		return *x.Type
-	}
-	return ScteResetTypeE_SCTE_SOFT_RESET
-}
-
-func (x *ResetNotification) GetReason() string {
-	if x != nil && x.Reason != nil {
-		return *x.Reason
-	}
-	return ""
-}
-
-func (x *ResetNotification) GetCurrentSwVersion() string {
-	if x != nil && x.CurrentSwVersion != nil {
-		return *x.CurrentSwVersion
-	}
-	return ""
-}
-
 type Reset struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          *ScteResetTypeE        `protobuf:"varint,1,opt,name=type,enum=scte.xponder.ScteResetTypeE" json:"type,omitempty"`
-	Result        *bool                  `protobuf:"varint,2,opt,name=result" json:"result,omitempty"`                                                // Response Only
-	ErrorTag      *common_go.ErrorTagE   `protobuf:"varint,3,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"` // Response Only
-	ErrorMessage  *string                `protobuf:"bytes,4,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`                 // Response Only
+	Type          *ResetTypeE            `protobuf:"varint,1,opt,name=type,enum=scte.common.ResetTypeE" json:"type,omitempty"`
+	Result        *bool                  `protobuf:"varint,2,opt,name=result" json:"result,omitempty"`
+	ErrorTag      *ErrorTagE             `protobuf:"varint,3,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
+	ErrorMessage  *string                `protobuf:"bytes,4,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Reset) Reset() {
 	*x = Reset{}
-	mi := &file_xponder_reset_proto_msgTypes[3]
+	mi := &file_common_reset_common_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -250,7 +252,7 @@ func (x *Reset) String() string {
 func (*Reset) ProtoMessage() {}
 
 func (x *Reset) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_reset_proto_msgTypes[3]
+	mi := &file_common_reset_common_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -263,14 +265,14 @@ func (x *Reset) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Reset.ProtoReflect.Descriptor instead.
 func (*Reset) Descriptor() ([]byte, []int) {
-	return file_xponder_reset_proto_rawDescGZIP(), []int{3}
+	return file_common_reset_common_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Reset) GetType() ScteResetTypeE {
+func (x *Reset) GetType() ResetTypeE {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
-	return ScteResetTypeE_SCTE_SOFT_RESET
+	return ResetTypeE_SOFT_RESET
 }
 
 func (x *Reset) GetResult() bool {
@@ -280,11 +282,11 @@ func (x *Reset) GetResult() bool {
 	return false
 }
 
-func (x *Reset) GetErrorTag() common_go.ErrorTagE {
+func (x *Reset) GetErrorTag() ErrorTagE {
 	if x != nil && x.ErrorTag != nil {
 		return *x.ErrorTag
 	}
-	return common_go.ErrorTagE(0)
+	return ErrorTagE_OK
 }
 
 func (x *Reset) GetErrorMessage() string {
@@ -297,16 +299,16 @@ func (x *Reset) GetErrorMessage() string {
 type DisableAutoReboot struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Timeout       *uint32                `protobuf:"varint,1,opt,name=timeout" json:"timeout,omitempty"`
-	Result        *bool                  `protobuf:"varint,2,opt,name=result" json:"result,omitempty"`                                                // Response Only
-	ErrorTag      *common_go.ErrorTagE   `protobuf:"varint,3,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"` // Response Only
-	ErrorMessage  *string                `protobuf:"bytes,4,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`                 // Response Only
+	Result        *bool                  `protobuf:"varint,2,opt,name=result" json:"result,omitempty"`
+	ErrorTag      *ErrorTagE             `protobuf:"varint,3,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
+	ErrorMessage  *string                `protobuf:"bytes,4,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *DisableAutoReboot) Reset() {
 	*x = DisableAutoReboot{}
-	mi := &file_xponder_reset_proto_msgTypes[4]
+	mi := &file_common_reset_common_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -318,7 +320,7 @@ func (x *DisableAutoReboot) String() string {
 func (*DisableAutoReboot) ProtoMessage() {}
 
 func (x *DisableAutoReboot) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_reset_proto_msgTypes[4]
+	mi := &file_common_reset_common_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -331,7 +333,7 @@ func (x *DisableAutoReboot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableAutoReboot.ProtoReflect.Descriptor instead.
 func (*DisableAutoReboot) Descriptor() ([]byte, []int) {
-	return file_xponder_reset_proto_rawDescGZIP(), []int{4}
+	return file_common_reset_common_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *DisableAutoReboot) GetTimeout() uint32 {
@@ -348,11 +350,11 @@ func (x *DisableAutoReboot) GetResult() bool {
 	return false
 }
 
-func (x *DisableAutoReboot) GetErrorTag() common_go.ErrorTagE {
+func (x *DisableAutoReboot) GetErrorTag() ErrorTagE {
 	if x != nil && x.ErrorTag != nil {
 		return *x.ErrorTag
 	}
-	return common_go.ErrorTagE(0)
+	return ErrorTagE_OK
 }
 
 func (x *DisableAutoReboot) GetErrorMessage() string {
@@ -364,16 +366,16 @@ func (x *DisableAutoReboot) GetErrorMessage() string {
 
 type EnableAutoReboot struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Result        *bool                  `protobuf:"varint,1,opt,name=result" json:"result,omitempty"`                                                // Response Only
-	ErrorTag      *common_go.ErrorTagE   `protobuf:"varint,2,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"` // Response Only
-	ErrorMessage  *string                `protobuf:"bytes,3,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`                 // Response Only
+	Result        *bool                  `protobuf:"varint,1,opt,name=result" json:"result,omitempty"`
+	ErrorTag      *ErrorTagE             `protobuf:"varint,2,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
+	ErrorMessage  *string                `protobuf:"bytes,3,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *EnableAutoReboot) Reset() {
 	*x = EnableAutoReboot{}
-	mi := &file_xponder_reset_proto_msgTypes[5]
+	mi := &file_common_reset_common_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -385,7 +387,7 @@ func (x *EnableAutoReboot) String() string {
 func (*EnableAutoReboot) ProtoMessage() {}
 
 func (x *EnableAutoReboot) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_reset_proto_msgTypes[5]
+	mi := &file_common_reset_common_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -398,7 +400,7 @@ func (x *EnableAutoReboot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableAutoReboot.ProtoReflect.Descriptor instead.
 func (*EnableAutoReboot) Descriptor() ([]byte, []int) {
-	return file_xponder_reset_proto_rawDescGZIP(), []int{5}
+	return file_common_reset_common_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *EnableAutoReboot) GetResult() bool {
@@ -408,11 +410,11 @@ func (x *EnableAutoReboot) GetResult() bool {
 	return false
 }
 
-func (x *EnableAutoReboot) GetErrorTag() common_go.ErrorTagE {
+func (x *EnableAutoReboot) GetErrorTag() ErrorTagE {
 	if x != nil && x.ErrorTag != nil {
 		return *x.ErrorTag
 	}
-	return common_go.ErrorTagE(0)
+	return ErrorTagE_OK
 }
 
 func (x *EnableAutoReboot) GetErrorMessage() string {
@@ -422,29 +424,25 @@ func (x *EnableAutoReboot) GetErrorMessage() string {
 	return ""
 }
 
-var File_xponder_reset_proto protoreflect.FileDescriptor
+var File_common_reset_common_proto protoreflect.FileDescriptor
 
-const file_xponder_reset_proto_rawDesc = "" +
+const file_common_reset_common_proto_rawDesc = "" +
 	"\n" +
-	"\x13xponder/reset.proto\x12\fscte.xponder\x1a\x14xponder/common.proto\x1a\x19common/error_common.proto\"u\n" +
+	"\x19common/reset_common.proto\x12\vscte.common\x1a\x19common/error_common.proto\"u\n" +
 	"\x11ResetCapabilities\x122\n" +
 	"\x15reset_types_supported\x18\x01 \x01(\rR\x13resetTypesSupported\x12,\n" +
-	"\x12reset_history_size\x18\x02 \x01(\rR\x10resetHistorySize\"\x94\x02\n" +
+	"\x12reset_history_size\x18\x02 \x01(\rR\x10resetHistorySize\"\x8e\x02\n" +
 	"\x12ResetHistoryStatus\x12\x14\n" +
 	"\x05index\x18\x01 \x01(\rR\x05index\x12'\n" +
-	"\x0freset_timestamp\x18\x02 \x01(\tR\x0eresetTimestamp\x123\n" +
-	"\x04type\x18\x03 \x01(\x0e2\x1f.scte.xponder.scte_reset_type_eR\x04type\x12\x16\n" +
+	"\x0freset_timestamp\x18\x02 \x01(\tR\x0eresetTimestamp\x12-\n" +
+	"\x04type\x18\x03 \x01(\x0e2\x19.scte.common.reset_type_eR\x04type\x12\x16\n" +
 	"\x06reason\x18\x04 \x01(\tR\x06reason\x12 \n" +
 	"\fevent_id_ref\x18\x05 \x01(\rR\n" +
 	"eventIdRef\x12+\n" +
 	"\x11event_description\x18\x06 \x01(\tR\x10eventDescription\x12#\n" +
-	"\rrecovery_time\x18\a \x01(\rR\frecoveryTime\"\x8e\x01\n" +
-	"\x11ResetNotification\x123\n" +
-	"\x04type\x18\x01 \x01(\x0e2\x1f.scte.xponder.scte_reset_type_eR\x04type\x12\x16\n" +
-	"\x06reason\x18\x02 \x01(\tR\x06reason\x12,\n" +
-	"\x12current_sw_version\x18\x03 \x01(\tR\x10currentSwVersion\"\xb0\x01\n" +
-	"\x05Reset\x123\n" +
-	"\x04type\x18\x01 \x01(\x0e2\x1f.scte.xponder.scte_reset_type_eR\x04type\x12\x16\n" +
+	"\rrecovery_time\x18\a \x01(\rR\frecoveryTime\"\xaa\x01\n" +
+	"\x05Reset\x12-\n" +
+	"\x04type\x18\x01 \x01(\x0e2\x19.scte.common.reset_type_eR\x04type\x12\x16\n" +
 	"\x06result\x18\x02 \x01(\bR\x06result\x125\n" +
 	"\terror_tag\x18\x03 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xa1\x01\n" +
@@ -456,66 +454,73 @@ const file_xponder_reset_proto_rawDesc = "" +
 	"\x10EnableAutoReboot\x12\x16\n" +
 	"\x06result\x18\x01 \x01(\bR\x06result\x125\n" +
 	"\terror_tag\x18\x02 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessageB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage*O\n" +
+	"\freset_type_e\x12\x0e\n" +
+	"\n" +
+	"SOFT_RESET\x10\x01\x12\x0e\n" +
+	"\n" +
+	"HARD_RESET\x10\x02\x12\f\n" +
+	"\bNV_RESET\x10\x04\x12\x11\n" +
+	"\rFACTORY_RESET\x10\bB1Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
-	file_xponder_reset_proto_rawDescOnce sync.Once
-	file_xponder_reset_proto_rawDescData []byte
+	file_common_reset_common_proto_rawDescOnce sync.Once
+	file_common_reset_common_proto_rawDescData []byte
 )
 
-func file_xponder_reset_proto_rawDescGZIP() []byte {
-	file_xponder_reset_proto_rawDescOnce.Do(func() {
-		file_xponder_reset_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_xponder_reset_proto_rawDesc), len(file_xponder_reset_proto_rawDesc)))
+func file_common_reset_common_proto_rawDescGZIP() []byte {
+	file_common_reset_common_proto_rawDescOnce.Do(func() {
+		file_common_reset_common_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_common_reset_common_proto_rawDesc), len(file_common_reset_common_proto_rawDesc)))
 	})
-	return file_xponder_reset_proto_rawDescData
+	return file_common_reset_common_proto_rawDescData
 }
 
-var file_xponder_reset_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_xponder_reset_proto_goTypes = []any{
-	(*ResetCapabilities)(nil),  // 0: scte.xponder.ResetCapabilities
-	(*ResetHistoryStatus)(nil), // 1: scte.xponder.ResetHistoryStatus
-	(*ResetNotification)(nil),  // 2: scte.xponder.ResetNotification
-	(*Reset)(nil),              // 3: scte.xponder.Reset
-	(*DisableAutoReboot)(nil),  // 4: scte.xponder.DisableAutoReboot
-	(*EnableAutoReboot)(nil),   // 5: scte.xponder.EnableAutoReboot
-	(ScteResetTypeE)(0),        // 6: scte.xponder.scte_reset_type_e
-	(common_go.ErrorTagE)(0),   // 7: scte.common.error_tag_e
+var file_common_reset_common_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_common_reset_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_common_reset_common_proto_goTypes = []any{
+	(ResetTypeE)(0),            // 0: scte.common.reset_type_e
+	(*ResetCapabilities)(nil),  // 1: scte.common.ResetCapabilities
+	(*ResetHistoryStatus)(nil), // 2: scte.common.ResetHistoryStatus
+	(*Reset)(nil),              // 3: scte.common.Reset
+	(*DisableAutoReboot)(nil),  // 4: scte.common.DisableAutoReboot
+	(*EnableAutoReboot)(nil),   // 5: scte.common.EnableAutoReboot
+	(ErrorTagE)(0),             // 6: scte.common.error_tag_e
 }
-var file_xponder_reset_proto_depIdxs = []int32{
-	6, // 0: scte.xponder.ResetHistoryStatus.type:type_name -> scte.xponder.scte_reset_type_e
-	6, // 1: scte.xponder.ResetNotification.type:type_name -> scte.xponder.scte_reset_type_e
-	6, // 2: scte.xponder.Reset.type:type_name -> scte.xponder.scte_reset_type_e
-	7, // 3: scte.xponder.Reset.error_tag:type_name -> scte.common.error_tag_e
-	7, // 4: scte.xponder.DisableAutoReboot.error_tag:type_name -> scte.common.error_tag_e
-	7, // 5: scte.xponder.EnableAutoReboot.error_tag:type_name -> scte.common.error_tag_e
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+var file_common_reset_common_proto_depIdxs = []int32{
+	0, // 0: scte.common.ResetHistoryStatus.type:type_name -> scte.common.reset_type_e
+	0, // 1: scte.common.Reset.type:type_name -> scte.common.reset_type_e
+	6, // 2: scte.common.Reset.error_tag:type_name -> scte.common.error_tag_e
+	6, // 3: scte.common.DisableAutoReboot.error_tag:type_name -> scte.common.error_tag_e
+	6, // 4: scte.common.EnableAutoReboot.error_tag:type_name -> scte.common.error_tag_e
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
-func init() { file_xponder_reset_proto_init() }
-func file_xponder_reset_proto_init() {
-	if File_xponder_reset_proto != nil {
+func init() { file_common_reset_common_proto_init() }
+func file_common_reset_common_proto_init() {
+	if File_common_reset_common_proto != nil {
 		return
 	}
-	file_xponder_common_proto_init()
+	file_common_error_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_xponder_reset_proto_rawDesc), len(file_xponder_reset_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   6,
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_reset_common_proto_rawDesc), len(file_common_reset_common_proto_rawDesc)),
+			NumEnums:      1,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_xponder_reset_proto_goTypes,
-		DependencyIndexes: file_xponder_reset_proto_depIdxs,
-		MessageInfos:      file_xponder_reset_proto_msgTypes,
+		GoTypes:           file_common_reset_common_proto_goTypes,
+		DependencyIndexes: file_common_reset_common_proto_depIdxs,
+		EnumInfos:         file_common_reset_common_proto_enumTypes,
+		MessageInfos:      file_common_reset_common_proto_msgTypes,
 	}.Build()
-	File_xponder_reset_proto = out.File
-	file_xponder_reset_proto_goTypes = nil
-	file_xponder_reset_proto_depIdxs = nil
+	File_common_reset_common_proto = out.File
+	file_common_reset_common_proto_goTypes = nil
+	file_common_reset_common_proto_depIdxs = nil
 }

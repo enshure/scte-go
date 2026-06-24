@@ -22,6 +22,13 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// --------------------------------
+// SCTE-283 Section 7.2.2 RF Status Group data-model/API represented as protobuf messages.
+// This section defines messages related to the RF Status Group (RfStatusGrp) of the amplifier API.
+// These messages would be the payload of HRDC_GetAPI when retrieving the RF status information of the amplifier.
+// It also uses the scte.common.VendorExtensions protobuf message to extend the RF status data model with vendor-specific information without modifying the core API,
+// allowing for flexibility and future expansion.
+// --------------------------------
 type RfControlMethodE int32
 
 const (
@@ -658,8 +665,8 @@ type RfStatusGrp struct {
 	UniversalPlugginPresent *bool                             `protobuf:"varint,1,opt,name=universal_pluggin_present,json=universalPlugginPresent" json:"universal_pluggin_present,omitempty"`
 	UniversalPlugginDesc    *string                           `protobuf:"bytes,2,opt,name=universal_pluggin_desc,json=universalPlugginDesc" json:"universal_pluggin_desc,omitempty"`
 	PortStatuses            []*RfPortStatus                   `protobuf:"bytes,3,rep,name=port_statuses,json=portStatuses" json:"port_statuses,omitempty"`
-	VendorRfStatuses        []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_statuses,json=vendorRfStatuses" json:"vendor_rf_statuses,omitempty"`
-	Page                    *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`
+	VendorRfStatuses        []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_statuses,json=vendorRfStatuses" json:"vendor_rf_statuses,omitempty"` //scte.common.Vendor extensions for RF status, allowing for future expansion without modifying the core API.
+	Page                    *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`                                                  //Pagination info for cases where the response cannot fit in one packet and needs to be paginated in the API response.
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }

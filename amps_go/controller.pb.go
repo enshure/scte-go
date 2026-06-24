@@ -23,19 +23,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// scte.common.Vendor-specific controller convenience APIs for bulk get/set over the existing
-// SCTE-283 per-group messages. These APIs are intended for low-MTU links where
-// packets must stay within 232 bytes and indexed groups need explicit selectors.
-//
-// For controller-efficient sensor access over low-MTU links, use:
-//   - SENSOR_DESCRIPTOR: static sensor metadata, fetched infrequently
-//   - SENSOR_READING: compact sensor readings carrying id/value only
-//   - ACTIVE_FAULTS_READ: current active fault/alarm snapshot
-//
-// Selector semantics for these groups are:
-//   - instance_id: exact sensor id
-//   - start_index: first sensor id in ascending catalog order
-//   - max_entries: maximum number of returned sensor records
 type GroupId int32
 
 const (
@@ -164,6 +151,13 @@ func (GroupId) EnumDescriptor() ([]byte, []int) {
 	return file_amps_controller_proto_rawDescGZIP(), []int{0}
 }
 
+// GroupSelector is used in the HRDC_GET request to specify which groups of information are being requested, along with any necessary parameters for that group.
+// - group_id specifies the group of information being requested, as defined in the GroupId enum.
+// - instance_id is an optional field that can be used to specify a particular instance of the group being requested,
+// for example if there are multiple sensors and the request is for sensor status, the instance_id can specify which sensor's status is being requested.
+// scte.common.Vendor extensions can also use instance_id to specify which instance of the vendor extension is being requested, for example if the vendor has defined multiple extensions that are indexed.
+// - start_index and max_entries are optional fields that can be used for pagination when requesting groups that may have multiple entries, such as sensor readings.
+// For example, if there are 100 sensors and the request is for sensor descriptors, the start_index
 type GroupSelector struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	GroupId       *GroupId               `protobuf:"varint,1,opt,name=group_id,json=groupId,enum=scte.amp.GroupId" json:"group_id,omitempty"`
@@ -329,10 +323,10 @@ type ControllerGetGroupResponse struct {
 	//	*ControllerGetGroupResponse_RfCapabilities
 	//	*ControllerGetGroupResponse_RfStatusGroup
 	//	*ControllerGetGroupResponse_RfConfigGrp
-	Payload          isControllerGetGroupResponse_Payload `protobuf_oneof:"payload"`
-	VendorExtensions []*common_go.VendorExtension         `protobuf:"bytes,100,rep,name=vendor_extensions,json=vendorExtensions" json:"vendor_extensions,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	//	*ControllerGetGroupResponse_VendorExtensions
+	Payload       isControllerGetGroupResponse_Payload `protobuf_oneof:"payload"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ControllerGetGroupResponse) Reset() {
@@ -483,7 +477,7 @@ func (x *ControllerGetGroupResponse) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetResetCapabilities() *ResetCapabilities {
+func (x *ControllerGetGroupResponse) GetResetCapabilities() *common_go.ResetCapabilities {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_ResetCapabilities); ok {
 			return x.ResetCapabilities
@@ -492,7 +486,7 @@ func (x *ControllerGetGroupResponse) GetResetCapabilities() *ResetCapabilities {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetResetHistoryStatus() *ResetHistoryStatus {
+func (x *ControllerGetGroupResponse) GetResetHistoryStatus() *common_go.ResetHistoryStatus {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_ResetHistoryStatus); ok {
 			return x.ResetHistoryStatus
@@ -501,7 +495,7 @@ func (x *ControllerGetGroupResponse) GetResetHistoryStatus() *ResetHistoryStatus
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetReset_() *Reset {
+func (x *ControllerGetGroupResponse) GetReset_() *common_go.Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_Reset_); ok {
 			return x.Reset_
@@ -510,7 +504,7 @@ func (x *ControllerGetGroupResponse) GetReset_() *Reset {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetDisableAutoReboot() *DisableAutoReboot {
+func (x *ControllerGetGroupResponse) GetDisableAutoReboot() *common_go.DisableAutoReboot {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_DisableAutoReboot); ok {
 			return x.DisableAutoReboot
@@ -519,7 +513,7 @@ func (x *ControllerGetGroupResponse) GetDisableAutoReboot() *DisableAutoReboot {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetEnableAutoReboot() *EnableAutoReboot {
+func (x *ControllerGetGroupResponse) GetEnableAutoReboot() *common_go.EnableAutoReboot {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_EnableAutoReboot); ok {
 			return x.EnableAutoReboot
@@ -618,9 +612,11 @@ func (x *ControllerGetGroupResponse) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
-func (x *ControllerGetGroupResponse) GetVendorExtensions() []*common_go.VendorExtension {
+func (x *ControllerGetGroupResponse) GetVendorExtensions() *common_go.VendorExtensions {
 	if x != nil {
-		return x.VendorExtensions
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_VendorExtensions); ok {
+			return x.VendorExtensions
+		}
 	}
 	return nil
 }
@@ -670,23 +666,23 @@ type ControllerGetGroupResponse_SystemCfg struct {
 }
 
 type ControllerGetGroupResponse_ResetCapabilities struct {
-	ResetCapabilities *ResetCapabilities `protobuf:"bytes,21,opt,name=reset_capabilities,json=resetCapabilities,oneof"`
+	ResetCapabilities *common_go.ResetCapabilities `protobuf:"bytes,21,opt,name=reset_capabilities,json=resetCapabilities,oneof"`
 }
 
 type ControllerGetGroupResponse_ResetHistoryStatus struct {
-	ResetHistoryStatus *ResetHistoryStatus `protobuf:"bytes,22,opt,name=reset_history_status,json=resetHistoryStatus,oneof"`
+	ResetHistoryStatus *common_go.ResetHistoryStatus `protobuf:"bytes,22,opt,name=reset_history_status,json=resetHistoryStatus,oneof"`
 }
 
 type ControllerGetGroupResponse_Reset_ struct {
-	Reset_ *Reset `protobuf:"bytes,23,opt,name=reset,oneof"`
+	Reset_ *common_go.Reset `protobuf:"bytes,23,opt,name=reset,oneof"`
 }
 
 type ControllerGetGroupResponse_DisableAutoReboot struct {
-	DisableAutoReboot *DisableAutoReboot `protobuf:"bytes,24,opt,name=disable_auto_reboot,json=disableAutoReboot,oneof"`
+	DisableAutoReboot *common_go.DisableAutoReboot `protobuf:"bytes,24,opt,name=disable_auto_reboot,json=disableAutoReboot,oneof"`
 }
 
 type ControllerGetGroupResponse_EnableAutoReboot struct {
-	EnableAutoReboot *EnableAutoReboot `protobuf:"bytes,25,opt,name=enable_auto_reboot,json=enableAutoReboot,oneof"`
+	EnableAutoReboot *common_go.EnableAutoReboot `protobuf:"bytes,25,opt,name=enable_auto_reboot,json=enableAutoReboot,oneof"`
 }
 
 type ControllerGetGroupResponse_EventCapabilities struct {
@@ -727,6 +723,10 @@ type ControllerGetGroupResponse_RfStatusGroup struct {
 
 type ControllerGetGroupResponse_RfConfigGrp struct {
 	RfConfigGrp *RfCfgGrp `protobuf:"bytes,39,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
+}
+
+type ControllerGetGroupResponse_VendorExtensions struct {
+	VendorExtensions *common_go.VendorExtensions `protobuf:"bytes,100,opt,name=vendor_extensions,json=vendorExtensions,oneof"`
 }
 
 func (*ControllerGetGroupResponse_SystemCapabilities) isControllerGetGroupResponse_Payload() {}
@@ -778,6 +778,8 @@ func (*ControllerGetGroupResponse_RfCapabilities) isControllerGetGroupResponse_P
 func (*ControllerGetGroupResponse_RfStatusGroup) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_RfConfigGrp) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_VendorExtensions) isControllerGetGroupResponse_Payload() {}
 
 type ControllerGetResponse struct {
 	state         protoimpl.MessageState        `protogen:"open.v1"`
@@ -851,10 +853,10 @@ type ControllerSetRequest struct {
 	//	*ControllerSetRequest_EventReportingCfg
 	//	*ControllerSetRequest_TelemetryIntervalConfig
 	//	*ControllerSetRequest_RfConfigGrp
-	Payload          isControllerSetRequest_Payload `protobuf_oneof:"payload"`
-	VendorExtensions []*common_go.VendorExtension   `protobuf:"bytes,100,rep,name=vendor_extensions,json=vendorExtensions" json:"vendor_extensions,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	//	*ControllerSetRequest_VendorExtensions
+	Payload       isControllerSetRequest_Payload `protobuf_oneof:"payload"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 // Default values for ControllerSetRequest fields.
@@ -915,7 +917,7 @@ func (x *ControllerSetRequest) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerSetRequest) GetReset_() *Reset {
+func (x *ControllerSetRequest) GetReset_() *common_go.Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetRequest_Reset_); ok {
 			return x.Reset_
@@ -924,7 +926,7 @@ func (x *ControllerSetRequest) GetReset_() *Reset {
 	return nil
 }
 
-func (x *ControllerSetRequest) GetDisableAutoReboot() *DisableAutoReboot {
+func (x *ControllerSetRequest) GetDisableAutoReboot() *common_go.DisableAutoReboot {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetRequest_DisableAutoReboot); ok {
 			return x.DisableAutoReboot
@@ -933,7 +935,7 @@ func (x *ControllerSetRequest) GetDisableAutoReboot() *DisableAutoReboot {
 	return nil
 }
 
-func (x *ControllerSetRequest) GetEnableAutoReboot() *EnableAutoReboot {
+func (x *ControllerSetRequest) GetEnableAutoReboot() *common_go.EnableAutoReboot {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetRequest_EnableAutoReboot); ok {
 			return x.EnableAutoReboot
@@ -969,9 +971,11 @@ func (x *ControllerSetRequest) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
-func (x *ControllerSetRequest) GetVendorExtensions() []*common_go.VendorExtension {
+func (x *ControllerSetRequest) GetVendorExtensions() *common_go.VendorExtensions {
 	if x != nil {
-		return x.VendorExtensions
+		if x, ok := x.Payload.(*ControllerSetRequest_VendorExtensions); ok {
+			return x.VendorExtensions
+		}
 	}
 	return nil
 }
@@ -985,15 +989,15 @@ type ControllerSetRequest_SystemCfg struct {
 }
 
 type ControllerSetRequest_Reset_ struct {
-	Reset_ *Reset `protobuf:"bytes,12,opt,name=reset,oneof"`
+	Reset_ *common_go.Reset `protobuf:"bytes,12,opt,name=reset,oneof"`
 }
 
 type ControllerSetRequest_DisableAutoReboot struct {
-	DisableAutoReboot *DisableAutoReboot `protobuf:"bytes,13,opt,name=disable_auto_reboot,json=disableAutoReboot,oneof"`
+	DisableAutoReboot *common_go.DisableAutoReboot `protobuf:"bytes,13,opt,name=disable_auto_reboot,json=disableAutoReboot,oneof"`
 }
 
 type ControllerSetRequest_EnableAutoReboot struct {
-	EnableAutoReboot *EnableAutoReboot `protobuf:"bytes,14,opt,name=enable_auto_reboot,json=enableAutoReboot,oneof"`
+	EnableAutoReboot *common_go.EnableAutoReboot `protobuf:"bytes,14,opt,name=enable_auto_reboot,json=enableAutoReboot,oneof"`
 }
 
 type ControllerSetRequest_EventReportingCfg struct {
@@ -1006,6 +1010,10 @@ type ControllerSetRequest_TelemetryIntervalConfig struct {
 
 type ControllerSetRequest_RfConfigGrp struct {
 	RfConfigGrp *RfCfgGrp `protobuf:"bytes,17,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
+}
+
+type ControllerSetRequest_VendorExtensions struct {
+	VendorExtensions *common_go.VendorExtensions `protobuf:"bytes,100,opt,name=vendor_extensions,json=vendorExtensions,oneof"`
 }
 
 func (*ControllerSetRequest_SystemCfg) isControllerSetRequest_Payload() {}
@@ -1022,6 +1030,8 @@ func (*ControllerSetRequest_TelemetryIntervalConfig) isControllerSetRequest_Payl
 
 func (*ControllerSetRequest_RfConfigGrp) isControllerSetRequest_Payload() {}
 
+func (*ControllerSetRequest_VendorExtensions) isControllerSetRequest_Payload() {}
+
 type ControllerSetResponse struct {
 	state        protoimpl.MessageState `protogen:"open.v1"`
 	ErrorTag     *common_go.ErrorTagE   `protobuf:"varint,1,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
@@ -1035,10 +1045,10 @@ type ControllerSetResponse struct {
 	//	*ControllerSetResponse_EventReportingCfg
 	//	*ControllerSetResponse_TelemetryIntervalConfig
 	//	*ControllerSetResponse_RfConfigGrp
-	Payload          isControllerSetResponse_Payload `protobuf_oneof:"payload"`
-	VendorExtensions []*common_go.VendorExtension    `protobuf:"bytes,100,rep,name=vendor_extensions,json=vendorExtensions" json:"vendor_extensions,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	//	*ControllerSetResponse_VendorExtensions
+	Payload       isControllerSetResponse_Payload `protobuf_oneof:"payload"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ControllerSetResponse) Reset() {
@@ -1101,7 +1111,7 @@ func (x *ControllerSetResponse) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerSetResponse) GetReset_() *Reset {
+func (x *ControllerSetResponse) GetReset_() *common_go.Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetResponse_Reset_); ok {
 			return x.Reset_
@@ -1110,7 +1120,7 @@ func (x *ControllerSetResponse) GetReset_() *Reset {
 	return nil
 }
 
-func (x *ControllerSetResponse) GetDisableAutoReboot() *DisableAutoReboot {
+func (x *ControllerSetResponse) GetDisableAutoReboot() *common_go.DisableAutoReboot {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetResponse_DisableAutoReboot); ok {
 			return x.DisableAutoReboot
@@ -1119,7 +1129,7 @@ func (x *ControllerSetResponse) GetDisableAutoReboot() *DisableAutoReboot {
 	return nil
 }
 
-func (x *ControllerSetResponse) GetEnableAutoReboot() *EnableAutoReboot {
+func (x *ControllerSetResponse) GetEnableAutoReboot() *common_go.EnableAutoReboot {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetResponse_EnableAutoReboot); ok {
 			return x.EnableAutoReboot
@@ -1155,9 +1165,11 @@ func (x *ControllerSetResponse) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
-func (x *ControllerSetResponse) GetVendorExtensions() []*common_go.VendorExtension {
+func (x *ControllerSetResponse) GetVendorExtensions() *common_go.VendorExtensions {
 	if x != nil {
-		return x.VendorExtensions
+		if x, ok := x.Payload.(*ControllerSetResponse_VendorExtensions); ok {
+			return x.VendorExtensions
+		}
 	}
 	return nil
 }
@@ -1171,15 +1183,15 @@ type ControllerSetResponse_SystemCfg struct {
 }
 
 type ControllerSetResponse_Reset_ struct {
-	Reset_ *Reset `protobuf:"bytes,12,opt,name=reset,oneof"`
+	Reset_ *common_go.Reset `protobuf:"bytes,12,opt,name=reset,oneof"`
 }
 
 type ControllerSetResponse_DisableAutoReboot struct {
-	DisableAutoReboot *DisableAutoReboot `protobuf:"bytes,13,opt,name=disable_auto_reboot,json=disableAutoReboot,oneof"`
+	DisableAutoReboot *common_go.DisableAutoReboot `protobuf:"bytes,13,opt,name=disable_auto_reboot,json=disableAutoReboot,oneof"`
 }
 
 type ControllerSetResponse_EnableAutoReboot struct {
-	EnableAutoReboot *EnableAutoReboot `protobuf:"bytes,14,opt,name=enable_auto_reboot,json=enableAutoReboot,oneof"`
+	EnableAutoReboot *common_go.EnableAutoReboot `protobuf:"bytes,14,opt,name=enable_auto_reboot,json=enableAutoReboot,oneof"`
 }
 
 type ControllerSetResponse_EventReportingCfg struct {
@@ -1192,6 +1204,10 @@ type ControllerSetResponse_TelemetryIntervalConfig struct {
 
 type ControllerSetResponse_RfConfigGrp struct {
 	RfConfigGrp *RfCfgGrp `protobuf:"bytes,17,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
+}
+
+type ControllerSetResponse_VendorExtensions struct {
+	VendorExtensions *common_go.VendorExtensions `protobuf:"bytes,100,opt,name=vendor_extensions,json=vendorExtensions,oneof"`
 }
 
 func (*ControllerSetResponse_SystemCfg) isControllerSetResponse_Payload() {}
@@ -1208,11 +1224,13 @@ func (*ControllerSetResponse_TelemetryIntervalConfig) isControllerSetResponse_Pa
 
 func (*ControllerSetResponse_RfConfigGrp) isControllerSetResponse_Payload() {}
 
+func (*ControllerSetResponse_VendorExtensions) isControllerSetResponse_Payload() {}
+
 var File_amps_controller_proto protoreflect.FileDescriptor
 
 const file_amps_controller_proto_rawDesc = "" +
 	"\n" +
-	"\x15amps/controller.proto\x12\bscte.amp\x1a\x13amps/spectrum.proto\x1a\x19common/error_common.proto\x1a\x1acommon/device_common.proto\x1a\x19common/event_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/vendor_common.proto\x1a\x1bcommon/version_common.proto\x1a\x15amps/system_grp.proto\x1a\x1eamps/rf_capabilities_grp.proto\x1a\x14amps/rf_status.proto\x1a\x11amps/rf_cfg.proto\x1a\x10amps/reset.proto\x1a\x11amps/events.proto\x1a\x11amps/sensor.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\x01\n" +
+	"\x15amps/controller.proto\x12\bscte.amp\x1a\x13amps/spectrum.proto\x1a\x19common/error_common.proto\x1a\x1acommon/device_common.proto\x1a\x19common/event_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/vendor_common.proto\x1a\x1bcommon/version_common.proto\x1a\x15amps/system_grp.proto\x1a\x1eamps/rf_capabilities_grp.proto\x1a\x14amps/rf_status.proto\x1a\x11amps/rf_cfg.proto\x1a\x19common/reset_common.proto\x1a\x1acommon/sensor_common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\x01\n" +
 	"\rGroupSelector\x12,\n" +
 	"\bgroup_id\x18\x01 \x01(\x0e2\x11.scte.amp.GroupIdR\agroupId\x12\x1f\n" +
 	"\vinstance_id\x18\x02 \x01(\rR\n" +
@@ -1225,7 +1243,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\tselectors\x18\x01 \x03(\v2\x17.scte.amp.GroupSelectorR\tselectors\x12+\n" +
 	"\x0fmax_packet_size\x18\x02 \x01(\r:\x03232R\rmaxPacketSize\x12Z\n" +
 	"\x18spectrum_capture_request\x18\n" +
-	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\"\x9c\x10\n" +
+	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\"\xae\x10\n" +
 	"\x1aControllerGetGroupResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12B\n" +
@@ -1241,12 +1259,12 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x13power_supply_status\x18\x11 \x01(\v2\x1b.scte.amp.PowerSupplyStatusH\x00R\x11powerSupplyStatus\x12J\n" +
 	"\x12output_rail_status\x18\x12 \x01(\v2\x1a.scte.amp.OutputRailStatusH\x00R\x10outputRailStatus\x127\n" +
 	"\n" +
-	"system_cfg\x18\x14 \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12L\n" +
-	"\x12reset_capabilities\x18\x15 \x01(\v2\x1b.scte.amp.ResetCapabilitiesH\x00R\x11resetCapabilities\x12P\n" +
-	"\x14reset_history_status\x18\x16 \x01(\v2\x1c.scte.amp.ResetHistoryStatusH\x00R\x12resetHistoryStatus\x12'\n" +
-	"\x05reset\x18\x17 \x01(\v2\x0f.scte.amp.ResetH\x00R\x05reset\x12M\n" +
-	"\x13disable_auto_reboot\x18\x18 \x01(\v2\x1b.scte.amp.DisableAutoRebootH\x00R\x11disableAutoReboot\x12J\n" +
-	"\x12enable_auto_reboot\x18\x19 \x01(\v2\x1a.scte.amp.EnableAutoRebootH\x00R\x10enableAutoReboot\x12O\n" +
+	"system_cfg\x18\x14 \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12O\n" +
+	"\x12reset_capabilities\x18\x15 \x01(\v2\x1e.scte.common.ResetCapabilitiesH\x00R\x11resetCapabilities\x12S\n" +
+	"\x14reset_history_status\x18\x16 \x01(\v2\x1f.scte.common.ResetHistoryStatusH\x00R\x12resetHistoryStatus\x12*\n" +
+	"\x05reset\x18\x17 \x01(\v2\x12.scte.common.ResetH\x00R\x05reset\x12P\n" +
+	"\x13disable_auto_reboot\x18\x18 \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
+	"\x12enable_auto_reboot\x18\x19 \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12O\n" +
 	"\x12event_capabilities\x18\x1a \x01(\v2\x1e.scte.common.EventCapabilitiesH\x00R\x11eventCapabilities\x12O\n" +
 	"\x12event_notification\x18\x1e \x01(\v2\x1e.scte.common.EventNotificationH\x00R\x11eventNotification\x12b\n" +
 	"\x19telemetry_interval_config\x18\x1f \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x12N\n" +
@@ -1256,40 +1274,40 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\fsensors_data\x18# \x01(\v2\x18.scte.common.SensorsDataH\x00R\vsensorsData\x12C\n" +
 	"\x0frf_capabilities\x18% \x01(\v2\x18.scte.amp.RfCapabilitiesH\x00R\x0erfCapabilities\x12?\n" +
 	"\x0frf_status_group\x18& \x01(\v2\x15.scte.amp.RfStatusGrpH\x00R\rrfStatusGroup\x128\n" +
-	"\rrf_config_grp\x18' \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12I\n" +
-	"\x11vendor_extensions\x18d \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorExtensionsB\t\n" +
+	"\rrf_config_grp\x18' \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
+	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
 	"\apayload\"\xac\x01\n" +
 	"\x15ControllerGetResponse\x120\n" +
 	"\x06result\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\x06result\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12<\n" +
 	"\x06groups\x18\n" +
-	" \x03(\v2$.scte.amp.ControllerGetGroupResponseR\x06groups\"\x86\x05\n" +
+	" \x03(\v2$.scte.amp.ControllerGetGroupResponseR\x06groups\"\x92\x05\n" +
 	"\x14ControllerSetRequest\x12+\n" +
 	"\x0fmax_packet_size\x18\x01 \x01(\r:\x03232R\rmaxPacketSize\x127\n" +
 	"\n" +
 	"system_cfg\x18\n" +
-	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12'\n" +
-	"\x05reset\x18\f \x01(\v2\x0f.scte.amp.ResetH\x00R\x05reset\x12M\n" +
-	"\x13disable_auto_reboot\x18\r \x01(\v2\x1b.scte.amp.DisableAutoRebootH\x00R\x11disableAutoReboot\x12J\n" +
-	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1a.scte.amp.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
+	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12*\n" +
+	"\x05reset\x18\f \x01(\v2\x12.scte.common.ResetH\x00R\x05reset\x12P\n" +
+	"\x13disable_auto_reboot\x18\r \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
+	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
-	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12I\n" +
-	"\x11vendor_extensions\x18d \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorExtensionsB\t\n" +
-	"\apayload\"\xb6\x05\n" +
+	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
+	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
+	"\apayload\"\xc2\x05\n" +
 	"\x15ControllerSetResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x127\n" +
 	"\n" +
 	"system_cfg\x18\n" +
-	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12'\n" +
-	"\x05reset\x18\f \x01(\v2\x0f.scte.amp.ResetH\x00R\x05reset\x12M\n" +
-	"\x13disable_auto_reboot\x18\r \x01(\v2\x1b.scte.amp.DisableAutoRebootH\x00R\x11disableAutoReboot\x12J\n" +
-	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1a.scte.amp.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
+	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12*\n" +
+	"\x05reset\x18\f \x01(\v2\x12.scte.common.ResetH\x00R\x05reset\x12P\n" +
+	"\x13disable_auto_reboot\x18\r \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
+	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
-	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12I\n" +
-	"\x11vendor_extensions\x18d \x03(\v2\x1c.scte.common.VendorExtensionR\x10vendorExtensionsB\t\n" +
+	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
+	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
 	"\apayload*\xb9\x04\n" +
 	"\aGroupId\x12\x17\n" +
 	"\x13SYSTEM_CAPABILITIES\x10\x01\x12\x1d\n" +
@@ -1358,11 +1376,11 @@ var file_amps_controller_proto_goTypes = []any{
 	(*PowerSupplyStatus)(nil),                 // 17: scte.amp.PowerSupplyStatus
 	(*OutputRailStatus)(nil),                  // 18: scte.amp.OutputRailStatus
 	(*common_go.SystemCfg)(nil),               // 19: scte.common.SystemCfg
-	(*ResetCapabilities)(nil),                 // 20: scte.amp.ResetCapabilities
-	(*ResetHistoryStatus)(nil),                // 21: scte.amp.ResetHistoryStatus
-	(*Reset)(nil),                             // 22: scte.amp.Reset
-	(*DisableAutoReboot)(nil),                 // 23: scte.amp.DisableAutoReboot
-	(*EnableAutoReboot)(nil),                  // 24: scte.amp.EnableAutoReboot
+	(*common_go.ResetCapabilities)(nil),       // 20: scte.common.ResetCapabilities
+	(*common_go.ResetHistoryStatus)(nil),      // 21: scte.common.ResetHistoryStatus
+	(*common_go.Reset)(nil),                   // 22: scte.common.Reset
+	(*common_go.DisableAutoReboot)(nil),       // 23: scte.common.DisableAutoReboot
+	(*common_go.EnableAutoReboot)(nil),        // 24: scte.common.EnableAutoReboot
 	(*common_go.EventCapabilities)(nil),       // 25: scte.common.EventCapabilities
 	(*common_go.EventNotification)(nil),       // 26: scte.common.EventNotification
 	(*common_go.TelemetryIntervalConfig)(nil), // 27: scte.common.TelemetryIntervalConfig
@@ -1373,7 +1391,7 @@ var file_amps_controller_proto_goTypes = []any{
 	(*RfCapabilities)(nil),                    // 32: scte.amp.RfCapabilities
 	(*RfStatusGrp)(nil),                       // 33: scte.amp.RfStatusGrp
 	(*RfCfgGrp)(nil),                          // 34: scte.amp.RfCfgGrp
-	(*common_go.VendorExtension)(nil),         // 35: scte.common.VendorExtension
+	(*common_go.VendorExtensions)(nil),        // 35: scte.common.VendorExtensions
 	(*common_go.EventReportingCfg)(nil),       // 36: scte.common.EventReportingCfg
 }
 var file_amps_controller_proto_depIdxs = []int32{
@@ -1392,11 +1410,11 @@ var file_amps_controller_proto_depIdxs = []int32{
 	17, // 12: scte.amp.ControllerGetGroupResponse.power_supply_status:type_name -> scte.amp.PowerSupplyStatus
 	18, // 13: scte.amp.ControllerGetGroupResponse.output_rail_status:type_name -> scte.amp.OutputRailStatus
 	19, // 14: scte.amp.ControllerGetGroupResponse.system_cfg:type_name -> scte.common.SystemCfg
-	20, // 15: scte.amp.ControllerGetGroupResponse.reset_capabilities:type_name -> scte.amp.ResetCapabilities
-	21, // 16: scte.amp.ControllerGetGroupResponse.reset_history_status:type_name -> scte.amp.ResetHistoryStatus
-	22, // 17: scte.amp.ControllerGetGroupResponse.reset:type_name -> scte.amp.Reset
-	23, // 18: scte.amp.ControllerGetGroupResponse.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
-	24, // 19: scte.amp.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
+	20, // 15: scte.amp.ControllerGetGroupResponse.reset_capabilities:type_name -> scte.common.ResetCapabilities
+	21, // 16: scte.amp.ControllerGetGroupResponse.reset_history_status:type_name -> scte.common.ResetHistoryStatus
+	22, // 17: scte.amp.ControllerGetGroupResponse.reset:type_name -> scte.common.Reset
+	23, // 18: scte.amp.ControllerGetGroupResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	24, // 19: scte.amp.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
 	25, // 20: scte.amp.ControllerGetGroupResponse.event_capabilities:type_name -> scte.common.EventCapabilities
 	26, // 21: scte.amp.ControllerGetGroupResponse.event_notification:type_name -> scte.common.EventNotification
 	27, // 22: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
@@ -1407,26 +1425,26 @@ var file_amps_controller_proto_depIdxs = []int32{
 	32, // 27: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
 	33, // 28: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
 	34, // 29: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	35, // 30: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtension
+	35, // 30: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
 	8,  // 31: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
 	3,  // 32: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
 	19, // 33: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
-	22, // 34: scte.amp.ControllerSetRequest.reset:type_name -> scte.amp.Reset
-	23, // 35: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
-	24, // 36: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
+	22, // 34: scte.amp.ControllerSetRequest.reset:type_name -> scte.common.Reset
+	23, // 35: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	24, // 36: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
 	36, // 37: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
 	27, // 38: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
 	34, // 39: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	35, // 40: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtension
+	35, // 40: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtensions
 	8,  // 41: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
 	19, // 42: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
-	22, // 43: scte.amp.ControllerSetResponse.reset:type_name -> scte.amp.Reset
-	23, // 44: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.amp.DisableAutoReboot
-	24, // 45: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.amp.EnableAutoReboot
+	22, // 43: scte.amp.ControllerSetResponse.reset:type_name -> scte.common.Reset
+	23, // 44: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	24, // 45: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
 	36, // 46: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
 	27, // 47: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
 	34, // 48: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	35, // 49: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtension
+	35, // 49: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
 	50, // [50:50] is the sub-list for method output_type
 	50, // [50:50] is the sub-list for method input_type
 	50, // [50:50] is the sub-list for extension type_name
@@ -1444,9 +1462,6 @@ func file_amps_controller_proto_init() {
 	file_amps_rf_capabilities_grp_proto_init()
 	file_amps_rf_status_proto_init()
 	file_amps_rf_cfg_proto_init()
-	file_amps_reset_proto_init()
-	file_amps_events_proto_init()
-	file_amps_sensor_proto_init()
 	file_amps_controller_proto_msgTypes[2].OneofWrappers = []any{
 		(*ControllerGetGroupResponse_SystemCapabilities)(nil),
 		(*ControllerGetGroupResponse_PowerSupplyCapabilities)(nil),
@@ -1473,6 +1488,7 @@ func file_amps_controller_proto_init() {
 		(*ControllerGetGroupResponse_RfCapabilities)(nil),
 		(*ControllerGetGroupResponse_RfStatusGroup)(nil),
 		(*ControllerGetGroupResponse_RfConfigGrp)(nil),
+		(*ControllerGetGroupResponse_VendorExtensions)(nil),
 	}
 	file_amps_controller_proto_msgTypes[4].OneofWrappers = []any{
 		(*ControllerSetRequest_SystemCfg)(nil),
@@ -1482,6 +1498,7 @@ func file_amps_controller_proto_init() {
 		(*ControllerSetRequest_EventReportingCfg)(nil),
 		(*ControllerSetRequest_TelemetryIntervalConfig)(nil),
 		(*ControllerSetRequest_RfConfigGrp)(nil),
+		(*ControllerSetRequest_VendorExtensions)(nil),
 	}
 	file_amps_controller_proto_msgTypes[5].OneofWrappers = []any{
 		(*ControllerSetResponse_SystemCfg)(nil),
@@ -1491,6 +1508,7 @@ func file_amps_controller_proto_init() {
 		(*ControllerSetResponse_EventReportingCfg)(nil),
 		(*ControllerSetResponse_TelemetryIntervalConfig)(nil),
 		(*ControllerSetResponse_RfConfigGrp)(nil),
+		(*ControllerSetResponse_VendorExtensions)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

@@ -77,6 +77,11 @@ func (EntityPermissionE) EnumDescriptor() ([]byte, []int) {
 	return file_common_vendor_common_proto_rawDescGZIP(), []int{0}
 }
 
+// VendorExtension is a generic message structure that can be used by vendors to include additional information in API requests or responses.
+// Each extension is identified by a unique id and can carry a value of various types (bool, uint32, string, or blob).
+// The permissions field indicates what accesses are allowed on this extension (e.g., read, write).
+// This message could be mapped to a distinct API or could be used to extend existing API messages by including a repeated field of VendorExtension,
+// allowing for flexible and extensible APIs.
 type VendorExtension struct {
 	state       protoimpl.MessageState `protogen:"open.v1"`
 	Id          *uint32                `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`                                                      // defined by the vendor, for example aoi_vendor_extn_id_e
@@ -204,7 +209,7 @@ type VendorExtension_StringValue struct {
 }
 
 type VendorExtension_BlobValue struct {
-	BlobValue []byte `protobuf:"bytes,13,opt,name=blob_value,json=blobValue,oneof"`
+	BlobValue []byte `protobuf:"bytes,13,opt,name=blob_value,json=blobValue,oneof"` //Vendor specific data, opaque to the API. Could be used to pass a serialized protobuf message defined by the vendor, for example.
 }
 
 func (*VendorExtension_BoolValue) isVendorExtension_Value() {}
@@ -215,11 +220,63 @@ func (*VendorExtension_StringValue) isVendorExtension_Value() {}
 
 func (*VendorExtension_BlobValue) isVendorExtension_Value() {}
 
+type VendorExtensions struct {
+	state          protoimpl.MessageState  `protogen:"open.v1"`
+	Extensions     []*VendorExtension      `protobuf:"bytes,1,rep,name=extensions" json:"extensions,omitempty"`                               // A list of vendor extensions, allowing for multiple extensions to be included in a single message.
+	PaginationInfo *ResponsePaginationInfo `protobuf:"bytes,2,opt,name=pagination_info,json=paginationInfo" json:"pagination_info,omitempty"` // Optional pagination information for cases where the list of extensions is too large to be returned in a single response.
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *VendorExtensions) Reset() {
+	*x = VendorExtensions{}
+	mi := &file_common_vendor_common_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VendorExtensions) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VendorExtensions) ProtoMessage() {}
+
+func (x *VendorExtensions) ProtoReflect() protoreflect.Message {
+	mi := &file_common_vendor_common_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VendorExtensions.ProtoReflect.Descriptor instead.
+func (*VendorExtensions) Descriptor() ([]byte, []int) {
+	return file_common_vendor_common_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *VendorExtensions) GetExtensions() []*VendorExtension {
+	if x != nil {
+		return x.Extensions
+	}
+	return nil
+}
+
+func (x *VendorExtensions) GetPaginationInfo() *ResponsePaginationInfo {
+	if x != nil {
+		return x.PaginationInfo
+	}
+	return nil
+}
+
 var File_common_vendor_common_proto protoreflect.FileDescriptor
 
 const file_common_vendor_common_proto_rawDesc = "" +
 	"\n" +
-	"\x1acommon/vendor_common.proto\x12\vscte.common\"\x8a\x02\n" +
+	"\x1acommon/vendor_common.proto\x12\vscte.common\x1a\x17common/pagination.proto\"\x8a\x02\n" +
 	"\x0fVendorExtension\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12B\n" +
@@ -232,7 +289,12 @@ const file_common_vendor_common_proto_rawDesc = "" +
 	"\fstring_value\x18\f \x01(\tH\x00R\vstringValue\x12\x1f\n" +
 	"\n" +
 	"blob_value\x18\r \x01(\fH\x00R\tblobValueB\a\n" +
-	"\x05value*N\n" +
+	"\x05value\"\x9e\x01\n" +
+	"\x10VendorExtensions\x12<\n" +
+	"\n" +
+	"extensions\x18\x01 \x03(\v2\x1c.scte.common.VendorExtensionR\n" +
+	"extensions\x12L\n" +
+	"\x0fpagination_info\x18\x02 \x01(\v2#.scte.common.ResponsePaginationInfoR\x0epaginationInfo*N\n" +
 	"\x13entity_permission_e\x12\x1a\n" +
 	"\x16ENTITY_PERMISSION_READ\x10\x01\x12\x1b\n" +
 	"\x17ENTITY_PERMISSION_WRITE\x10\x02B1Z/github.com/enshure/scte-go/common_go;sctecommon"
@@ -250,18 +312,22 @@ func file_common_vendor_common_proto_rawDescGZIP() []byte {
 }
 
 var file_common_vendor_common_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_common_vendor_common_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_common_vendor_common_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_common_vendor_common_proto_goTypes = []any{
-	(EntityPermissionE)(0),  // 0: scte.common.entity_permission_e
-	(*VendorExtension)(nil), // 1: scte.common.VendorExtension
+	(EntityPermissionE)(0),         // 0: scte.common.entity_permission_e
+	(*VendorExtension)(nil),        // 1: scte.common.VendorExtension
+	(*VendorExtensions)(nil),       // 2: scte.common.VendorExtensions
+	(*ResponsePaginationInfo)(nil), // 3: scte.common.ResponsePaginationInfo
 }
 var file_common_vendor_common_proto_depIdxs = []int32{
 	0, // 0: scte.common.VendorExtension.permissions:type_name -> scte.common.entity_permission_e
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 1: scte.common.VendorExtensions.extensions:type_name -> scte.common.VendorExtension
+	3, // 2: scte.common.VendorExtensions.pagination_info:type_name -> scte.common.ResponsePaginationInfo
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_common_vendor_common_proto_init() }
@@ -269,6 +335,7 @@ func file_common_vendor_common_proto_init() {
 	if File_common_vendor_common_proto != nil {
 		return
 	}
+	file_common_pagination_proto_init()
 	file_common_vendor_common_proto_msgTypes[0].OneofWrappers = []any{
 		(*VendorExtension_BoolValue)(nil),
 		(*VendorExtension_UintValue)(nil),
@@ -281,7 +348,7 @@ func file_common_vendor_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_vendor_common_proto_rawDesc), len(file_common_vendor_common_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
