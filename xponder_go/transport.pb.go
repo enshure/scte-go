@@ -21,6 +21,13 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// --------------------------------
+// Think of these messages as a way to encapsulate the request and response structures for the HRDC (HFC Remote Devices Controller) APIs in the amplifier system.
+// These APIs would be similar to RPCs in other protocols, where you have a defined request and response message for each API call.
+// The HRDC_GetAPI message can be used for any API call that retrieves information (GET operations), while the HRDC_SetAPI message can be used for any API call that modifies information
+// (SET operations).
+// Each of these messages contains a oneof field that can hold either a request or a response
+// --------------------------------
 type HRDC_GetAPI struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Id:

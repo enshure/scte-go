@@ -93,10 +93,10 @@ type SystemCfg struct {
 	Description     *string                `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
 	Alias           *string                `protobuf:"bytes,4,opt,name=alias" json:"alias,omitempty"`
 	CascadePosition *uint32                `protobuf:"varint,5,opt,name=cascade_position,json=cascadePosition" json:"cascade_position,omitempty"`
-	// If this is not 0, then the amplifier is not fully initialized.
-	// Read-only field.
+	// if this is not 0, then the amplifier is not fully initialized
+	// read-only field
 	InitializationStateBitmask *uint32 `protobuf:"varint,6,opt,name=initialization_state_bitmask,json=initializationStateBitmask" json:"initialization_state_bitmask,omitempty"`
-	// The location of the system.
+	// The location of the system
 	Location      *Location `protobuf:"bytes,7,opt,name=location" json:"location,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

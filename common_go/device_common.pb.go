@@ -9,6 +9,7 @@ package sctecommon
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -152,10 +153,9 @@ type Identification struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	ModelNumber       *string                `protobuf:"bytes,1,opt,name=model_number,json=modelNumber" json:"model_number,omitempty"`
 	SerialNumber      *string                `protobuf:"bytes,2,opt,name=serial_number,json=serialNumber" json:"serial_number,omitempty"`
-	DeviceAlias       *string                `protobuf:"bytes,3,opt,name=device_alias,json=deviceAlias" json:"device_alias,omitempty"`
-	DeviceDescription *string                `protobuf:"bytes,4,opt,name=device_description,json=deviceDescription" json:"device_description,omitempty"`
-	ProductId         *uint32                `protobuf:"varint,5,opt,name=product_id,json=productId" json:"product_id,omitempty"`
-	HwVersion         *string                `protobuf:"bytes,6,opt,name=hw_version,json=hwVersion" json:"hw_version,omitempty"`
+	ProductId         *uint32                `protobuf:"varint,3,opt,name=product_id,json=productId" json:"product_id,omitempty"`
+	HwVersion         *string                `protobuf:"bytes,4,opt,name=hw_version,json=hwVersion" json:"hw_version,omitempty"`
+	ManufacturingDate *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=manufacturing_date,json=manufacturingDate" json:"manufacturing_date,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -204,20 +204,6 @@ func (x *Identification) GetSerialNumber() string {
 	return ""
 }
 
-func (x *Identification) GetDeviceAlias() string {
-	if x != nil && x.DeviceAlias != nil {
-		return *x.DeviceAlias
-	}
-	return ""
-}
-
-func (x *Identification) GetDeviceDescription() string {
-	if x != nil && x.DeviceDescription != nil {
-		return *x.DeviceDescription
-	}
-	return ""
-}
-
 func (x *Identification) GetProductId() uint32 {
 	if x != nil && x.ProductId != nil {
 		return *x.ProductId
@@ -230,6 +216,13 @@ func (x *Identification) GetHwVersion() string {
 		return *x.HwVersion
 	}
 	return ""
+}
+
+func (x *Identification) GetManufacturingDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ManufacturingDate
+	}
+	return nil
 }
 
 type Vendor struct {
@@ -350,11 +343,9 @@ type Location struct {
 	Latitude       *float64               `protobuf:"fixed64,2,opt,name=latitude" json:"latitude,omitempty"`
 	Longitude      *float64               `protobuf:"fixed64,3,opt,name=longitude" json:"longitude,omitempty"`
 	DeviceLocation *DeviceLocationTypeE   `protobuf:"varint,4,opt,name=device_location,json=deviceLocation,enum=scte.common.DeviceLocationTypeE" json:"device_location,omitempty"`
-	// This should be configured along with location. It will be used by HRDC
-	// for topology purposes.
-	UsDevice      *UpstreamDevice `protobuf:"bytes,5,opt,name=us_device,json=usDevice" json:"us_device,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	UsDevice       *UpstreamDevice        `protobuf:"bytes,5,opt,name=us_device,json=usDevice" json:"us_device,omitempty"` //This should be configured along with location.  It will be used by HRDC for topology purposes.
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Location) Reset() {
@@ -426,16 +417,15 @@ var File_common_device_common_proto protoreflect.FileDescriptor
 
 const file_common_device_common_proto_rawDesc = "" +
 	"\n" +
-	"\x1acommon/device_common.proto\x12\vscte.common\"\xe8\x01\n" +
+	"\x1acommon/device_common.proto\x12\vscte.common\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe1\x01\n" +
 	"\x0eIdentification\x12!\n" +
 	"\fmodel_number\x18\x01 \x01(\tR\vmodelNumber\x12#\n" +
-	"\rserial_number\x18\x02 \x01(\tR\fserialNumber\x12!\n" +
-	"\fdevice_alias\x18\x03 \x01(\tR\vdeviceAlias\x12-\n" +
-	"\x12device_description\x18\x04 \x01(\tR\x11deviceDescription\x12\x1d\n" +
+	"\rserial_number\x18\x02 \x01(\tR\fserialNumber\x12\x1d\n" +
 	"\n" +
-	"product_id\x18\x05 \x01(\rR\tproductId\x12\x1d\n" +
+	"product_id\x18\x03 \x01(\rR\tproductId\x12\x1d\n" +
 	"\n" +
-	"hw_version\x18\x06 \x01(\tR\thwVersion\".\n" +
+	"hw_version\x18\x04 \x01(\tR\thwVersion\x12I\n" +
+	"\x12manufacturing_date\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x11manufacturingDate\".\n" +
 	"\x06Vendor\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x10\n" +
 	"\x03oui\x18\x02 \x01(\fR\x03oui\"y\n" +
@@ -478,22 +468,24 @@ func file_common_device_common_proto_rawDescGZIP() []byte {
 var file_common_device_common_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_common_device_common_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_common_device_common_proto_goTypes = []any{
-	(DeviceLocationTypeE)(0), // 0: scte.common.device_location_type_e
-	(UsDeviceTypeE)(0),       // 1: scte.common.us_device_type_e
-	(*Identification)(nil),   // 2: scte.common.Identification
-	(*Vendor)(nil),           // 3: scte.common.Vendor
-	(*UpstreamDevice)(nil),   // 4: scte.common.UpstreamDevice
-	(*Location)(nil),         // 5: scte.common.Location
+	(DeviceLocationTypeE)(0),      // 0: scte.common.device_location_type_e
+	(UsDeviceTypeE)(0),            // 1: scte.common.us_device_type_e
+	(*Identification)(nil),        // 2: scte.common.Identification
+	(*Vendor)(nil),                // 3: scte.common.Vendor
+	(*UpstreamDevice)(nil),        // 4: scte.common.UpstreamDevice
+	(*Location)(nil),              // 5: scte.common.Location
+	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
 }
 var file_common_device_common_proto_depIdxs = []int32{
-	1, // 0: scte.common.UpstreamDevice.type:type_name -> scte.common.us_device_type_e
-	0, // 1: scte.common.Location.device_location:type_name -> scte.common.device_location_type_e
-	4, // 2: scte.common.Location.us_device:type_name -> scte.common.UpstreamDevice
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	6, // 0: scte.common.Identification.manufacturing_date:type_name -> google.protobuf.Timestamp
+	1, // 1: scte.common.UpstreamDevice.type:type_name -> scte.common.us_device_type_e
+	0, // 2: scte.common.Location.device_location:type_name -> scte.common.device_location_type_e
+	4, // 3: scte.common.Location.us_device:type_name -> scte.common.UpstreamDevice
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_common_device_common_proto_init() }
