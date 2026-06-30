@@ -21,15 +21,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// --------------------------------
-// These protobuf definitions describe Sensor data-model ported from the SCTE-283 info model section 7.1.1.8.
-// As defined in SCTE-283, retrieving the sensor data will be very expensive because fetching the value involves too much meta-data.
-// To optimize the performance of retrieving sensor data values, the sensor information is split into two parts: SensorDescriptor and SensorData.
-// SensorDescriptor contains the meta-data information and descriptor version information about each sensor, such as its name, type, scale, precision, unit display, and update rate.
-// SensorData contains an array of ID/value pairs along with descriptor version information of the sensor.
-// This way, the HRDC can retrieve the Descriptor/meta-data once, and then only retrieve the SensorData which is more lightweight for subsequent data retrievals.
-// SensorDescriptor is not defined in SCTE-283, but is proposed to be added to the info model to optimize the retrieval of sensor data.
-// --------------------------------
 type Sensor struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Id              *uint32                `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
@@ -291,8 +282,7 @@ func (x *SensorDescriptor) GetValueUpdateRate() uint32 {
 }
 
 type SensorDescriptors struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Tracks SensorDescriptor/meta-data info is current or stale. The HRDC can use it to decide whether to refresh the SensorDescriptor information.
+	state                protoimpl.MessageState  `protogen:"open.v1"`
 	SensorCatalogVersion *uint64                 `protobuf:"varint,1,opt,name=sensor_catalog_version,json=sensorCatalogVersion" json:"sensor_catalog_version,omitempty"`
 	Sensors              []*SensorDescriptor     `protobuf:"bytes,2,rep,name=sensors" json:"sensors,omitempty"`
 	Page                 *ResponsePaginationInfo `protobuf:"bytes,3,opt,name=page" json:"page,omitempty"`
@@ -404,10 +394,7 @@ func (x *SensorData) GetValue() int32 {
 }
 
 type SensorsData struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// sensor_catalog_version increments everytime there's a change in the sensor descriptors,
-	// such as addition/removal of sensors or changes in the meta-data of existing sensors.
-	// This allows HRDC to detect changes in the sensor catalog and update its stored descriptors accordingly.
+	state                protoimpl.MessageState  `protogen:"open.v1"`
 	SensorCatalogVersion *uint64                 `protobuf:"varint,1,opt,name=sensor_catalog_version,json=sensorCatalogVersion" json:"sensor_catalog_version,omitempty"`
 	TelemetryEtag        *uint64                 `protobuf:"varint,2,opt,name=telemetry_etag,json=telemetryEtag" json:"telemetry_etag,omitempty"`
 	Sensors              []*SensorData           `protobuf:"bytes,3,rep,name=sensors" json:"sensors,omitempty"`
@@ -476,7 +463,7 @@ func (x *SensorsData) GetPage() *ResponsePaginationInfo {
 
 type TelemetryIntervalEntry struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	ClassId            *uint32                `protobuf:"varint,1,opt,name=class_id,json=classId" json:"class_id,omitempty"` //Used to categorize sensors into different telemetry classes. Sensors with the same class_id will be configured to have the same telemetry reporting interval.
+	ClassId            *uint32                `protobuf:"varint,1,opt,name=class_id,json=classId" json:"class_id,omitempty"`
 	Name               *string                `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 	IntervalSeconds    *uint32                `protobuf:"varint,3,opt,name=interval_seconds,json=intervalSeconds" json:"interval_seconds,omitempty"`
 	MinIntervalSeconds *uint32                `protobuf:"varint,4,opt,name=min_interval_seconds,json=minIntervalSeconds" json:"min_interval_seconds,omitempty"`

@@ -317,19 +317,72 @@ func (x *SpectrumCaptureRequest) GetRanges() []*SpectrumCaptureRange {
 	return nil
 }
 
+type SpectrumCapturePointValue struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	FrequencyMhzX100 *uint32                `protobuf:"varint,1,opt,name=frequency_mhz_x100,json=frequencyMhzX100" json:"frequency_mhz_x100,omitempty"` // Frequency in MHz multiplied by 100, for example 261.0 MHz is 26100.
+	PowerX100        *int32                 `protobuf:"zigzag32,2,opt,name=power_x100,json=powerX100" json:"power_x100,omitempty"`                      // Power multiplied by 100, for example 41.43 dBmV is 4143.
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *SpectrumCapturePointValue) Reset() {
+	*x = SpectrumCapturePointValue{}
+	mi := &file_amps_spectrum_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SpectrumCapturePointValue) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SpectrumCapturePointValue) ProtoMessage() {}
+
+func (x *SpectrumCapturePointValue) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_spectrum_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SpectrumCapturePointValue.ProtoReflect.Descriptor instead.
+func (*SpectrumCapturePointValue) Descriptor() ([]byte, []int) {
+	return file_amps_spectrum_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SpectrumCapturePointValue) GetFrequencyMhzX100() uint32 {
+	if x != nil && x.FrequencyMhzX100 != nil {
+		return *x.FrequencyMhzX100
+	}
+	return 0
+}
+
+func (x *SpectrumCapturePointValue) GetPowerX100() int32 {
+	if x != nil && x.PowerX100 != nil {
+		return *x.PowerX100
+	}
+	return 0
+}
+
 type SpectrumCaptureResponse struct {
 	state                    protoimpl.MessageState        `protogen:"open.v1"`
 	SpectrumCaptureDataTypeE *SpectrumCaptureDataTypeE     `protobuf:"varint,2,req,name=spectrum_capture_data_type_e,json=spectrumCaptureDataTypeE,enum=scte.amp.SpectrumCaptureDataTypeE" json:"spectrum_capture_data_type_e,omitempty"` // 1 byte
-	Values                   []*SpectrumCaptureRangeValues `protobuf:"bytes,3,rep,name=values" json:"values,omitempty"`                                                                                                                   // multiplied by 100, for e.g. 43.5 will be sent as 4350 Max bytes - 7 bytes
+	Values                   []*SpectrumCaptureRangeValues `protobuf:"bytes,3,rep,name=values" json:"values,omitempty"`                                                                                                                   // Power values multiplied by 100, for e.g. 43.5 will be sent as 4350 Max bytes - 7 bytes
 	TotalCompositePower      *float32                      `protobuf:"fixed32,4,opt,name=total_composite_power,json=totalCompositePower" json:"total_composite_power,omitempty"`
 	FragmentInfo             *FragmentInfo                 `protobuf:"bytes,5,opt,name=fragment_info,json=fragmentInfo" json:"fragment_info,omitempty"` // header for the response
+	PointValues              []*SpectrumCapturePointValue  `protobuf:"bytes,6,rep,name=point_values,json=pointValues" json:"point_values,omitempty"`    // Sparse/non-uniform points, used for plot-ready REFERENCE_VALUE responses.
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
 
 func (x *SpectrumCaptureResponse) Reset() {
 	*x = SpectrumCaptureResponse{}
-	mi := &file_amps_spectrum_proto_msgTypes[4]
+	mi := &file_amps_spectrum_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -341,7 +394,7 @@ func (x *SpectrumCaptureResponse) String() string {
 func (*SpectrumCaptureResponse) ProtoMessage() {}
 
 func (x *SpectrumCaptureResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_spectrum_proto_msgTypes[4]
+	mi := &file_amps_spectrum_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -354,7 +407,7 @@ func (x *SpectrumCaptureResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SpectrumCaptureResponse.ProtoReflect.Descriptor instead.
 func (*SpectrumCaptureResponse) Descriptor() ([]byte, []int) {
-	return file_amps_spectrum_proto_rawDescGZIP(), []int{4}
+	return file_amps_spectrum_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SpectrumCaptureResponse) GetSpectrumCaptureDataTypeE() SpectrumCaptureDataTypeE {
@@ -385,6 +438,13 @@ func (x *SpectrumCaptureResponse) GetFragmentInfo() *FragmentInfo {
 	return nil
 }
 
+func (x *SpectrumCaptureResponse) GetPointValues() []*SpectrumCapturePointValue {
+	if x != nil {
+		return x.PointValues
+	}
+	return nil
+}
+
 type SpectrumCapture struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Id:
@@ -398,7 +458,7 @@ type SpectrumCapture struct {
 
 func (x *SpectrumCapture) Reset() {
 	*x = SpectrumCapture{}
-	mi := &file_amps_spectrum_proto_msgTypes[5]
+	mi := &file_amps_spectrum_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -410,7 +470,7 @@ func (x *SpectrumCapture) String() string {
 func (*SpectrumCapture) ProtoMessage() {}
 
 func (x *SpectrumCapture) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_spectrum_proto_msgTypes[5]
+	mi := &file_amps_spectrum_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -423,7 +483,7 @@ func (x *SpectrumCapture) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SpectrumCapture.ProtoReflect.Descriptor instead.
 func (*SpectrumCapture) Descriptor() ([]byte, []int) {
-	return file_amps_spectrum_proto_rawDescGZIP(), []int{5}
+	return file_amps_spectrum_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *SpectrumCapture) GetId() isSpectrumCapture_Id {
@@ -489,12 +549,17 @@ const file_amps_spectrum_proto_rawDesc = "" +
 	"\x06values\x18\x04 \x03(\rB\x02\x10\x01R\x06values\"\x8d\x01\n" +
 	"\x16SpectrumCaptureRequest\x129\n" +
 	"\x06config\x18\x02 \x02(\v2!.scte.amp.spectrum_capture_configR\x06config\x128\n" +
-	"\x06ranges\x18\x03 \x03(\v2 .scte.amp.spectrum_capture_rangeR\x06ranges\"\xb3\x02\n" +
+	"\x06ranges\x18\x03 \x03(\v2 .scte.amp.spectrum_capture_rangeR\x06ranges\"k\n" +
+	"\x1cspectrum_capture_point_value\x12,\n" +
+	"\x12frequency_mhz_x100\x18\x01 \x01(\rR\x10frequencyMhzX100\x12\x1d\n" +
+	"\n" +
+	"power_x100\x18\x02 \x01(\x11R\tpowerX100\"\xfe\x02\n" +
 	"\x17SpectrumCaptureResponse\x12f\n" +
 	"\x1cspectrum_capture_data_type_e\x18\x02 \x02(\x0e2&.scte.amp.spectrum_capture_data_type_eR\x18spectrumCaptureDataTypeE\x12?\n" +
 	"\x06values\x18\x03 \x03(\v2'.scte.amp.spectrum_capture_range_valuesR\x06values\x122\n" +
 	"\x15total_composite_power\x18\x04 \x01(\x02R\x13totalCompositePower\x12;\n" +
-	"\rfragment_info\x18\x05 \x01(\v2\x16.scte.amp.FragmentInfoR\ffragmentInfo\"\x96\x01\n" +
+	"\rfragment_info\x18\x05 \x01(\v2\x16.scte.amp.FragmentInfoR\ffragmentInfo\x12I\n" +
+	"\fpoint_values\x18\x06 \x03(\v2&.scte.amp.spectrum_capture_point_valueR\vpointValues\"\x96\x01\n" +
 	"\x0fSpectrumCapture\x12<\n" +
 	"\arequest\x18\x01 \x01(\v2 .scte.amp.SpectrumCaptureRequestH\x00R\arequest\x12?\n" +
 	"\bresponse\x18\x02 \x01(\v2!.scte.amp.SpectrumCaptureResponseH\x00R\bresponseB\x04\n" +
@@ -516,35 +581,37 @@ func file_amps_spectrum_proto_rawDescGZIP() []byte {
 }
 
 var file_amps_spectrum_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_amps_spectrum_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_amps_spectrum_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_amps_spectrum_proto_goTypes = []any{
 	(SpectrumCaptureDataTypeE)(0),      // 0: scte.amp.spectrum_capture_data_type_e
 	(*SpectrumCaptureConfig)(nil),      // 1: scte.amp.spectrum_capture_config
 	(*SpectrumCaptureRange)(nil),       // 2: scte.amp.spectrum_capture_range
 	(*SpectrumCaptureRangeValues)(nil), // 3: scte.amp.spectrum_capture_range_values
 	(*SpectrumCaptureRequest)(nil),     // 4: scte.amp.SpectrumCaptureRequest
-	(*SpectrumCaptureResponse)(nil),    // 5: scte.amp.SpectrumCaptureResponse
-	(*SpectrumCapture)(nil),            // 6: scte.amp.SpectrumCapture
-	(PathSelectorE)(0),                 // 7: scte.amp.path_selector_e
-	(SpectrumScanDataE)(0),             // 8: scte.amp.spectrum_scan_data_e
-	(*FragmentInfo)(nil),               // 9: scte.amp.FragmentInfo
+	(*SpectrumCapturePointValue)(nil),  // 5: scte.amp.spectrum_capture_point_value
+	(*SpectrumCaptureResponse)(nil),    // 6: scte.amp.SpectrumCaptureResponse
+	(*SpectrumCapture)(nil),            // 7: scte.amp.SpectrumCapture
+	(PathSelectorE)(0),                 // 8: scte.amp.path_selector_e
+	(SpectrumScanDataE)(0),             // 9: scte.amp.spectrum_scan_data_e
+	(*FragmentInfo)(nil),               // 10: scte.amp.FragmentInfo
 }
 var file_amps_spectrum_proto_depIdxs = []int32{
-	7,  // 0: scte.amp.spectrum_capture_config.spectrum_capture_mode_e:type_name -> scte.amp.path_selector_e
+	8,  // 0: scte.amp.spectrum_capture_config.spectrum_capture_mode_e:type_name -> scte.amp.path_selector_e
 	0,  // 1: scte.amp.spectrum_capture_config.spectrum_capture_data_type_e:type_name -> scte.amp.spectrum_capture_data_type_e
-	8,  // 2: scte.amp.spectrum_capture_config.scan_mode:type_name -> scte.amp.spectrum_scan_data_e
+	9,  // 2: scte.amp.spectrum_capture_config.scan_mode:type_name -> scte.amp.spectrum_scan_data_e
 	1,  // 3: scte.amp.SpectrumCaptureRequest.config:type_name -> scte.amp.spectrum_capture_config
 	2,  // 4: scte.amp.SpectrumCaptureRequest.ranges:type_name -> scte.amp.spectrum_capture_range
 	0,  // 5: scte.amp.SpectrumCaptureResponse.spectrum_capture_data_type_e:type_name -> scte.amp.spectrum_capture_data_type_e
 	3,  // 6: scte.amp.SpectrumCaptureResponse.values:type_name -> scte.amp.spectrum_capture_range_values
-	9,  // 7: scte.amp.SpectrumCaptureResponse.fragment_info:type_name -> scte.amp.FragmentInfo
-	4,  // 8: scte.amp.SpectrumCapture.request:type_name -> scte.amp.SpectrumCaptureRequest
-	5,  // 9: scte.amp.SpectrumCapture.response:type_name -> scte.amp.SpectrumCaptureResponse
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	10, // 7: scte.amp.SpectrumCaptureResponse.fragment_info:type_name -> scte.amp.FragmentInfo
+	5,  // 8: scte.amp.SpectrumCaptureResponse.point_values:type_name -> scte.amp.spectrum_capture_point_value
+	4,  // 9: scte.amp.SpectrumCapture.request:type_name -> scte.amp.SpectrumCaptureRequest
+	6,  // 10: scte.amp.SpectrumCapture.response:type_name -> scte.amp.SpectrumCaptureResponse
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_amps_spectrum_proto_init() }
@@ -553,7 +620,7 @@ func file_amps_spectrum_proto_init() {
 		return
 	}
 	file_amps_common_proto_init()
-	file_amps_spectrum_proto_msgTypes[5].OneofWrappers = []any{
+	file_amps_spectrum_proto_msgTypes[6].OneofWrappers = []any{
 		(*SpectrumCapture_Request)(nil),
 		(*SpectrumCapture_Response)(nil),
 	}
@@ -563,7 +630,7 @@ func file_amps_spectrum_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_spectrum_proto_rawDesc), len(file_amps_spectrum_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
