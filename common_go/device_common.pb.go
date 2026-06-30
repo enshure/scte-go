@@ -154,7 +154,7 @@ type Identification struct {
 	SerialNumber      *string                `protobuf:"bytes,2,opt,name=serial_number,json=serialNumber" json:"serial_number,omitempty"`
 	DeviceAlias       *string                `protobuf:"bytes,3,opt,name=device_alias,json=deviceAlias" json:"device_alias,omitempty"`
 	DeviceDescription *string                `protobuf:"bytes,4,opt,name=device_description,json=deviceDescription" json:"device_description,omitempty"`
-	ProductId         *string                `protobuf:"bytes,5,opt,name=product_id,json=productId" json:"product_id,omitempty"`
+	ProductId         *uint32                `protobuf:"varint,5,opt,name=product_id,json=productId" json:"product_id,omitempty"`
 	HwVersion         *string                `protobuf:"bytes,6,opt,name=hw_version,json=hwVersion" json:"hw_version,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
@@ -218,11 +218,11 @@ func (x *Identification) GetDeviceDescription() string {
 	return ""
 }
 
-func (x *Identification) GetProductId() string {
+func (x *Identification) GetProductId() uint32 {
 	if x != nil && x.ProductId != nil {
 		return *x.ProductId
 	}
-	return ""
+	return 0
 }
 
 func (x *Identification) GetHwVersion() string {
@@ -433,7 +433,7 @@ const file_common_device_common_proto_rawDesc = "" +
 	"\fdevice_alias\x18\x03 \x01(\tR\vdeviceAlias\x12-\n" +
 	"\x12device_description\x18\x04 \x01(\tR\x11deviceDescription\x12\x1d\n" +
 	"\n" +
-	"product_id\x18\x05 \x01(\tR\tproductId\x12\x1d\n" +
+	"product_id\x18\x05 \x01(\rR\tproductId\x12\x1d\n" +
 	"\n" +
 	"hw_version\x18\x06 \x01(\tR\thwVersion\".\n" +
 	"\x06Vendor\x12\x12\n" +
