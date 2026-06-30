@@ -4,4 +4,4 @@ use ./common_go
 use ./amps_go
 use ./xponder_go
 
-replace github.com/enshure/scte-go/common_go v0.0.9 => ./common_go
+replace github.com/enshure/scte-go/common_go v0.0.10 => ./common_go
