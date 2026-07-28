@@ -500,7 +500,7 @@ type DsLogicalPortStatus struct {
 	DsAgcToUpperLimit        *uint32                           `protobuf:"varint,4,opt,name=ds_agc_to_upper_limit,json=dsAgcToUpperLimit" json:"ds_agc_to_upper_limit,omitempty"`
 	DsAgcToLowerLimit        *uint32                           `protobuf:"varint,5,opt,name=ds_agc_to_lower_limit,json=dsAgcToLowerLimit" json:"ds_agc_to_lower_limit,omitempty"`
 	PortStatus               *LogicalPortStatus                `protobuf:"bytes,6,opt,name=port_status,json=portStatus" json:"port_status,omitempty"`
-	UsTestPointStatuses      []*DsTestPointStatus              `protobuf:"bytes,7,rep,name=us_test_point_statuses,json=usTestPointStatuses" json:"us_test_point_statuses,omitempty"`
+	DsTestPointStatuses      []*DsTestPointStatus              `protobuf:"bytes,7,rep,name=ds_test_point_statuses,json=dsTestPointStatuses" json:"ds_test_point_statuses,omitempty"`
 	Page                     *common_go.ResponsePaginationInfo `protobuf:"bytes,8,opt,name=page" json:"page,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
@@ -578,9 +578,9 @@ func (x *DsLogicalPortStatus) GetPortStatus() *LogicalPortStatus {
 	return nil
 }
 
-func (x *DsLogicalPortStatus) GetUsTestPointStatuses() []*DsTestPointStatus {
+func (x *DsLogicalPortStatus) GetDsTestPointStatuses() []*DsTestPointStatus {
 	if x != nil {
-		return x.UsTestPointStatuses
+		return x.DsTestPointStatuses
 	}
 	return nil
 }
@@ -596,8 +596,9 @@ type RfPortStatus struct {
 	state           protoimpl.MessageState  `protogen:"open.v1"`
 	Index           *uint32                 `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
 	OperStatus      *uint32                 `protobuf:"varint,2,opt,name=oper_status,json=operStatus" json:"oper_status,omitempty"`
-	PortStatus      *UsLogicalPortStatus    `protobuf:"bytes,3,opt,name=port_status,json=portStatus" json:"port_status,omitempty"`
-	BidirPortStatus *BiDirLogicalPortStatus `protobuf:"bytes,4,opt,name=bidir_port_status,json=bidirPortStatus" json:"bidir_port_status,omitempty"`
+	UsPortStatus    *UsLogicalPortStatus    `protobuf:"bytes,3,opt,name=us_port_status,json=usPortStatus" json:"us_port_status,omitempty"`
+	DsPortStatus    *DsLogicalPortStatus    `protobuf:"bytes,4,opt,name=ds_port_status,json=dsPortStatus" json:"ds_port_status,omitempty"`
+	BidirPortStatus *BiDirLogicalPortStatus `protobuf:"bytes,5,opt,name=bidir_port_status,json=bidirPortStatus" json:"bidir_port_status,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -646,9 +647,16 @@ func (x *RfPortStatus) GetOperStatus() uint32 {
 	return 0
 }
 
-func (x *RfPortStatus) GetPortStatus() *UsLogicalPortStatus {
+func (x *RfPortStatus) GetUsPortStatus() *UsLogicalPortStatus {
 	if x != nil {
-		return x.PortStatus
+		return x.UsPortStatus
+	}
+	return nil
+}
+
+func (x *RfPortStatus) GetDsPortStatus() *DsLogicalPortStatus {
+	if x != nil {
+		return x.DsPortStatus
 	}
 	return nil
 }
@@ -778,15 +786,15 @@ const file_amps_rf_status_proto_rawDesc = "" +
 	"\x15ds_agc_to_lower_limit\x18\x05 \x01(\rR\x11dsAgcToLowerLimit\x12<\n" +
 	"\vport_status\x18\x06 \x01(\v2\x1b.scte.amp.LogicalPortStatusR\n" +
 	"portStatus\x12P\n" +
-	"\x16us_test_point_statuses\x18\a \x03(\v2\x1b.scte.amp.DsTestPointStatusR\x13usTestPointStatuses\x127\n" +
-	"\x04page\x18\b \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\xd3\x01\n" +
+	"\x16ds_test_point_statuses\x18\a \x03(\v2\x1b.scte.amp.DsTestPointStatusR\x13dsTestPointStatuses\x127\n" +
+	"\x04page\x18\b \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\x9d\x02\n" +
 	"\fRfPortStatus\x12\x14\n" +
 	"\x05index\x18\x01 \x01(\rR\x05index\x12\x1f\n" +
 	"\voper_status\x18\x02 \x01(\rR\n" +
-	"operStatus\x12>\n" +
-	"\vport_status\x18\x03 \x01(\v2\x1d.scte.amp.UsLogicalPortStatusR\n" +
-	"portStatus\x12L\n" +
-	"\x11bidir_port_status\x18\x04 \x01(\v2 .scte.amp.BiDirLogicalPortStatusR\x0fbidirPortStatus\"\xc1\x02\n" +
+	"operStatus\x12C\n" +
+	"\x0eus_port_status\x18\x03 \x01(\v2\x1d.scte.amp.UsLogicalPortStatusR\fusPortStatus\x12C\n" +
+	"\x0eds_port_status\x18\x04 \x01(\v2\x1d.scte.amp.DsLogicalPortStatusR\fdsPortStatus\x12L\n" +
+	"\x11bidir_port_status\x18\x05 \x01(\v2 .scte.amp.BiDirLogicalPortStatusR\x0fbidirPortStatus\"\xc1\x02\n" +
 	"\vRfStatusGrp\x12:\n" +
 	"\x19universal_pluggin_present\x18\x01 \x01(\bR\x17universalPlugginPresent\x124\n" +
 	"\x16universal_pluggin_desc\x18\x02 \x01(\tR\x14universalPlugginDesc\x12;\n" +
@@ -846,18 +854,19 @@ var file_amps_rf_status_proto_depIdxs = []int32{
 	3,  // 7: scte.amp.BiDirLogicalPortStatus.port_status:type_name -> scte.amp.LogicalPortStatus
 	1,  // 8: scte.amp.DsLogicalPortStatus.ds_agc_pilot_loss_protection:type_name -> scte.amp.pilot_loss_protection_type_e
 	3,  // 9: scte.amp.DsLogicalPortStatus.port_status:type_name -> scte.amp.LogicalPortStatus
-	5,  // 10: scte.amp.DsLogicalPortStatus.us_test_point_statuses:type_name -> scte.amp.DsTestPointStatus
+	5,  // 10: scte.amp.DsLogicalPortStatus.ds_test_point_statuses:type_name -> scte.amp.DsTestPointStatus
 	12, // 11: scte.amp.DsLogicalPortStatus.page:type_name -> scte.common.ResponsePaginationInfo
-	6,  // 12: scte.amp.RfPortStatus.port_status:type_name -> scte.amp.UsLogicalPortStatus
-	7,  // 13: scte.amp.RfPortStatus.bidir_port_status:type_name -> scte.amp.BiDirLogicalPortStatus
-	9,  // 14: scte.amp.RfStatusGrp.port_statuses:type_name -> scte.amp.RfPortStatus
-	13, // 15: scte.amp.RfStatusGrp.vendor_rf_statuses:type_name -> scte.common.VendorExtension
-	12, // 16: scte.amp.RfStatusGrp.page:type_name -> scte.common.ResponsePaginationInfo
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	6,  // 12: scte.amp.RfPortStatus.us_port_status:type_name -> scte.amp.UsLogicalPortStatus
+	8,  // 13: scte.amp.RfPortStatus.ds_port_status:type_name -> scte.amp.DsLogicalPortStatus
+	7,  // 14: scte.amp.RfPortStatus.bidir_port_status:type_name -> scte.amp.BiDirLogicalPortStatus
+	9,  // 15: scte.amp.RfStatusGrp.port_statuses:type_name -> scte.amp.RfPortStatus
+	13, // 16: scte.amp.RfStatusGrp.vendor_rf_statuses:type_name -> scte.common.VendorExtension
+	12, // 17: scte.amp.RfStatusGrp.page:type_name -> scte.common.ResponsePaginationInfo
+	18, // [18:18] is the sub-list for method output_type
+	18, // [18:18] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_amps_rf_status_proto_init() }

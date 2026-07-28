@@ -361,6 +361,86 @@ func (StageTypeE) EnumDescriptor() ([]byte, []int) {
 	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{4}
 }
 
+// *
+// SCTE-283 has type constraints of 1-8 for number of stages
+// Extend it to include cumulative stage index for vendors that can only configure cumulative attn/eq
+type StageIndexE int32
+
+const (
+	StageIndexE_STAGE_INDEX1           StageIndexE = 1
+	StageIndexE_STAGE_INDEX2           StageIndexE = 2
+	StageIndexE_STAGE_INDEX3           StageIndexE = 3
+	StageIndexE_STAGE_INDEX4           StageIndexE = 4
+	StageIndexE_STAGE_INDEX5           StageIndexE = 5
+	StageIndexE_STAGE_INDEX6           StageIndexE = 6
+	StageIndexE_STAGE_INDEX7           StageIndexE = 7
+	StageIndexE_STAGE_INDEX8           StageIndexE = 8
+	StageIndexE_STAGE_INDEX_CUMULATIVE StageIndexE = 9
+)
+
+// Enum value maps for StageIndexE.
+var (
+	StageIndexE_name = map[int32]string{
+		1: "STAGE_INDEX1",
+		2: "STAGE_INDEX2",
+		3: "STAGE_INDEX3",
+		4: "STAGE_INDEX4",
+		5: "STAGE_INDEX5",
+		6: "STAGE_INDEX6",
+		7: "STAGE_INDEX7",
+		8: "STAGE_INDEX8",
+		9: "STAGE_INDEX_CUMULATIVE",
+	}
+	StageIndexE_value = map[string]int32{
+		"STAGE_INDEX1":           1,
+		"STAGE_INDEX2":           2,
+		"STAGE_INDEX3":           3,
+		"STAGE_INDEX4":           4,
+		"STAGE_INDEX5":           5,
+		"STAGE_INDEX6":           6,
+		"STAGE_INDEX7":           7,
+		"STAGE_INDEX8":           8,
+		"STAGE_INDEX_CUMULATIVE": 9,
+	}
+)
+
+func (x StageIndexE) Enum() *StageIndexE {
+	p := new(StageIndexE)
+	*p = x
+	return p
+}
+
+func (x StageIndexE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (StageIndexE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_rf_capabilities_grp_proto_enumTypes[5].Descriptor()
+}
+
+func (StageIndexE) Type() protoreflect.EnumType {
+	return &file_amps_rf_capabilities_grp_proto_enumTypes[5]
+}
+
+func (x StageIndexE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *StageIndexE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = StageIndexE(num)
+	return nil
+}
+
+// Deprecated: Use StageIndexE.Descriptor instead.
+func (StageIndexE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{5}
+}
+
 type StageLocationE int32
 
 const (
@@ -403,11 +483,11 @@ func (x StageLocationE) String() string {
 }
 
 func (StageLocationE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_rf_capabilities_grp_proto_enumTypes[5].Descriptor()
+	return file_amps_rf_capabilities_grp_proto_enumTypes[6].Descriptor()
 }
 
 func (StageLocationE) Type() protoreflect.EnumType {
-	return &file_amps_rf_capabilities_grp_proto_enumTypes[5]
+	return &file_amps_rf_capabilities_grp_proto_enumTypes[6]
 }
 
 func (x StageLocationE) Number() protoreflect.EnumNumber {
@@ -426,7 +506,7 @@ func (x *StageLocationE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use StageLocationE.Descriptor instead.
 func (StageLocationE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{5}
+	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{6}
 }
 
 type AgcTypeE int32
@@ -468,11 +548,11 @@ func (x AgcTypeE) String() string {
 }
 
 func (AgcTypeE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_rf_capabilities_grp_proto_enumTypes[6].Descriptor()
+	return file_amps_rf_capabilities_grp_proto_enumTypes[7].Descriptor()
 }
 
 func (AgcTypeE) Type() protoreflect.EnumType {
-	return &file_amps_rf_capabilities_grp_proto_enumTypes[6]
+	return &file_amps_rf_capabilities_grp_proto_enumTypes[7]
 }
 
 func (x AgcTypeE) Number() protoreflect.EnumNumber {
@@ -491,12 +571,12 @@ func (x *AgcTypeE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use AgcTypeE.Descriptor instead.
 func (AgcTypeE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{6}
+	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{7}
 }
 
 type UsDsStageCapabilities struct {
 	state                        protoimpl.MessageState `protogen:"open.v1"`
-	StageIndex                   *uint32                `protobuf:"varint,1,opt,name=stage_index,json=stageIndex" json:"stage_index,omitempty"`
+	StageIndex                   *StageIndexE           `protobuf:"varint,1,opt,name=stage_index,json=stageIndex,enum=scte.amp.StageIndexE" json:"stage_index,omitempty"`
 	StageType                    *StageTypeE            `protobuf:"varint,2,opt,name=stage_type,json=stageType,enum=scte.amp.StageTypeE" json:"stage_type,omitempty"`
 	StageLocation                *StageLocationE        `protobuf:"varint,3,opt,name=stage_location,json=stageLocation,enum=scte.amp.StageLocationE" json:"stage_location,omitempty"`
 	MinAttenuationTenthsDb       *uint32                `protobuf:"varint,4,opt,name=min_attenuation_tenths_db,json=minAttenuationTenthsDb" json:"min_attenuation_tenths_db,omitempty"`
@@ -539,11 +619,11 @@ func (*UsDsStageCapabilities) Descriptor() ([]byte, []int) {
 	return file_amps_rf_capabilities_grp_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *UsDsStageCapabilities) GetStageIndex() uint32 {
+func (x *UsDsStageCapabilities) GetStageIndex() StageIndexE {
 	if x != nil && x.StageIndex != nil {
 		return *x.StageIndex
 	}
-	return 0
+	return StageIndexE_STAGE_INDEX1
 }
 
 func (x *UsDsStageCapabilities) GetStageType() StageTypeE {
@@ -1142,9 +1222,9 @@ var File_amps_rf_capabilities_grp_proto protoreflect.FileDescriptor
 
 const file_amps_rf_capabilities_grp_proto_rawDesc = "" +
 	"\n" +
-	"\x1eamps/rf_capabilities_grp.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/vendor_common.proto\"\x8c\x04\n" +
-	"\x15UsDsStageCapabilities\x12\x1f\n" +
-	"\vstage_index\x18\x01 \x01(\rR\n" +
+	"\x1eamps/rf_capabilities_grp.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/vendor_common.proto\"\xa5\x04\n" +
+	"\x15UsDsStageCapabilities\x128\n" +
+	"\vstage_index\x18\x01 \x01(\x0e2\x17.scte.amp.stage_index_eR\n" +
 	"stageIndex\x125\n" +
 	"\n" +
 	"stage_type\x18\x02 \x01(\x0e2\x16.scte.amp.stage_type_eR\tstageType\x12A\n" +
@@ -1235,7 +1315,17 @@ const file_amps_rf_capabilities_grp_proto_rawDesc = "" +
 	"\x10STAGE_TYPE_OTHER\x10\x00\x12\x16\n" +
 	"\x12STAGE_TYPE_UNKNOWN\x10\x01\x12\x19\n" +
 	"\x15STAGE_TYPE_ATTENUATOR\x10\x02\x12\x18\n" +
-	"\x14STAGE_TYPE_EQUALIZER\x10\x03*\xbc\x01\n" +
+	"\x14STAGE_TYPE_EQUALIZER\x10\x03*\xbb\x01\n" +
+	"\rstage_index_e\x12\x10\n" +
+	"\fSTAGE_INDEX1\x10\x01\x12\x10\n" +
+	"\fSTAGE_INDEX2\x10\x02\x12\x10\n" +
+	"\fSTAGE_INDEX3\x10\x03\x12\x10\n" +
+	"\fSTAGE_INDEX4\x10\x04\x12\x10\n" +
+	"\fSTAGE_INDEX5\x10\x05\x12\x10\n" +
+	"\fSTAGE_INDEX6\x10\x06\x12\x10\n" +
+	"\fSTAGE_INDEX7\x10\a\x12\x10\n" +
+	"\fSTAGE_INDEX8\x10\b\x12\x1a\n" +
+	"\x16STAGE_INDEX_CUMULATIVE\x10\t*\xbc\x01\n" +
 	"\x10stage_location_e\x12\x18\n" +
 	"\x14STAGE_LOCATION_OTHER\x10\x00\x12\x1a\n" +
 	"\x16STAGE_LOCATION_UNKNOWN\x10\x01\x12\x18\n" +
@@ -1263,7 +1353,7 @@ func file_amps_rf_capabilities_grp_proto_rawDescGZIP() []byte {
 	return file_amps_rf_capabilities_grp_proto_rawDescData
 }
 
-var file_amps_rf_capabilities_grp_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
+var file_amps_rf_capabilities_grp_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
 var file_amps_rf_capabilities_grp_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_amps_rf_capabilities_grp_proto_goTypes = []any{
 	(RfSpectrumCaptureTypeE)(0),              // 0: scte.amp.rf_spectrum_capture_type_e
@@ -1271,37 +1361,39 @@ var file_amps_rf_capabilities_grp_proto_goTypes = []any{
 	(AlignmentTypeE)(0),                      // 2: scte.amp.alignment_type_e
 	(RfLevelControlTypeE)(0),                 // 3: scte.amp.rf_level_control_type_e
 	(StageTypeE)(0),                          // 4: scte.amp.stage_type_e
-	(StageLocationE)(0),                      // 5: scte.amp.stage_location_e
-	(AgcTypeE)(0),                            // 6: scte.amp.agc_type_e
-	(*UsDsStageCapabilities)(nil),            // 7: scte.amp.UsDsStageCapabilities
-	(*UsLogicalPortCapabilities)(nil),        // 8: scte.amp.UsLogicalPortCapabilities
-	(*DsLogicalPortCapabilities)(nil),        // 9: scte.amp.DsLogicalPortCapabilities
-	(*DiplexFilterCapabilities)(nil),         // 10: scte.amp.DiplexFilterCapabilities
-	(*BiDirLogicalPortCapabilities)(nil),     // 11: scte.amp.BiDirLogicalPortCapabilities
-	(*RfPortCapabilities)(nil),               // 12: scte.amp.RfPortCapabilities
-	(*RfCapabilities)(nil),                   // 13: scte.amp.RfCapabilities
-	(*common_go.VendorExtension)(nil),        // 14: scte.common.VendorExtension
-	(*common_go.ResponsePaginationInfo)(nil), // 15: scte.common.ResponsePaginationInfo
+	(StageIndexE)(0),                         // 5: scte.amp.stage_index_e
+	(StageLocationE)(0),                      // 6: scte.amp.stage_location_e
+	(AgcTypeE)(0),                            // 7: scte.amp.agc_type_e
+	(*UsDsStageCapabilities)(nil),            // 8: scte.amp.UsDsStageCapabilities
+	(*UsLogicalPortCapabilities)(nil),        // 9: scte.amp.UsLogicalPortCapabilities
+	(*DsLogicalPortCapabilities)(nil),        // 10: scte.amp.DsLogicalPortCapabilities
+	(*DiplexFilterCapabilities)(nil),         // 11: scte.amp.DiplexFilterCapabilities
+	(*BiDirLogicalPortCapabilities)(nil),     // 12: scte.amp.BiDirLogicalPortCapabilities
+	(*RfPortCapabilities)(nil),               // 13: scte.amp.RfPortCapabilities
+	(*RfCapabilities)(nil),                   // 14: scte.amp.RfCapabilities
+	(*common_go.VendorExtension)(nil),        // 15: scte.common.VendorExtension
+	(*common_go.ResponsePaginationInfo)(nil), // 16: scte.common.ResponsePaginationInfo
 }
 var file_amps_rf_capabilities_grp_proto_depIdxs = []int32{
-	4,  // 0: scte.amp.UsDsStageCapabilities.stage_type:type_name -> scte.amp.stage_type_e
-	5,  // 1: scte.amp.UsDsStageCapabilities.stage_location:type_name -> scte.amp.stage_location_e
-	7,  // 2: scte.amp.UsLogicalPortCapabilities.us_stage_capabilities:type_name -> scte.amp.UsDsStageCapabilities
-	7,  // 3: scte.amp.DsLogicalPortCapabilities.ds_stage_capabilities:type_name -> scte.amp.UsDsStageCapabilities
-	10, // 4: scte.amp.BiDirLogicalPortCapabilities.diplex_filter_capabilities:type_name -> scte.amp.DiplexFilterCapabilities
-	1,  // 5: scte.amp.RfPortCapabilities.index:type_name -> scte.amp.rf_port_index_e
-	9,  // 6: scte.amp.RfPortCapabilities.ds_logical_port_capabilities:type_name -> scte.amp.DsLogicalPortCapabilities
-	8,  // 7: scte.amp.RfPortCapabilities.us_logical_port_capabilities:type_name -> scte.amp.UsLogicalPortCapabilities
-	11, // 8: scte.amp.RfPortCapabilities.bidir_logical_port_capabilities:type_name -> scte.amp.BiDirLogicalPortCapabilities
-	0,  // 9: scte.amp.RfCapabilities.supports_rf_spectrum_capture:type_name -> scte.amp.rf_spectrum_capture_type_e
-	12, // 10: scte.amp.RfCapabilities.rf_port_capabilities:type_name -> scte.amp.RfPortCapabilities
-	14, // 11: scte.amp.RfCapabilities.vendor_rf_capabilities:type_name -> scte.common.VendorExtension
-	15, // 12: scte.amp.RfCapabilities.page:type_name -> scte.common.ResponsePaginationInfo
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	5,  // 0: scte.amp.UsDsStageCapabilities.stage_index:type_name -> scte.amp.stage_index_e
+	4,  // 1: scte.amp.UsDsStageCapabilities.stage_type:type_name -> scte.amp.stage_type_e
+	6,  // 2: scte.amp.UsDsStageCapabilities.stage_location:type_name -> scte.amp.stage_location_e
+	8,  // 3: scte.amp.UsLogicalPortCapabilities.us_stage_capabilities:type_name -> scte.amp.UsDsStageCapabilities
+	8,  // 4: scte.amp.DsLogicalPortCapabilities.ds_stage_capabilities:type_name -> scte.amp.UsDsStageCapabilities
+	11, // 5: scte.amp.BiDirLogicalPortCapabilities.diplex_filter_capabilities:type_name -> scte.amp.DiplexFilterCapabilities
+	1,  // 6: scte.amp.RfPortCapabilities.index:type_name -> scte.amp.rf_port_index_e
+	10, // 7: scte.amp.RfPortCapabilities.ds_logical_port_capabilities:type_name -> scte.amp.DsLogicalPortCapabilities
+	9,  // 8: scte.amp.RfPortCapabilities.us_logical_port_capabilities:type_name -> scte.amp.UsLogicalPortCapabilities
+	12, // 9: scte.amp.RfPortCapabilities.bidir_logical_port_capabilities:type_name -> scte.amp.BiDirLogicalPortCapabilities
+	0,  // 10: scte.amp.RfCapabilities.supports_rf_spectrum_capture:type_name -> scte.amp.rf_spectrum_capture_type_e
+	13, // 11: scte.amp.RfCapabilities.rf_port_capabilities:type_name -> scte.amp.RfPortCapabilities
+	15, // 12: scte.amp.RfCapabilities.vendor_rf_capabilities:type_name -> scte.common.VendorExtension
+	16, // 13: scte.amp.RfCapabilities.page:type_name -> scte.common.ResponsePaginationInfo
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_amps_rf_capabilities_grp_proto_init() }
@@ -1314,7 +1406,7 @@ func file_amps_rf_capabilities_grp_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_rf_capabilities_grp_proto_rawDesc), len(file_amps_rf_capabilities_grp_proto_rawDesc)),
-			NumEnums:      7,
+			NumEnums:      8,
 			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,

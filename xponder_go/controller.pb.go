@@ -30,7 +30,6 @@ const (
 	GroupId_IDENTIFICATION       GroupId = 4
 	GroupId_VENDOR               GroupId = 5
 	GroupId_VERSION_SUMMARY      GroupId = 6
-	GroupId_SENSOR_STATUS        GroupId = 8
 	GroupId_SYSTEM_CFG           GroupId = 11
 	GroupId_LOCATION             GroupId = 12
 	GroupId_MANAGED_DEVICE       GroupId = 13
@@ -52,7 +51,6 @@ var (
 		4:  "IDENTIFICATION",
 		5:  "VENDOR",
 		6:  "VERSION_SUMMARY",
-		8:  "SENSOR_STATUS",
 		11: "SYSTEM_CFG",
 		12: "LOCATION",
 		13: "MANAGED_DEVICE",
@@ -71,7 +69,6 @@ var (
 		"IDENTIFICATION":       4,
 		"VENDOR":               5,
 		"VERSION_SUMMARY":      6,
-		"SENSOR_STATUS":        8,
 		"SYSTEM_CFG":           11,
 		"LOCATION":             12,
 		"MANAGED_DEVICE":       13,
@@ -1073,14 +1070,13 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12M\n" +
 	"\x12event_throttle_cfg\x18( \x01(\v2\x1d.scte.common.EventThrottleCfgH\x00R\x10eventThrottleCfgB\t\n" +
-	"\apayload*\xdf\x02\n" +
+	"\apayload*\xcc\x02\n" +
 	"\aGroupId\x12\x11\n" +
 	"\rSYSTEM_STATUS\x10\x03\x12\x12\n" +
 	"\x0eIDENTIFICATION\x10\x04\x12\n" +
 	"\n" +
 	"\x06VENDOR\x10\x05\x12\x13\n" +
-	"\x0fVERSION_SUMMARY\x10\x06\x12\x11\n" +
-	"\rSENSOR_STATUS\x10\b\x12\x0e\n" +
+	"\x0fVERSION_SUMMARY\x10\x06\x12\x0e\n" +
 	"\n" +
 	"SYSTEM_CFG\x10\v\x12\f\n" +
 	"\bLOCATION\x10\f\x12\x12\n" +

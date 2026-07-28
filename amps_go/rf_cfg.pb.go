@@ -144,6 +144,62 @@ func (IngressSwitchStatesE) EnumDescriptor() ([]byte, []int) {
 	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{1}
 }
 
+type PilotTypeE int32
+
+const (
+	PilotTypeE_PRIMARY PilotTypeE = 1
+	PilotTypeE_BACKUP  PilotTypeE = 2
+)
+
+// Enum value maps for PilotTypeE.
+var (
+	PilotTypeE_name = map[int32]string{
+		1: "PRIMARY",
+		2: "BACKUP",
+	}
+	PilotTypeE_value = map[string]int32{
+		"PRIMARY": 1,
+		"BACKUP":  2,
+	}
+)
+
+func (x PilotTypeE) Enum() *PilotTypeE {
+	p := new(PilotTypeE)
+	*p = x
+	return p
+}
+
+func (x PilotTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (PilotTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_rf_cfg_proto_enumTypes[2].Descriptor()
+}
+
+func (PilotTypeE) Type() protoreflect.EnumType {
+	return &file_amps_rf_cfg_proto_enumTypes[2]
+}
+
+func (x PilotTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *PilotTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = PilotTypeE(num)
+	return nil
+}
+
+// Deprecated: Use PilotTypeE.Descriptor instead.
+func (PilotTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{2}
+}
+
 type UsDsCfg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StageIndex    *uint32                `protobuf:"varint,1,opt,name=stage_index,json=stageIndex" json:"stage_index,omitempty"`
@@ -248,17 +304,70 @@ func (x *UsCfg) GetUsConfig() *UsDsCfg {
 	return nil
 }
 
+type TestPointConfig struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	TestPointId     *TestPointIdE          `protobuf:"varint,1,opt,name=test_point_id,json=testPointId,enum=scte.amp.TestPointIdE" json:"test_point_id,omitempty"`
+	TestPointConfig *TestPointConfigE      `protobuf:"varint,2,opt,name=test_point_config,json=testPointConfig,enum=scte.amp.TestPointConfigE" json:"test_point_config,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *TestPointConfig) Reset() {
+	*x = TestPointConfig{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TestPointConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TestPointConfig) ProtoMessage() {}
+
+func (x *TestPointConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TestPointConfig.ProtoReflect.Descriptor instead.
+func (*TestPointConfig) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *TestPointConfig) GetTestPointId() TestPointIdE {
+	if x != nil && x.TestPointId != nil {
+		return *x.TestPointId
+	}
+	return TestPointIdE_INPUT_TP
+}
+
+func (x *TestPointConfig) GetTestPointConfig() TestPointConfigE {
+	if x != nil && x.TestPointConfig != nil {
+		return *x.TestPointConfig
+	}
+	return TestPointConfigE_FWD
+}
+
 type LogicalPortCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminStatus   *AdminStatusE          `protobuf:"varint,1,opt,name=admin_status,json=adminStatus,enum=scte.amp.AdminStatusE" json:"admin_status,omitempty"`
-	RfMute        *bool                  `protobuf:"varint,2,opt,name=rf_mute,json=rfMute" json:"rf_mute,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	AdminStatus     *AdminStatusE          `protobuf:"varint,1,opt,name=admin_status,json=adminStatus,enum=scte.amp.AdminStatusE" json:"admin_status,omitempty"`
+	RfMute          *bool                  `protobuf:"varint,2,opt,name=rf_mute,json=rfMute" json:"rf_mute,omitempty"`
+	TestPointConfig *TestPointConfig       `protobuf:"bytes,3,opt,name=test_point_config,json=testPointConfig" json:"test_point_config,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *LogicalPortCfg) Reset() {
 	*x = LogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	mi := &file_amps_rf_cfg_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -270,7 +379,7 @@ func (x *LogicalPortCfg) String() string {
 func (*LogicalPortCfg) ProtoMessage() {}
 
 func (x *LogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	mi := &file_amps_rf_cfg_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -283,7 +392,7 @@ func (x *LogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*LogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{2}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LogicalPortCfg) GetAdminStatus() AdminStatusE {
@@ -300,6 +409,13 @@ func (x *LogicalPortCfg) GetRfMute() bool {
 	return false
 }
 
+func (x *LogicalPortCfg) GetTestPointConfig() *TestPointConfig {
+	if x != nil {
+		return x.TestPointConfig
+	}
+	return nil
+}
+
 type UsIngressSwitchCfg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	State         *IngressSwitchStatesE  `protobuf:"varint,1,opt,name=state,enum=scte.amp.IngressSwitchStatesE" json:"state,omitempty"`
@@ -310,7 +426,7 @@ type UsIngressSwitchCfg struct {
 
 func (x *UsIngressSwitchCfg) Reset() {
 	*x = UsIngressSwitchCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[3]
+	mi := &file_amps_rf_cfg_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -322,7 +438,7 @@ func (x *UsIngressSwitchCfg) String() string {
 func (*UsIngressSwitchCfg) ProtoMessage() {}
 
 func (x *UsIngressSwitchCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[3]
+	mi := &file_amps_rf_cfg_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -335,7 +451,7 @@ func (x *UsIngressSwitchCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsIngressSwitchCfg.ProtoReflect.Descriptor instead.
 func (*UsIngressSwitchCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{3}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UsIngressSwitchCfg) GetState() IngressSwitchStatesE {
@@ -364,7 +480,7 @@ type UsLogicalPortCfg struct {
 
 func (x *UsLogicalPortCfg) Reset() {
 	*x = UsLogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[4]
+	mi := &file_amps_rf_cfg_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -376,7 +492,7 @@ func (x *UsLogicalPortCfg) String() string {
 func (*UsLogicalPortCfg) ProtoMessage() {}
 
 func (x *UsLogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[4]
+	mi := &file_amps_rf_cfg_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -389,7 +505,7 @@ func (x *UsLogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsLogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*UsLogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{4}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UsLogicalPortCfg) GetThermalLevelControlSelectRangeSetting() uint32 {
@@ -430,7 +546,7 @@ type BiDirLogicalPortCfg struct {
 
 func (x *BiDirLogicalPortCfg) Reset() {
 	*x = BiDirLogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[5]
+	mi := &file_amps_rf_cfg_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -442,7 +558,7 @@ func (x *BiDirLogicalPortCfg) String() string {
 func (*BiDirLogicalPortCfg) ProtoMessage() {}
 
 func (x *BiDirLogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[5]
+	mi := &file_amps_rf_cfg_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -455,7 +571,7 @@ func (x *BiDirLogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BiDirLogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*BiDirLogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{5}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *BiDirLogicalPortCfg) GetActiveDiplexFilterIndex() uint32 {
@@ -481,7 +597,7 @@ type DsCfg struct {
 
 func (x *DsCfg) Reset() {
 	*x = DsCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[6]
+	mi := &file_amps_rf_cfg_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -493,7 +609,7 @@ func (x *DsCfg) String() string {
 func (*DsCfg) ProtoMessage() {}
 
 func (x *DsCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[6]
+	mi := &file_amps_rf_cfg_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -506,7 +622,7 @@ func (x *DsCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DsCfg.ProtoReflect.Descriptor instead.
 func (*DsCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{6}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DsCfg) GetDsConfig() *UsDsCfg {
@@ -520,14 +636,14 @@ type AgileAgcPilotCfg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PilotNum      *uint32                `protobuf:"varint,1,opt,name=pilot_num,json=pilotNum" json:"pilot_num,omitempty"`
 	PilotFreq     *uint32                `protobuf:"varint,2,opt,name=pilot_freq,json=pilotFreq" json:"pilot_freq,omitempty"`
-	BackupPilots  *uint32                `protobuf:"varint,3,opt,name=backup_pilots,json=backupPilots" json:"backup_pilots,omitempty"`
+	PilotType     *PilotTypeE            `protobuf:"varint,3,opt,name=pilot_type,json=pilotType,enum=scte.amp.PilotTypeE" json:"pilot_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AgileAgcPilotCfg) Reset() {
 	*x = AgileAgcPilotCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[7]
+	mi := &file_amps_rf_cfg_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -539,7 +655,7 @@ func (x *AgileAgcPilotCfg) String() string {
 func (*AgileAgcPilotCfg) ProtoMessage() {}
 
 func (x *AgileAgcPilotCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[7]
+	mi := &file_amps_rf_cfg_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -552,7 +668,7 @@ func (x *AgileAgcPilotCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgileAgcPilotCfg.ProtoReflect.Descriptor instead.
 func (*AgileAgcPilotCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{7}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *AgileAgcPilotCfg) GetPilotNum() uint32 {
@@ -569,11 +685,11 @@ func (x *AgileAgcPilotCfg) GetPilotFreq() uint32 {
 	return 0
 }
 
-func (x *AgileAgcPilotCfg) GetBackupPilots() uint32 {
-	if x != nil && x.BackupPilots != nil {
-		return *x.BackupPilots
+func (x *AgileAgcPilotCfg) GetPilotType() PilotTypeE {
+	if x != nil && x.PilotType != nil {
+		return *x.PilotType
 	}
-	return 0
+	return PilotTypeE_PRIMARY
 }
 
 type DsLogicalPortCfg struct {
@@ -587,7 +703,7 @@ type DsLogicalPortCfg struct {
 
 func (x *DsLogicalPortCfg) Reset() {
 	*x = DsLogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[8]
+	mi := &file_amps_rf_cfg_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -599,7 +715,7 @@ func (x *DsLogicalPortCfg) String() string {
 func (*DsLogicalPortCfg) ProtoMessage() {}
 
 func (x *DsLogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[8]
+	mi := &file_amps_rf_cfg_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -612,7 +728,7 @@ func (x *DsLogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DsLogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*DsLogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{8}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DsLogicalPortCfg) GetDsAgcEnable() bool {
@@ -647,7 +763,7 @@ type RfPortCfg struct {
 
 func (x *RfPortCfg) Reset() {
 	*x = RfPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[9]
+	mi := &file_amps_rf_cfg_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -659,7 +775,7 @@ func (x *RfPortCfg) String() string {
 func (*RfPortCfg) ProtoMessage() {}
 
 func (x *RfPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[9]
+	mi := &file_amps_rf_cfg_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -672,7 +788,7 @@ func (x *RfPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RfPortCfg.ProtoReflect.Descriptor instead.
 func (*RfPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{9}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *RfPortCfg) GetUsLogicalPortConfig() *UsLogicalPortCfg {
@@ -707,7 +823,7 @@ type RfCfgGrp struct {
 
 func (x *RfCfgGrp) Reset() {
 	*x = RfCfgGrp{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[10]
+	mi := &file_amps_rf_cfg_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -719,7 +835,7 @@ func (x *RfCfgGrp) String() string {
 func (*RfCfgGrp) ProtoMessage() {}
 
 func (x *RfCfgGrp) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[10]
+	mi := &file_amps_rf_cfg_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -732,7 +848,7 @@ func (x *RfCfgGrp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RfCfgGrp.ProtoReflect.Descriptor instead.
 func (*RfCfgGrp) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{10}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *RfCfgGrp) GetRfPortConfigs() []*RfPortCfg {
@@ -760,17 +876,21 @@ var File_amps_rf_cfg_proto protoreflect.FileDescriptor
 
 const file_amps_rf_cfg_proto_rawDesc = "" +
 	"\n" +
-	"\x11amps/rf_cfg.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/vendor_common.proto\"p\n" +
+	"\x11amps/rf_cfg.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/vendor_common.proto\x1a\x11amps/common.proto\"p\n" +
 	"\aUsDsCfg\x12\x1f\n" +
 	"\vstage_index\x18\x01 \x01(\rR\n" +
 	"stageIndex\x12 \n" +
 	"\vattenuation\x18\x02 \x01(\rR\vattenuation\x12\"\n" +
 	"\fequalization\x18\x03 \x01(\x02R\fequalization\"7\n" +
 	"\x05UsCfg\x12.\n" +
-	"\tus_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\busConfig\"f\n" +
+	"\tus_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\busConfig\"\x9b\x01\n" +
+	"\x0fTestPointConfig\x12=\n" +
+	"\rtest_point_id\x18\x01 \x01(\x0e2\x19.scte.amp.test_point_id_eR\vtestPointId\x12I\n" +
+	"\x11test_point_config\x18\x02 \x01(\x0e2\x1d.scte.amp.test_point_config_eR\x0ftestPointConfig\"\xad\x01\n" +
 	"\x0eLogicalPortCfg\x12;\n" +
 	"\fadmin_status\x18\x01 \x01(\x0e2\x18.scte.amp.admin_status_eR\vadminStatus\x12\x17\n" +
-	"\arf_mute\x18\x02 \x01(\bR\x06rfMute\"o\n" +
+	"\arf_mute\x18\x02 \x01(\bR\x06rfMute\x12E\n" +
+	"\x11test_point_config\x18\x03 \x01(\v2\x19.scte.amp.TestPointConfigR\x0ftestPointConfig\"o\n" +
 	"\x12UsIngressSwitchCfg\x127\n" +
 	"\x05state\x18\x01 \x01(\x0e2!.scte.amp.ingress_switch_states_eR\x05state\x12 \n" +
 	"\vattenuation\x18\x02 \x01(\rR\vattenuation\"\xa8\x02\n" +
@@ -784,12 +904,13 @@ const file_amps_rf_cfg_proto_rawDesc = "" +
 	"\x1aactive_diplex_filter_index\x18\x01 \x01(\rR\x17activeDiplexFilterIndex\x12D\n" +
 	"\x11port_admin_status\x18\x02 \x01(\v2\x18.scte.amp.LogicalPortCfgR\x0fportAdminStatus\"7\n" +
 	"\x05DsCfg\x12.\n" +
-	"\tds_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\bdsConfig\"s\n" +
+	"\tds_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\bdsConfig\"\x85\x01\n" +
 	"\x10AgileAgcPilotCfg\x12\x1b\n" +
 	"\tpilot_num\x18\x01 \x01(\rR\bpilotNum\x12\x1d\n" +
 	"\n" +
-	"pilot_freq\x18\x02 \x01(\rR\tpilotFreq\x12#\n" +
-	"\rbackup_pilots\x18\x03 \x01(\rR\fbackupPilots\"\xa7\x01\n" +
+	"pilot_freq\x18\x02 \x01(\rR\tpilotFreq\x125\n" +
+	"\n" +
+	"pilot_type\x18\x03 \x01(\x0e2\x16.scte.amp.pilot_type_eR\tpilotType\"\xa7\x01\n" +
 	"\x10DsLogicalPortCfg\x12\"\n" +
 	"\rds_agc_enable\x18\x01 \x01(\bR\vdsAgcEnable\x12?\n" +
 	"\rpilot_configs\x18\x02 \x03(\v2\x1a.scte.amp.AgileAgcPilotCfgR\fpilotConfigs\x12.\n" +
@@ -809,7 +930,11 @@ const file_amps_rf_cfg_proto_rawDesc = "" +
 	"\x17ingress_switch_states_e\x12\x1a\n" +
 	"\x16SAMP_INGRESS_SWITCH_ON\x10\x01\x12\x1b\n" +
 	"\x17SAMP_INGRESS_SWITCH_OFF\x10\x02\x12\"\n" +
-	"\x1eSAMP_INGRESS_SWITCH_ATTENUATED\x10\x03B,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\x1eSAMP_INGRESS_SWITCH_ATTENUATED\x10\x03*'\n" +
+	"\fpilot_type_e\x12\v\n" +
+	"\aPRIMARY\x10\x01\x12\n" +
+	"\n" +
+	"\x06BACKUP\x10\x02B,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_rf_cfg_proto_rawDescOnce sync.Once
@@ -823,47 +948,55 @@ func file_amps_rf_cfg_proto_rawDescGZIP() []byte {
 	return file_amps_rf_cfg_proto_rawDescData
 }
 
-var file_amps_rf_cfg_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_amps_rf_cfg_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_amps_rf_cfg_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_amps_rf_cfg_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_amps_rf_cfg_proto_goTypes = []any{
 	(AdminStatusE)(0),                        // 0: scte.amp.admin_status_e
 	(IngressSwitchStatesE)(0),                // 1: scte.amp.ingress_switch_states_e
-	(*UsDsCfg)(nil),                          // 2: scte.amp.UsDsCfg
-	(*UsCfg)(nil),                            // 3: scte.amp.UsCfg
-	(*LogicalPortCfg)(nil),                   // 4: scte.amp.LogicalPortCfg
-	(*UsIngressSwitchCfg)(nil),               // 5: scte.amp.UsIngressSwitchCfg
-	(*UsLogicalPortCfg)(nil),                 // 6: scte.amp.UsLogicalPortCfg
-	(*BiDirLogicalPortCfg)(nil),              // 7: scte.amp.BiDirLogicalPortCfg
-	(*DsCfg)(nil),                            // 8: scte.amp.DsCfg
-	(*AgileAgcPilotCfg)(nil),                 // 9: scte.amp.AgileAgcPilotCfg
-	(*DsLogicalPortCfg)(nil),                 // 10: scte.amp.DsLogicalPortCfg
-	(*RfPortCfg)(nil),                        // 11: scte.amp.RfPortCfg
-	(*RfCfgGrp)(nil),                         // 12: scte.amp.RfCfgGrp
-	(*common_go.VendorExtension)(nil),        // 13: scte.common.VendorExtension
-	(*common_go.ResponsePaginationInfo)(nil), // 14: scte.common.ResponsePaginationInfo
+	(PilotTypeE)(0),                          // 2: scte.amp.pilot_type_e
+	(*UsDsCfg)(nil),                          // 3: scte.amp.UsDsCfg
+	(*UsCfg)(nil),                            // 4: scte.amp.UsCfg
+	(*TestPointConfig)(nil),                  // 5: scte.amp.TestPointConfig
+	(*LogicalPortCfg)(nil),                   // 6: scte.amp.LogicalPortCfg
+	(*UsIngressSwitchCfg)(nil),               // 7: scte.amp.UsIngressSwitchCfg
+	(*UsLogicalPortCfg)(nil),                 // 8: scte.amp.UsLogicalPortCfg
+	(*BiDirLogicalPortCfg)(nil),              // 9: scte.amp.BiDirLogicalPortCfg
+	(*DsCfg)(nil),                            // 10: scte.amp.DsCfg
+	(*AgileAgcPilotCfg)(nil),                 // 11: scte.amp.AgileAgcPilotCfg
+	(*DsLogicalPortCfg)(nil),                 // 12: scte.amp.DsLogicalPortCfg
+	(*RfPortCfg)(nil),                        // 13: scte.amp.RfPortCfg
+	(*RfCfgGrp)(nil),                         // 14: scte.amp.RfCfgGrp
+	(TestPointIdE)(0),                        // 15: scte.amp.test_point_id_e
+	(TestPointConfigE)(0),                    // 16: scte.amp.test_point_config_e
+	(*common_go.VendorExtension)(nil),        // 17: scte.common.VendorExtension
+	(*common_go.ResponsePaginationInfo)(nil), // 18: scte.common.ResponsePaginationInfo
 }
 var file_amps_rf_cfg_proto_depIdxs = []int32{
-	2,  // 0: scte.amp.UsCfg.us_config:type_name -> scte.amp.UsDsCfg
-	0,  // 1: scte.amp.LogicalPortCfg.admin_status:type_name -> scte.amp.admin_status_e
-	1,  // 2: scte.amp.UsIngressSwitchCfg.state:type_name -> scte.amp.ingress_switch_states_e
-	4,  // 3: scte.amp.UsLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
-	5,  // 4: scte.amp.UsLogicalPortCfg.ingress_switch:type_name -> scte.amp.UsIngressSwitchCfg
-	3,  // 5: scte.amp.UsLogicalPortCfg.us_configs:type_name -> scte.amp.UsCfg
-	4,  // 6: scte.amp.BiDirLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
-	2,  // 7: scte.amp.DsCfg.ds_config:type_name -> scte.amp.UsDsCfg
-	9,  // 8: scte.amp.DsLogicalPortCfg.pilot_configs:type_name -> scte.amp.AgileAgcPilotCfg
-	8,  // 9: scte.amp.DsLogicalPortCfg.ds_configs:type_name -> scte.amp.DsCfg
-	6,  // 10: scte.amp.RfPortCfg.us_logical_port_config:type_name -> scte.amp.UsLogicalPortCfg
-	7,  // 11: scte.amp.RfPortCfg.bidir_logical_port_config:type_name -> scte.amp.BiDirLogicalPortCfg
-	10, // 12: scte.amp.RfPortCfg.ds_logical_port_config:type_name -> scte.amp.DsLogicalPortCfg
-	11, // 13: scte.amp.RfCfgGrp.rf_port_configs:type_name -> scte.amp.RfPortCfg
-	13, // 14: scte.amp.RfCfgGrp.vendor_rf_cfgs:type_name -> scte.common.VendorExtension
-	14, // 15: scte.amp.RfCfgGrp.page:type_name -> scte.common.ResponsePaginationInfo
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	3,  // 0: scte.amp.UsCfg.us_config:type_name -> scte.amp.UsDsCfg
+	15, // 1: scte.amp.TestPointConfig.test_point_id:type_name -> scte.amp.test_point_id_e
+	16, // 2: scte.amp.TestPointConfig.test_point_config:type_name -> scte.amp.test_point_config_e
+	0,  // 3: scte.amp.LogicalPortCfg.admin_status:type_name -> scte.amp.admin_status_e
+	5,  // 4: scte.amp.LogicalPortCfg.test_point_config:type_name -> scte.amp.TestPointConfig
+	1,  // 5: scte.amp.UsIngressSwitchCfg.state:type_name -> scte.amp.ingress_switch_states_e
+	6,  // 6: scte.amp.UsLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
+	7,  // 7: scte.amp.UsLogicalPortCfg.ingress_switch:type_name -> scte.amp.UsIngressSwitchCfg
+	4,  // 8: scte.amp.UsLogicalPortCfg.us_configs:type_name -> scte.amp.UsCfg
+	6,  // 9: scte.amp.BiDirLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
+	3,  // 10: scte.amp.DsCfg.ds_config:type_name -> scte.amp.UsDsCfg
+	2,  // 11: scte.amp.AgileAgcPilotCfg.pilot_type:type_name -> scte.amp.pilot_type_e
+	11, // 12: scte.amp.DsLogicalPortCfg.pilot_configs:type_name -> scte.amp.AgileAgcPilotCfg
+	10, // 13: scte.amp.DsLogicalPortCfg.ds_configs:type_name -> scte.amp.DsCfg
+	8,  // 14: scte.amp.RfPortCfg.us_logical_port_config:type_name -> scte.amp.UsLogicalPortCfg
+	9,  // 15: scte.amp.RfPortCfg.bidir_logical_port_config:type_name -> scte.amp.BiDirLogicalPortCfg
+	12, // 16: scte.amp.RfPortCfg.ds_logical_port_config:type_name -> scte.amp.DsLogicalPortCfg
+	13, // 17: scte.amp.RfCfgGrp.rf_port_configs:type_name -> scte.amp.RfPortCfg
+	17, // 18: scte.amp.RfCfgGrp.vendor_rf_cfgs:type_name -> scte.common.VendorExtension
+	18, // 19: scte.amp.RfCfgGrp.page:type_name -> scte.common.ResponsePaginationInfo
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_amps_rf_cfg_proto_init() }
@@ -871,13 +1004,14 @@ func file_amps_rf_cfg_proto_init() {
 	if File_amps_rf_cfg_proto != nil {
 		return
 	}
+	file_amps_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_rf_cfg_proto_rawDesc), len(file_amps_rf_cfg_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   11,
+			NumEnums:      3,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

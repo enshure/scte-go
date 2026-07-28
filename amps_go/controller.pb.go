@@ -33,7 +33,6 @@ const (
 	GroupId_VENDOR                    GroupId = 5
 	GroupId_VERSION_SUMMARY           GroupId = 6
 	GroupId_ENCLOSURE_STATUS          GroupId = 7
-	GroupId_SENSOR_STATUS             GroupId = 8
 	GroupId_POWER_SUPPLY_STATUS       GroupId = 9
 	GroupId_OUTPUT_RAIL_STATUS        GroupId = 10
 	GroupId_SYSTEM_CFG                GroupId = 11
@@ -64,7 +63,6 @@ var (
 		5:   "VENDOR",
 		6:   "VERSION_SUMMARY",
 		7:   "ENCLOSURE_STATUS",
-		8:   "SENSOR_STATUS",
 		9:   "POWER_SUPPLY_STATUS",
 		10:  "OUTPUT_RAIL_STATUS",
 		11:  "SYSTEM_CFG",
@@ -92,7 +90,6 @@ var (
 		"VENDOR":                    5,
 		"VERSION_SUMMARY":           6,
 		"ENCLOSURE_STATUS":          7,
-		"SENSOR_STATUS":             8,
 		"POWER_SUPPLY_STATUS":       9,
 		"OUTPUT_RAIL_STATUS":        10,
 		"SYSTEM_CFG":                11,
@@ -1308,7 +1305,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
 	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
 	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
-	"\apayload*\xb9\x04\n" +
+	"\apayload*\xa6\x04\n" +
 	"\aGroupId\x12\x17\n" +
 	"\x13SYSTEM_CAPABILITIES\x10\x01\x12\x1d\n" +
 	"\x19POWER_SUPPLY_CAPABILITIES\x10\x02\x12\x11\n" +
@@ -1317,8 +1314,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\n" +
 	"\x06VENDOR\x10\x05\x12\x13\n" +
 	"\x0fVERSION_SUMMARY\x10\x06\x12\x14\n" +
-	"\x10ENCLOSURE_STATUS\x10\a\x12\x11\n" +
-	"\rSENSOR_STATUS\x10\b\x12\x17\n" +
+	"\x10ENCLOSURE_STATUS\x10\a\x12\x17\n" +
 	"\x13POWER_SUPPLY_STATUS\x10\t\x12\x16\n" +
 	"\x12OUTPUT_RAIL_STATUS\x10\n" +
 	"\x12\x0e\n" +
