@@ -59,6 +59,7 @@ COMMON_PROTO_FILES = [
     "error_common.proto",
     "event_common.proto",
     "pagination.proto",
+    "ping.proto",
     "reset_common.proto",
     "sensor_common.proto",
     "status_common.proto",

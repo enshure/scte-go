@@ -51,6 +51,7 @@ const (
 	GroupId_RF_STATUS                 GroupId = 62
 	GroupId_RF_CFG_GRP                GroupId = 63
 	GroupId_VENDOR_EXTENSIONS         GroupId = 100 // catch-all for vendor-specific indexed groups, e.g. per-sensor config
+	GroupId_PING                      GroupId = 101
 )
 
 // Enum value maps for GroupId.
@@ -81,6 +82,7 @@ var (
 		62:  "RF_STATUS",
 		63:  "RF_CFG_GRP",
 		100: "VENDOR_EXTENSIONS",
+		101: "PING",
 	}
 	GroupId_value = map[string]int32{
 		"SYSTEM_CAPABILITIES":       1,
@@ -108,6 +110,7 @@ var (
 		"RF_STATUS":                 62,
 		"RF_CFG_GRP":                63,
 		"VENDOR_EXTENSIONS":         100,
+		"PING":                      101,
 	}
 )
 
@@ -228,6 +231,7 @@ type ControllerGetRequest struct {
 	Selectors              []*GroupSelector        `protobuf:"bytes,1,rep,name=selectors" json:"selectors,omitempty"`
 	MaxPacketSize          *uint32                 `protobuf:"varint,2,opt,name=max_packet_size,json=maxPacketSize,def=232" json:"max_packet_size,omitempty"`
 	SpectrumCaptureRequest *SpectrumCaptureRequest `protobuf:"bytes,10,opt,name=spectrum_capture_request,json=spectrumCaptureRequest" json:"spectrum_capture_request,omitempty"`
+	Ping                   *common_go.Ping         `protobuf:"bytes,101,opt,name=ping" json:"ping,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -288,6 +292,13 @@ func (x *ControllerGetRequest) GetSpectrumCaptureRequest() *SpectrumCaptureReque
 	return nil
 }
 
+func (x *ControllerGetRequest) GetPing() *common_go.Ping {
+	if x != nil {
+		return x.Ping
+	}
+	return nil
+}
+
 type ControllerGetGroupResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ErrorTag      *common_go.ErrorTagE   `protobuf:"varint,1,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
@@ -321,6 +332,7 @@ type ControllerGetGroupResponse struct {
 	//	*ControllerGetGroupResponse_RfStatusGroup
 	//	*ControllerGetGroupResponse_RfConfigGrp
 	//	*ControllerGetGroupResponse_VendorExtensions
+	//	*ControllerGetGroupResponse_Ping
 	Payload       isControllerGetGroupResponse_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -618,6 +630,15 @@ func (x *ControllerGetGroupResponse) GetVendorExtensions() *common_go.VendorExte
 	return nil
 }
 
+func (x *ControllerGetGroupResponse) GetPing() *common_go.Ping {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_Ping); ok {
+			return x.Ping
+		}
+	}
+	return nil
+}
+
 type isControllerGetGroupResponse_Payload interface {
 	isControllerGetGroupResponse_Payload()
 }
@@ -726,6 +747,10 @@ type ControllerGetGroupResponse_VendorExtensions struct {
 	VendorExtensions *common_go.VendorExtensions `protobuf:"bytes,100,opt,name=vendor_extensions,json=vendorExtensions,oneof"`
 }
 
+type ControllerGetGroupResponse_Ping struct {
+	Ping *common_go.Ping `protobuf:"bytes,101,opt,name=ping,oneof"`
+}
+
 func (*ControllerGetGroupResponse_SystemCapabilities) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_PowerSupplyCapabilities) isControllerGetGroupResponse_Payload() {}
@@ -777,6 +802,8 @@ func (*ControllerGetGroupResponse_RfStatusGroup) isControllerGetGroupResponse_Pa
 func (*ControllerGetGroupResponse_RfConfigGrp) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_VendorExtensions) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_Ping) isControllerGetGroupResponse_Payload() {}
 
 type ControllerGetResponse struct {
 	state         protoimpl.MessageState        `protogen:"open.v1"`
@@ -1227,7 +1254,7 @@ var File_amps_controller_proto protoreflect.FileDescriptor
 
 const file_amps_controller_proto_rawDesc = "" +
 	"\n" +
-	"\x15amps/controller.proto\x12\bscte.amp\x1a\x13amps/spectrum.proto\x1a\x19common/error_common.proto\x1a\x1acommon/device_common.proto\x1a\x19common/event_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/vendor_common.proto\x1a\x1bcommon/version_common.proto\x1a\x15amps/system_grp.proto\x1a\x1eamps/rf_capabilities_grp.proto\x1a\x14amps/rf_status.proto\x1a\x11amps/rf_cfg.proto\x1a\x19common/reset_common.proto\x1a\x1acommon/sensor_common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\x01\n" +
+	"\x15amps/controller.proto\x12\bscte.amp\x1a\x13amps/spectrum.proto\x1a\x19common/error_common.proto\x1a\x1acommon/device_common.proto\x1a\x19common/event_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/vendor_common.proto\x1a\x1bcommon/version_common.proto\x1a\x11common/ping.proto\x1a\x15amps/system_grp.proto\x1a\x1eamps/rf_capabilities_grp.proto\x1a\x14amps/rf_status.proto\x1a\x11amps/rf_cfg.proto\x1a\x19common/reset_common.proto\x1a\x1acommon/sensor_common.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\x01\n" +
 	"\rGroupSelector\x12,\n" +
 	"\bgroup_id\x18\x01 \x01(\x0e2\x11.scte.amp.GroupIdR\agroupId\x12\x1f\n" +
 	"\vinstance_id\x18\x02 \x01(\rR\n" +
@@ -1235,12 +1262,13 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\vstart_index\x18\x03 \x01(\rR\n" +
 	"startIndex\x12\x1f\n" +
 	"\vmax_entries\x18\x04 \x01(\rR\n" +
-	"maxEntries\"\xd6\x01\n" +
+	"maxEntries\"\xfd\x01\n" +
 	"\x14ControllerGetRequest\x125\n" +
 	"\tselectors\x18\x01 \x03(\v2\x17.scte.amp.GroupSelectorR\tselectors\x12+\n" +
 	"\x0fmax_packet_size\x18\x02 \x01(\r:\x03232R\rmaxPacketSize\x12Z\n" +
 	"\x18spectrum_capture_request\x18\n" +
-	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\"\xae\x10\n" +
+	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\x12%\n" +
+	"\x04ping\x18e \x01(\v2\x11.scte.common.PingR\x04ping\"\xd7\x10\n" +
 	"\x1aControllerGetGroupResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12B\n" +
@@ -1272,7 +1300,8 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x0frf_capabilities\x18% \x01(\v2\x18.scte.amp.RfCapabilitiesH\x00R\x0erfCapabilities\x12?\n" +
 	"\x0frf_status_group\x18& \x01(\v2\x15.scte.amp.RfStatusGrpH\x00R\rrfStatusGroup\x128\n" +
 	"\rrf_config_grp\x18' \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
-	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
+	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensions\x12'\n" +
+	"\x04ping\x18e \x01(\v2\x11.scte.common.PingH\x00R\x04pingB\t\n" +
 	"\apayload\"\xac\x01\n" +
 	"\x15ControllerGetResponse\x120\n" +
 	"\x06result\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\x06result\x12#\n" +
@@ -1305,7 +1334,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
 	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
 	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
-	"\apayload*\xa6\x04\n" +
+	"\apayload*\xb0\x04\n" +
 	"\aGroupId\x12\x17\n" +
 	"\x13SYSTEM_CAPABILITIES\x10\x01\x12\x1d\n" +
 	"\x19POWER_SUPPLY_CAPABILITIES\x10\x02\x12\x11\n" +
@@ -1335,7 +1364,8 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\tRF_STATUS\x10>\x12\x0e\n" +
 	"\n" +
 	"RF_CFG_GRP\x10?\x12\x15\n" +
-	"\x11VENDOR_EXTENSIONS\x10dB,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\x11VENDOR_EXTENSIONS\x10d\x12\b\n" +
+	"\x04PING\x10eB,Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_controller_proto_rawDescOnce sync.Once
@@ -1360,92 +1390,95 @@ var file_amps_controller_proto_goTypes = []any{
 	(*ControllerSetRequest)(nil),              // 5: scte.amp.ControllerSetRequest
 	(*ControllerSetResponse)(nil),             // 6: scte.amp.ControllerSetResponse
 	(*SpectrumCaptureRequest)(nil),            // 7: scte.amp.SpectrumCaptureRequest
-	(common_go.ErrorTagE)(0),                  // 8: scte.common.error_tag_e
-	(*timestamppb.Timestamp)(nil),             // 9: google.protobuf.Timestamp
-	(*SystemCapabilities)(nil),                // 10: scte.amp.SystemCapabilities
-	(*PowerSupplyCapabilities)(nil),           // 11: scte.amp.PowerSupplyCapabilities
-	(*common_go.SystemStatus)(nil),            // 12: scte.common.SystemStatus
-	(*common_go.Identification)(nil),          // 13: scte.common.Identification
-	(*common_go.Vendor)(nil),                  // 14: scte.common.Vendor
-	(*common_go.VersionSummary)(nil),          // 15: scte.common.VersionSummary
-	(*EnclosureStatus)(nil),                   // 16: scte.amp.EnclosureStatus
-	(*PowerSupplyStatus)(nil),                 // 17: scte.amp.PowerSupplyStatus
-	(*OutputRailStatus)(nil),                  // 18: scte.amp.OutputRailStatus
-	(*common_go.SystemCfg)(nil),               // 19: scte.common.SystemCfg
-	(*common_go.ResetCapabilities)(nil),       // 20: scte.common.ResetCapabilities
-	(*common_go.ResetHistoryStatus)(nil),      // 21: scte.common.ResetHistoryStatus
-	(*common_go.Reset)(nil),                   // 22: scte.common.Reset
-	(*common_go.DisableAutoReboot)(nil),       // 23: scte.common.DisableAutoReboot
-	(*common_go.EnableAutoReboot)(nil),        // 24: scte.common.EnableAutoReboot
-	(*common_go.EventCapabilities)(nil),       // 25: scte.common.EventCapabilities
-	(*common_go.EventNotification)(nil),       // 26: scte.common.EventNotification
-	(*common_go.TelemetryIntervalConfig)(nil), // 27: scte.common.TelemetryIntervalConfig
-	(*SpectrumCaptureResponse)(nil),           // 28: scte.amp.SpectrumCaptureResponse
-	(*common_go.Sensors)(nil),                 // 29: scte.common.Sensors
-	(*common_go.SensorDescriptors)(nil),       // 30: scte.common.SensorDescriptors
-	(*common_go.SensorsData)(nil),             // 31: scte.common.SensorsData
-	(*RfCapabilities)(nil),                    // 32: scte.amp.RfCapabilities
-	(*RfStatusGrp)(nil),                       // 33: scte.amp.RfStatusGrp
-	(*RfCfgGrp)(nil),                          // 34: scte.amp.RfCfgGrp
-	(*common_go.VendorExtensions)(nil),        // 35: scte.common.VendorExtensions
-	(*common_go.EventReportingCfg)(nil),       // 36: scte.common.EventReportingCfg
+	(*common_go.Ping)(nil),                    // 8: scte.common.Ping
+	(common_go.ErrorTagE)(0),                  // 9: scte.common.error_tag_e
+	(*timestamppb.Timestamp)(nil),             // 10: google.protobuf.Timestamp
+	(*SystemCapabilities)(nil),                // 11: scte.amp.SystemCapabilities
+	(*PowerSupplyCapabilities)(nil),           // 12: scte.amp.PowerSupplyCapabilities
+	(*common_go.SystemStatus)(nil),            // 13: scte.common.SystemStatus
+	(*common_go.Identification)(nil),          // 14: scte.common.Identification
+	(*common_go.Vendor)(nil),                  // 15: scte.common.Vendor
+	(*common_go.VersionSummary)(nil),          // 16: scte.common.VersionSummary
+	(*EnclosureStatus)(nil),                   // 17: scte.amp.EnclosureStatus
+	(*PowerSupplyStatus)(nil),                 // 18: scte.amp.PowerSupplyStatus
+	(*OutputRailStatus)(nil),                  // 19: scte.amp.OutputRailStatus
+	(*common_go.SystemCfg)(nil),               // 20: scte.common.SystemCfg
+	(*common_go.ResetCapabilities)(nil),       // 21: scte.common.ResetCapabilities
+	(*common_go.ResetHistoryStatus)(nil),      // 22: scte.common.ResetHistoryStatus
+	(*common_go.Reset)(nil),                   // 23: scte.common.Reset
+	(*common_go.DisableAutoReboot)(nil),       // 24: scte.common.DisableAutoReboot
+	(*common_go.EnableAutoReboot)(nil),        // 25: scte.common.EnableAutoReboot
+	(*common_go.EventCapabilities)(nil),       // 26: scte.common.EventCapabilities
+	(*common_go.EventNotification)(nil),       // 27: scte.common.EventNotification
+	(*common_go.TelemetryIntervalConfig)(nil), // 28: scte.common.TelemetryIntervalConfig
+	(*SpectrumCaptureResponse)(nil),           // 29: scte.amp.SpectrumCaptureResponse
+	(*common_go.Sensors)(nil),                 // 30: scte.common.Sensors
+	(*common_go.SensorDescriptors)(nil),       // 31: scte.common.SensorDescriptors
+	(*common_go.SensorsData)(nil),             // 32: scte.common.SensorsData
+	(*RfCapabilities)(nil),                    // 33: scte.amp.RfCapabilities
+	(*RfStatusGrp)(nil),                       // 34: scte.amp.RfStatusGrp
+	(*RfCfgGrp)(nil),                          // 35: scte.amp.RfCfgGrp
+	(*common_go.VendorExtensions)(nil),        // 36: scte.common.VendorExtensions
+	(*common_go.EventReportingCfg)(nil),       // 37: scte.common.EventReportingCfg
 }
 var file_amps_controller_proto_depIdxs = []int32{
 	0,  // 0: scte.amp.GroupSelector.group_id:type_name -> scte.amp.GroupId
 	1,  // 1: scte.amp.ControllerGetRequest.selectors:type_name -> scte.amp.GroupSelector
 	7,  // 2: scte.amp.ControllerGetRequest.spectrum_capture_request:type_name -> scte.amp.SpectrumCaptureRequest
-	8,  // 3: scte.amp.ControllerGetGroupResponse.error_tag:type_name -> scte.common.error_tag_e
-	9,  // 4: scte.amp.ControllerGetGroupResponse.last_updated_at:type_name -> google.protobuf.Timestamp
-	10, // 5: scte.amp.ControllerGetGroupResponse.system_capabilities:type_name -> scte.amp.SystemCapabilities
-	11, // 6: scte.amp.ControllerGetGroupResponse.power_supply_capabilities:type_name -> scte.amp.PowerSupplyCapabilities
-	12, // 7: scte.amp.ControllerGetGroupResponse.system_status:type_name -> scte.common.SystemStatus
-	13, // 8: scte.amp.ControllerGetGroupResponse.identification:type_name -> scte.common.Identification
-	14, // 9: scte.amp.ControllerGetGroupResponse.vendor:type_name -> scte.common.Vendor
-	15, // 10: scte.amp.ControllerGetGroupResponse.version_summary:type_name -> scte.common.VersionSummary
-	16, // 11: scte.amp.ControllerGetGroupResponse.enclosure_status:type_name -> scte.amp.EnclosureStatus
-	17, // 12: scte.amp.ControllerGetGroupResponse.power_supply_status:type_name -> scte.amp.PowerSupplyStatus
-	18, // 13: scte.amp.ControllerGetGroupResponse.output_rail_status:type_name -> scte.amp.OutputRailStatus
-	19, // 14: scte.amp.ControllerGetGroupResponse.system_cfg:type_name -> scte.common.SystemCfg
-	20, // 15: scte.amp.ControllerGetGroupResponse.reset_capabilities:type_name -> scte.common.ResetCapabilities
-	21, // 16: scte.amp.ControllerGetGroupResponse.reset_history_status:type_name -> scte.common.ResetHistoryStatus
-	22, // 17: scte.amp.ControllerGetGroupResponse.reset:type_name -> scte.common.Reset
-	23, // 18: scte.amp.ControllerGetGroupResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
-	24, // 19: scte.amp.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	25, // 20: scte.amp.ControllerGetGroupResponse.event_capabilities:type_name -> scte.common.EventCapabilities
-	26, // 21: scte.amp.ControllerGetGroupResponse.event_notification:type_name -> scte.common.EventNotification
-	27, // 22: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	28, // 23: scte.amp.ControllerGetGroupResponse.spectrum_capture:type_name -> scte.amp.SpectrumCaptureResponse
-	29, // 24: scte.amp.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
-	30, // 25: scte.amp.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
-	31, // 26: scte.amp.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
-	32, // 27: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
-	33, // 28: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
-	34, // 29: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	35, // 30: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
-	8,  // 31: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
-	3,  // 32: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
-	19, // 33: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
-	22, // 34: scte.amp.ControllerSetRequest.reset:type_name -> scte.common.Reset
-	23, // 35: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
-	24, // 36: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	36, // 37: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	27, // 38: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	34, // 39: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	35, // 40: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtensions
-	8,  // 41: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
-	19, // 42: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
-	22, // 43: scte.amp.ControllerSetResponse.reset:type_name -> scte.common.Reset
-	23, // 44: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
-	24, // 45: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	36, // 46: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	27, // 47: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	34, // 48: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	35, // 49: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
-	50, // [50:50] is the sub-list for method output_type
-	50, // [50:50] is the sub-list for method input_type
-	50, // [50:50] is the sub-list for extension type_name
-	50, // [50:50] is the sub-list for extension extendee
-	0,  // [0:50] is the sub-list for field type_name
+	8,  // 3: scte.amp.ControllerGetRequest.ping:type_name -> scte.common.Ping
+	9,  // 4: scte.amp.ControllerGetGroupResponse.error_tag:type_name -> scte.common.error_tag_e
+	10, // 5: scte.amp.ControllerGetGroupResponse.last_updated_at:type_name -> google.protobuf.Timestamp
+	11, // 6: scte.amp.ControllerGetGroupResponse.system_capabilities:type_name -> scte.amp.SystemCapabilities
+	12, // 7: scte.amp.ControllerGetGroupResponse.power_supply_capabilities:type_name -> scte.amp.PowerSupplyCapabilities
+	13, // 8: scte.amp.ControllerGetGroupResponse.system_status:type_name -> scte.common.SystemStatus
+	14, // 9: scte.amp.ControllerGetGroupResponse.identification:type_name -> scte.common.Identification
+	15, // 10: scte.amp.ControllerGetGroupResponse.vendor:type_name -> scte.common.Vendor
+	16, // 11: scte.amp.ControllerGetGroupResponse.version_summary:type_name -> scte.common.VersionSummary
+	17, // 12: scte.amp.ControllerGetGroupResponse.enclosure_status:type_name -> scte.amp.EnclosureStatus
+	18, // 13: scte.amp.ControllerGetGroupResponse.power_supply_status:type_name -> scte.amp.PowerSupplyStatus
+	19, // 14: scte.amp.ControllerGetGroupResponse.output_rail_status:type_name -> scte.amp.OutputRailStatus
+	20, // 15: scte.amp.ControllerGetGroupResponse.system_cfg:type_name -> scte.common.SystemCfg
+	21, // 16: scte.amp.ControllerGetGroupResponse.reset_capabilities:type_name -> scte.common.ResetCapabilities
+	22, // 17: scte.amp.ControllerGetGroupResponse.reset_history_status:type_name -> scte.common.ResetHistoryStatus
+	23, // 18: scte.amp.ControllerGetGroupResponse.reset:type_name -> scte.common.Reset
+	24, // 19: scte.amp.ControllerGetGroupResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	25, // 20: scte.amp.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
+	26, // 21: scte.amp.ControllerGetGroupResponse.event_capabilities:type_name -> scte.common.EventCapabilities
+	27, // 22: scte.amp.ControllerGetGroupResponse.event_notification:type_name -> scte.common.EventNotification
+	28, // 23: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	29, // 24: scte.amp.ControllerGetGroupResponse.spectrum_capture:type_name -> scte.amp.SpectrumCaptureResponse
+	30, // 25: scte.amp.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
+	31, // 26: scte.amp.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
+	32, // 27: scte.amp.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
+	33, // 28: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
+	34, // 29: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
+	35, // 30: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	36, // 31: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
+	8,  // 32: scte.amp.ControllerGetGroupResponse.ping:type_name -> scte.common.Ping
+	9,  // 33: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
+	3,  // 34: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
+	20, // 35: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
+	23, // 36: scte.amp.ControllerSetRequest.reset:type_name -> scte.common.Reset
+	24, // 37: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	25, // 38: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
+	37, // 39: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	28, // 40: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	35, // 41: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	36, // 42: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtensions
+	9,  // 43: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
+	20, // 44: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
+	23, // 45: scte.amp.ControllerSetResponse.reset:type_name -> scte.common.Reset
+	24, // 46: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	25, // 47: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
+	37, // 48: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	28, // 49: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	35, // 50: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	36, // 51: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
+	52, // [52:52] is the sub-list for method output_type
+	52, // [52:52] is the sub-list for method input_type
+	52, // [52:52] is the sub-list for extension type_name
+	52, // [52:52] is the sub-list for extension extendee
+	0,  // [0:52] is the sub-list for field type_name
 }
 
 func init() { file_amps_controller_proto_init() }
@@ -1485,6 +1518,7 @@ func file_amps_controller_proto_init() {
 		(*ControllerGetGroupResponse_RfStatusGroup)(nil),
 		(*ControllerGetGroupResponse_RfConfigGrp)(nil),
 		(*ControllerGetGroupResponse_VendorExtensions)(nil),
+		(*ControllerGetGroupResponse_Ping)(nil),
 	}
 	file_amps_controller_proto_msgTypes[4].OneofWrappers = []any{
 		(*ControllerSetRequest_SystemCfg)(nil),
