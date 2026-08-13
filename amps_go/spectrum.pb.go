@@ -24,19 +24,22 @@ const (
 type SpectrumCaptureDataTypeE int32
 
 const (
-	SpectrumCaptureDataTypeE_REFERENCE_VALUE SpectrumCaptureDataTypeE = 1
-	SpectrumCaptureDataTypeE_MEASURED_VALUE  SpectrumCaptureDataTypeE = 2
+	SpectrumCaptureDataTypeE_SPECTRUM_CAPTURE_DATA_TYPE_UNKNOWN SpectrumCaptureDataTypeE = 0
+	SpectrumCaptureDataTypeE_REFERENCE_VALUE                    SpectrumCaptureDataTypeE = 1
+	SpectrumCaptureDataTypeE_MEASURED_VALUE                     SpectrumCaptureDataTypeE = 2
 )
 
 // Enum value maps for SpectrumCaptureDataTypeE.
 var (
 	SpectrumCaptureDataTypeE_name = map[int32]string{
+		0: "SPECTRUM_CAPTURE_DATA_TYPE_UNKNOWN",
 		1: "REFERENCE_VALUE",
 		2: "MEASURED_VALUE",
 	}
 	SpectrumCaptureDataTypeE_value = map[string]int32{
-		"REFERENCE_VALUE": 1,
-		"MEASURED_VALUE":  2,
+		"SPECTRUM_CAPTURE_DATA_TYPE_UNKNOWN": 0,
+		"REFERENCE_VALUE":                    1,
+		"MEASURED_VALUE":                     2,
 	}
 )
 
@@ -79,9 +82,9 @@ func (SpectrumCaptureDataTypeE) EnumDescriptor() ([]byte, []int) {
 
 type SpectrumCaptureConfig struct {
 	state                    protoimpl.MessageState    `protogen:"open.v1"`
-	SpectrumCaptureModeE     *PathSelectorE            `protobuf:"varint,2,req,name=spectrum_capture_mode_e,json=spectrumCaptureModeE,enum=scte.amp.PathSelectorE" json:"spectrum_capture_mode_e,omitempty"`
-	SpectrumCaptureDataTypeE *SpectrumCaptureDataTypeE `protobuf:"varint,3,req,name=spectrum_capture_data_type_e,json=spectrumCaptureDataTypeE,enum=scte.amp.SpectrumCaptureDataTypeE" json:"spectrum_capture_data_type_e,omitempty"`
-	ScanMode                 *SpectrumScanDataE        `protobuf:"varint,4,req,name=scan_mode,json=scanMode,enum=scte.amp.SpectrumScanDataE" json:"scan_mode,omitempty"`
+	SpectrumCaptureModeE     *PathSelectorE            `protobuf:"varint,2,opt,name=spectrum_capture_mode_e,json=spectrumCaptureModeE,enum=scte.amp.PathSelectorE" json:"spectrum_capture_mode_e,omitempty"`
+	SpectrumCaptureDataTypeE *SpectrumCaptureDataTypeE `protobuf:"varint,3,opt,name=spectrum_capture_data_type_e,json=spectrumCaptureDataTypeE,enum=scte.amp.SpectrumCaptureDataTypeE" json:"spectrum_capture_data_type_e,omitempty"`
+	ScanMode                 *SpectrumScanDataE        `protobuf:"varint,4,opt,name=scan_mode,json=scanMode,enum=scte.amp.SpectrumScanDataE" json:"scan_mode,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -120,14 +123,14 @@ func (x *SpectrumCaptureConfig) GetSpectrumCaptureModeE() PathSelectorE {
 	if x != nil && x.SpectrumCaptureModeE != nil {
 		return *x.SpectrumCaptureModeE
 	}
-	return PathSelectorE_DOWNSTREAM
+	return PathSelectorE_PATH_SELECTOR_UNKNOWN
 }
 
 func (x *SpectrumCaptureConfig) GetSpectrumCaptureDataTypeE() SpectrumCaptureDataTypeE {
 	if x != nil && x.SpectrumCaptureDataTypeE != nil {
 		return *x.SpectrumCaptureDataTypeE
 	}
-	return SpectrumCaptureDataTypeE_REFERENCE_VALUE
+	return SpectrumCaptureDataTypeE_SPECTRUM_CAPTURE_DATA_TYPE_UNKNOWN
 }
 
 func (x *SpectrumCaptureConfig) GetScanMode() SpectrumScanDataE {
@@ -139,12 +142,17 @@ func (x *SpectrumCaptureConfig) GetScanMode() SpectrumScanDataE {
 
 type SpectrumCaptureRange struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StartFreq     *uint32                `protobuf:"varint,1,req,name=start_freq,json=startFreq" json:"start_freq,omitempty"`
-	StepSize      *uint32                `protobuf:"varint,2,opt,name=step_size,json=stepSize" json:"step_size,omitempty"` // defaults to 6 Mhz
-	EndFreq       *uint32                `protobuf:"varint,3,req,name=end_freq,json=endFreq" json:"end_freq,omitempty"`
+	StartFreq     *uint32                `protobuf:"varint,1,opt,name=start_freq,json=startFreq" json:"start_freq,omitempty"`
+	StepSize      *uint32                `protobuf:"varint,2,opt,name=step_size,json=stepSize,def=6" json:"step_size,omitempty"` // Step size in MHz. Defaults to 6 MHz.
+	EndFreq       *uint32                `protobuf:"varint,3,opt,name=end_freq,json=endFreq" json:"end_freq,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
+
+// Default values for SpectrumCaptureRange fields.
+const (
+	Default_SpectrumCaptureRange_StepSize = uint32(6)
+)
 
 func (x *SpectrumCaptureRange) Reset() {
 	*x = SpectrumCaptureRange{}
@@ -187,7 +195,7 @@ func (x *SpectrumCaptureRange) GetStepSize() uint32 {
 	if x != nil && x.StepSize != nil {
 		return *x.StepSize
 	}
-	return 0
+	return Default_SpectrumCaptureRange_StepSize
 }
 
 func (x *SpectrumCaptureRange) GetEndFreq() uint32 {
@@ -199,13 +207,18 @@ func (x *SpectrumCaptureRange) GetEndFreq() uint32 {
 
 type SpectrumCaptureRangeValues struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	StartFreq     *uint32                `protobuf:"varint,1,req,name=start_freq,json=startFreq" json:"start_freq,omitempty"`
-	StepSize      *uint32                `protobuf:"varint,2,opt,name=step_size,json=stepSize" json:"step_size,omitempty"` // defaults to 6 Mhz
-	EndFreq       *uint32                `protobuf:"varint,3,req,name=end_freq,json=endFreq" json:"end_freq,omitempty"`
-	Values        []uint32               `protobuf:"varint,4,rep,packed,name=values" json:"values,omitempty"`
+	StartFreq     *uint32                `protobuf:"varint,1,opt,name=start_freq,json=startFreq" json:"start_freq,omitempty"`
+	StepSize      *uint32                `protobuf:"varint,2,opt,name=step_size,json=stepSize,def=6" json:"step_size,omitempty"` // Step size in MHz. Defaults to 6 MHz.
+	EndFreq       *uint32                `protobuf:"varint,3,opt,name=end_freq,json=endFreq" json:"end_freq,omitempty"`
+	Values        []int32                `protobuf:"zigzag32,4,rep,packed,name=values" json:"values,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
+
+// Default values for SpectrumCaptureRangeValues fields.
+const (
+	Default_SpectrumCaptureRangeValues_StepSize = uint32(6)
+)
 
 func (x *SpectrumCaptureRangeValues) Reset() {
 	*x = SpectrumCaptureRangeValues{}
@@ -248,7 +261,7 @@ func (x *SpectrumCaptureRangeValues) GetStepSize() uint32 {
 	if x != nil && x.StepSize != nil {
 		return *x.StepSize
 	}
-	return 0
+	return Default_SpectrumCaptureRangeValues_StepSize
 }
 
 func (x *SpectrumCaptureRangeValues) GetEndFreq() uint32 {
@@ -258,7 +271,7 @@ func (x *SpectrumCaptureRangeValues) GetEndFreq() uint32 {
 	return 0
 }
 
-func (x *SpectrumCaptureRangeValues) GetValues() []uint32 {
+func (x *SpectrumCaptureRangeValues) GetValues() []int32 {
 	if x != nil {
 		return x.Values
 	}
@@ -267,7 +280,7 @@ func (x *SpectrumCaptureRangeValues) GetValues() []uint32 {
 
 type SpectrumCaptureRequest struct {
 	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Config        *SpectrumCaptureConfig  `protobuf:"bytes,2,req,name=config" json:"config,omitempty"`
+	Config        *SpectrumCaptureConfig  `protobuf:"bytes,2,opt,name=config" json:"config,omitempty"`
 	Ranges        []*SpectrumCaptureRange `protobuf:"bytes,3,rep,name=ranges" json:"ranges,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -318,11 +331,12 @@ func (x *SpectrumCaptureRequest) GetRanges() []*SpectrumCaptureRange {
 }
 
 type SpectrumCapturePointValue struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	FrequencyMhzX100 *uint32                `protobuf:"varint,1,opt,name=frequency_mhz_x100,json=frequencyMhzX100" json:"frequency_mhz_x100,omitempty"` // Frequency in MHz multiplied by 100, for example 261.0 MHz is 26100.
-	PowerX100        *int32                 `protobuf:"zigzag32,2,opt,name=power_x100,json=powerX100" json:"power_x100,omitempty"`                      // Power multiplied by 100, for example 41.43 dBmV is 4143.
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	FrequencyMhzX100   *uint32                `protobuf:"varint,1,opt,name=frequency_mhz_x100,json=frequencyMhzX100" json:"frequency_mhz_x100,omitempty"`       // Frequency in MHz multiplied by 100, for example 261.0 MHz is 26100.
+	PowerX100          *int32                 `protobuf:"zigzag32,2,opt,name=power_x100,json=powerX100" json:"power_x100,omitempty"`                            // Power multiplied by 100, for example 41.43 dBmV is 4143.
+	ReferencePowerX100 *uint32                `protobuf:"varint,3,opt,name=reference_power_x100,json=referencePowerX100" json:"reference_power_x100,omitempty"` // Reference power level for the frequency.
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *SpectrumCapturePointValue) Reset() {
@@ -369,9 +383,16 @@ func (x *SpectrumCapturePointValue) GetPowerX100() int32 {
 	return 0
 }
 
+func (x *SpectrumCapturePointValue) GetReferencePowerX100() uint32 {
+	if x != nil && x.ReferencePowerX100 != nil {
+		return *x.ReferencePowerX100
+	}
+	return 0
+}
+
 type SpectrumCaptureResponse struct {
 	state                    protoimpl.MessageState        `protogen:"open.v1"`
-	SpectrumCaptureDataTypeE *SpectrumCaptureDataTypeE     `protobuf:"varint,2,req,name=spectrum_capture_data_type_e,json=spectrumCaptureDataTypeE,enum=scte.amp.SpectrumCaptureDataTypeE" json:"spectrum_capture_data_type_e,omitempty"` // 1 byte
+	SpectrumCaptureDataTypeE *SpectrumCaptureDataTypeE     `protobuf:"varint,2,opt,name=spectrum_capture_data_type_e,json=spectrumCaptureDataTypeE,enum=scte.amp.SpectrumCaptureDataTypeE" json:"spectrum_capture_data_type_e,omitempty"` // 1 byte
 	Values                   []*SpectrumCaptureRangeValues `protobuf:"bytes,3,rep,name=values" json:"values,omitempty"`                                                                                                                   // Power values multiplied by 100, for e.g. 43.5 will be sent as 4350 Max bytes - 7 bytes
 	TotalCompositePower      *float32                      `protobuf:"fixed32,4,opt,name=total_composite_power,json=totalCompositePower" json:"total_composite_power,omitempty"`
 	FragmentInfo             *FragmentInfo                 `protobuf:"bytes,5,opt,name=fragment_info,json=fragmentInfo" json:"fragment_info,omitempty"` // header for the response
@@ -414,7 +435,7 @@ func (x *SpectrumCaptureResponse) GetSpectrumCaptureDataTypeE() SpectrumCaptureD
 	if x != nil && x.SpectrumCaptureDataTypeE != nil {
 		return *x.SpectrumCaptureDataTypeE
 	}
-	return SpectrumCaptureDataTypeE_REFERENCE_VALUE
+	return SpectrumCaptureDataTypeE_SPECTRUM_CAPTURE_DATA_TYPE_UNKNOWN
 }
 
 func (x *SpectrumCaptureResponse) GetValues() []*SpectrumCaptureRangeValues {
@@ -533,29 +554,30 @@ const file_amps_spectrum_proto_rawDesc = "" +
 	"\n" +
 	"\x13amps/spectrum.proto\x12\bscte.amp\x1a\x11amps/common.proto\"\x90\x02\n" +
 	"\x17spectrum_capture_config\x12P\n" +
-	"\x17spectrum_capture_mode_e\x18\x02 \x02(\x0e2\x19.scte.amp.path_selector_eR\x14spectrumCaptureModeE\x12f\n" +
-	"\x1cspectrum_capture_data_type_e\x18\x03 \x02(\x0e2&.scte.amp.spectrum_capture_data_type_eR\x18spectrumCaptureDataTypeE\x12;\n" +
-	"\tscan_mode\x18\x04 \x02(\x0e2\x1e.scte.amp.spectrum_scan_data_eR\bscanMode\"o\n" +
+	"\x17spectrum_capture_mode_e\x18\x02 \x01(\x0e2\x19.scte.amp.path_selector_eR\x14spectrumCaptureModeE\x12f\n" +
+	"\x1cspectrum_capture_data_type_e\x18\x03 \x01(\x0e2&.scte.amp.spectrum_capture_data_type_eR\x18spectrumCaptureDataTypeE\x12;\n" +
+	"\tscan_mode\x18\x04 \x01(\x0e2\x1e.scte.amp.spectrum_scan_data_eR\bscanMode\"r\n" +
 	"\x16spectrum_capture_range\x12\x1d\n" +
 	"\n" +
-	"start_freq\x18\x01 \x02(\rR\tstartFreq\x12\x1b\n" +
-	"\tstep_size\x18\x02 \x01(\rR\bstepSize\x12\x19\n" +
-	"\bend_freq\x18\x03 \x02(\rR\aendFreq\"\x92\x01\n" +
+	"start_freq\x18\x01 \x01(\rR\tstartFreq\x12\x1e\n" +
+	"\tstep_size\x18\x02 \x01(\r:\x016R\bstepSize\x12\x19\n" +
+	"\bend_freq\x18\x03 \x01(\rR\aendFreq\"\x95\x01\n" +
 	"\x1dspectrum_capture_range_values\x12\x1d\n" +
 	"\n" +
-	"start_freq\x18\x01 \x02(\rR\tstartFreq\x12\x1b\n" +
-	"\tstep_size\x18\x02 \x01(\rR\bstepSize\x12\x19\n" +
-	"\bend_freq\x18\x03 \x02(\rR\aendFreq\x12\x1a\n" +
-	"\x06values\x18\x04 \x03(\rB\x02\x10\x01R\x06values\"\x8d\x01\n" +
+	"start_freq\x18\x01 \x01(\rR\tstartFreq\x12\x1e\n" +
+	"\tstep_size\x18\x02 \x01(\r:\x016R\bstepSize\x12\x19\n" +
+	"\bend_freq\x18\x03 \x01(\rR\aendFreq\x12\x1a\n" +
+	"\x06values\x18\x04 \x03(\x11B\x02\x10\x01R\x06values\"\x8d\x01\n" +
 	"\x16SpectrumCaptureRequest\x129\n" +
-	"\x06config\x18\x02 \x02(\v2!.scte.amp.spectrum_capture_configR\x06config\x128\n" +
-	"\x06ranges\x18\x03 \x03(\v2 .scte.amp.spectrum_capture_rangeR\x06ranges\"k\n" +
+	"\x06config\x18\x02 \x01(\v2!.scte.amp.spectrum_capture_configR\x06config\x128\n" +
+	"\x06ranges\x18\x03 \x03(\v2 .scte.amp.spectrum_capture_rangeR\x06ranges\"\x9d\x01\n" +
 	"\x1cspectrum_capture_point_value\x12,\n" +
 	"\x12frequency_mhz_x100\x18\x01 \x01(\rR\x10frequencyMhzX100\x12\x1d\n" +
 	"\n" +
-	"power_x100\x18\x02 \x01(\x11R\tpowerX100\"\xfe\x02\n" +
+	"power_x100\x18\x02 \x01(\x11R\tpowerX100\x120\n" +
+	"\x14reference_power_x100\x18\x03 \x01(\rR\x12referencePowerX100\"\xfe\x02\n" +
 	"\x17SpectrumCaptureResponse\x12f\n" +
-	"\x1cspectrum_capture_data_type_e\x18\x02 \x02(\x0e2&.scte.amp.spectrum_capture_data_type_eR\x18spectrumCaptureDataTypeE\x12?\n" +
+	"\x1cspectrum_capture_data_type_e\x18\x02 \x01(\x0e2&.scte.amp.spectrum_capture_data_type_eR\x18spectrumCaptureDataTypeE\x12?\n" +
 	"\x06values\x18\x03 \x03(\v2'.scte.amp.spectrum_capture_range_valuesR\x06values\x122\n" +
 	"\x15total_composite_power\x18\x04 \x01(\x02R\x13totalCompositePower\x12;\n" +
 	"\rfragment_info\x18\x05 \x01(\v2\x16.scte.amp.FragmentInfoR\ffragmentInfo\x12I\n" +
@@ -563,10 +585,12 @@ const file_amps_spectrum_proto_rawDesc = "" +
 	"\x0fSpectrumCapture\x12<\n" +
 	"\arequest\x18\x01 \x01(\v2 .scte.amp.SpectrumCaptureRequestH\x00R\arequest\x12?\n" +
 	"\bresponse\x18\x02 \x01(\v2!.scte.amp.SpectrumCaptureResponseH\x00R\bresponseB\x04\n" +
-	"\x02id*G\n" +
-	"\x1cspectrum_capture_data_type_e\x12\x13\n" +
+	"\x02id*o\n" +
+	"\x1cspectrum_capture_data_type_e\x12&\n" +
+	"\"SPECTRUM_CAPTURE_DATA_TYPE_UNKNOWN\x10\x00\x12\x13\n" +
 	"\x0fREFERENCE_VALUE\x10\x01\x12\x12\n" +
-	"\x0eMEASURED_VALUE\x10\x02B,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\x0eMEASURED_VALUE\x10\x02B=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_spectrum_proto_rawDescOnce sync.Once

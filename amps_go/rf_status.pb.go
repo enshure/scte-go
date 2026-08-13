@@ -594,8 +594,8 @@ func (x *DsLogicalPortStatus) GetPage() *common_go.ResponsePaginationInfo {
 
 type RfPortStatus struct {
 	state           protoimpl.MessageState  `protogen:"open.v1"`
-	Index           *uint32                 `protobuf:"varint,1,opt,name=index" json:"index,omitempty"`
-	OperStatus      *uint32                 `protobuf:"varint,2,opt,name=oper_status,json=operStatus" json:"oper_status,omitempty"`
+	Index           *RfPortIndexE           `protobuf:"varint,1,opt,name=index,enum=scte.amp.RfPortIndexE" json:"index,omitempty"` //SCTE-283: only output DS/input US ports can have status attributes
+	OperStatus      *common_go.OperStatusE  `protobuf:"varint,2,opt,name=oper_status,json=operStatus,enum=scte.common.OperStatusE" json:"oper_status,omitempty"`
 	UsPortStatus    *UsLogicalPortStatus    `protobuf:"bytes,3,opt,name=us_port_status,json=usPortStatus" json:"us_port_status,omitempty"`
 	DsPortStatus    *DsLogicalPortStatus    `protobuf:"bytes,4,opt,name=ds_port_status,json=dsPortStatus" json:"ds_port_status,omitempty"`
 	BidirPortStatus *BiDirLogicalPortStatus `protobuf:"bytes,5,opt,name=bidir_port_status,json=bidirPortStatus" json:"bidir_port_status,omitempty"`
@@ -633,18 +633,18 @@ func (*RfPortStatus) Descriptor() ([]byte, []int) {
 	return file_amps_rf_status_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *RfPortStatus) GetIndex() uint32 {
+func (x *RfPortStatus) GetIndex() RfPortIndexE {
 	if x != nil && x.Index != nil {
 		return *x.Index
 	}
-	return 0
+	return RfPortIndexE_RF_PORT_INDEX_1
 }
 
-func (x *RfPortStatus) GetOperStatus() uint32 {
+func (x *RfPortStatus) GetOperStatus() common_go.OperStatusE {
 	if x != nil && x.OperStatus != nil {
 		return *x.OperStatus
 	}
-	return 0
+	return common_go.OperStatusE(0)
 }
 
 func (x *RfPortStatus) GetUsPortStatus() *UsLogicalPortStatus {
@@ -748,7 +748,7 @@ var File_amps_rf_status_proto protoreflect.FileDescriptor
 
 const file_amps_rf_status_proto_rawDesc = "" +
 	"\n" +
-	"\x14amps/rf_status.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/status_common.proto\x1a\x1acommon/vendor_common.proto\"r\n" +
+	"\x14amps/rf_status.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/status_common.proto\x1a\x1acommon/vendor_common.proto\x1a\x11amps/common.proto\"r\n" +
 	"\x0fTestPointStatus\x12\x1f\n" +
 	"\vpoint_index\x18\x01 \x01(\rR\n" +
 	"pointIndex\x12\x1d\n" +
@@ -787,10 +787,10 @@ const file_amps_rf_status_proto_rawDesc = "" +
 	"\vport_status\x18\x06 \x01(\v2\x1b.scte.amp.LogicalPortStatusR\n" +
 	"portStatus\x12P\n" +
 	"\x16ds_test_point_statuses\x18\a \x03(\v2\x1b.scte.amp.DsTestPointStatusR\x13dsTestPointStatuses\x127\n" +
-	"\x04page\x18\b \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\x9d\x02\n" +
-	"\fRfPortStatus\x12\x14\n" +
-	"\x05index\x18\x01 \x01(\rR\x05index\x12\x1f\n" +
-	"\voper_status\x18\x02 \x01(\rR\n" +
+	"\x04page\x18\b \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\xd4\x02\n" +
+	"\fRfPortStatus\x12/\n" +
+	"\x05index\x18\x01 \x01(\x0e2\x19.scte.amp.rf_port_index_eR\x05index\x12;\n" +
+	"\voper_status\x18\x02 \x01(\x0e2\x1a.scte.common.oper_status_eR\n" +
 	"operStatus\x12C\n" +
 	"\x0eus_port_status\x18\x03 \x01(\v2\x1d.scte.amp.UsLogicalPortStatusR\fusPortStatus\x12C\n" +
 	"\x0eds_port_status\x18\x04 \x01(\v2\x1d.scte.amp.DsLogicalPortStatusR\fdsPortStatus\x12L\n" +
@@ -811,7 +811,8 @@ const file_amps_rf_status_proto_rawDesc = "" +
 	"\x1dPILOT_LOSS_PROTECTION_UNKNOWN\x10\x02\x12(\n" +
 	"$PILOT_LOSS_PROTECTION_ALTERNATE_FREQ\x10\x03\x12!\n" +
 	"\x1dPILOT_LOSS_PROTECTION_THERMAL\x10\x04\x12'\n" +
-	"#PILOT_LOSS_PROTECTION_LOCK_SETTINGS\x10\x05B,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"#PILOT_LOSS_PROTECTION_LOCK_SETTINGS\x10\x05B=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_rf_status_proto_rawDescOnce sync.Once
@@ -841,7 +842,8 @@ var file_amps_rf_status_proto_goTypes = []any{
 	(*RfStatusGrp)(nil),                      // 10: scte.amp.RfStatusGrp
 	(common_go.OperStatusE)(0),               // 11: scte.common.oper_status_e
 	(*common_go.ResponsePaginationInfo)(nil), // 12: scte.common.ResponsePaginationInfo
-	(*common_go.VendorExtension)(nil),        // 13: scte.common.VendorExtension
+	(RfPortIndexE)(0),                        // 13: scte.amp.rf_port_index_e
+	(*common_go.VendorExtension)(nil),        // 14: scte.common.VendorExtension
 }
 var file_amps_rf_status_proto_depIdxs = []int32{
 	11, // 0: scte.amp.LogicalPortStatus.oper_status:type_name -> scte.common.oper_status_e
@@ -856,17 +858,19 @@ var file_amps_rf_status_proto_depIdxs = []int32{
 	3,  // 9: scte.amp.DsLogicalPortStatus.port_status:type_name -> scte.amp.LogicalPortStatus
 	5,  // 10: scte.amp.DsLogicalPortStatus.ds_test_point_statuses:type_name -> scte.amp.DsTestPointStatus
 	12, // 11: scte.amp.DsLogicalPortStatus.page:type_name -> scte.common.ResponsePaginationInfo
-	6,  // 12: scte.amp.RfPortStatus.us_port_status:type_name -> scte.amp.UsLogicalPortStatus
-	8,  // 13: scte.amp.RfPortStatus.ds_port_status:type_name -> scte.amp.DsLogicalPortStatus
-	7,  // 14: scte.amp.RfPortStatus.bidir_port_status:type_name -> scte.amp.BiDirLogicalPortStatus
-	9,  // 15: scte.amp.RfStatusGrp.port_statuses:type_name -> scte.amp.RfPortStatus
-	13, // 16: scte.amp.RfStatusGrp.vendor_rf_statuses:type_name -> scte.common.VendorExtension
-	12, // 17: scte.amp.RfStatusGrp.page:type_name -> scte.common.ResponsePaginationInfo
-	18, // [18:18] is the sub-list for method output_type
-	18, // [18:18] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	13, // 12: scte.amp.RfPortStatus.index:type_name -> scte.amp.rf_port_index_e
+	11, // 13: scte.amp.RfPortStatus.oper_status:type_name -> scte.common.oper_status_e
+	6,  // 14: scte.amp.RfPortStatus.us_port_status:type_name -> scte.amp.UsLogicalPortStatus
+	8,  // 15: scte.amp.RfPortStatus.ds_port_status:type_name -> scte.amp.DsLogicalPortStatus
+	7,  // 16: scte.amp.RfPortStatus.bidir_port_status:type_name -> scte.amp.BiDirLogicalPortStatus
+	9,  // 17: scte.amp.RfStatusGrp.port_statuses:type_name -> scte.amp.RfPortStatus
+	14, // 18: scte.amp.RfStatusGrp.vendor_rf_statuses:type_name -> scte.common.VendorExtension
+	12, // 19: scte.amp.RfStatusGrp.page:type_name -> scte.common.ResponsePaginationInfo
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_amps_rf_status_proto_init() }
@@ -874,6 +878,7 @@ func file_amps_rf_status_proto_init() {
 	if File_amps_rf_status_proto != nil {
 		return
 	}
+	file_amps_common_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

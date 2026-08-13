@@ -7,10 +7,10 @@
 package sctexponder
 
 import (
+	_ "github.com/enshure/scte-go/common_go"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -21,280 +21,20 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Envelope-level response status for a processed Msg.
-type ResponseStatus int32
-
-const (
-	ResponseStatus_RESPONSE_STATUS_SUCCESS ResponseStatus = 0
-	ResponseStatus_RESPONSE_STATUS_FAILED  ResponseStatus = 1
-)
-
-// Enum value maps for ResponseStatus.
-var (
-	ResponseStatus_name = map[int32]string{
-		0: "RESPONSE_STATUS_SUCCESS",
-		1: "RESPONSE_STATUS_FAILED",
-	}
-	ResponseStatus_value = map[string]int32{
-		"RESPONSE_STATUS_SUCCESS": 0,
-		"RESPONSE_STATUS_FAILED":  1,
-	}
-)
-
-func (x ResponseStatus) Enum() *ResponseStatus {
-	p := new(ResponseStatus)
-	*p = x
-	return p
-}
-
-func (x ResponseStatus) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (ResponseStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_xponder_api_proto_enumTypes[0].Descriptor()
-}
-
-func (ResponseStatus) Type() protoreflect.EnumType {
-	return &file_xponder_api_proto_enumTypes[0]
-}
-
-func (x ResponseStatus) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Do not use.
-func (x *ResponseStatus) UnmarshalJSON(b []byte) error {
-	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
-	if err != nil {
-		return err
-	}
-	*x = ResponseStatus(num)
-	return nil
-}
-
-// Deprecated: Use ResponseStatus.Descriptor instead.
-func (ResponseStatus) EnumDescriptor() ([]byte, []int) {
-	return file_xponder_api_proto_rawDescGZIP(), []int{0}
-}
-
-// Envelope-level result returned with a Msg response.
-type Result struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Overall success or failure of processing the Msg envelope.
-	Status *ResponseStatus `protobuf:"varint,1,req,name=status,enum=scte.xponder.ResponseStatus" json:"status,omitempty"`
-	// Optional implementation-specific status or error code.
-	Code *uint32 `protobuf:"varint,2,opt,name=code" json:"code,omitempty"`
-	// Optional human-readable status or error detail.
-	Message       *string `protobuf:"bytes,3,opt,name=message" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Result) Reset() {
-	*x = Result{}
-	mi := &file_xponder_api_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Result) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Result) ProtoMessage() {}
-
-func (x *Result) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_api_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Result.ProtoReflect.Descriptor instead.
-func (*Result) Descriptor() ([]byte, []int) {
-	return file_xponder_api_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Result) GetStatus() ResponseStatus {
-	if x != nil && x.Status != nil {
-		return *x.Status
-	}
-	return ResponseStatus_RESPONSE_STATUS_SUCCESS
-}
-
-func (x *Result) GetCode() uint32 {
-	if x != nil && x.Code != nil {
-		return *x.Code
-	}
-	return 0
-}
-
-func (x *Result) GetMessage() string {
-	if x != nil && x.Message != nil {
-		return *x.Message
-	}
-	return ""
-}
-
-// Top-level protobuf API envelope exchanged between HRDC and a managed device.
-type Msg struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Opaque sender-chosen correlation value echoed by the response.
-	Cookie *uint32 `protobuf:"varint,1,opt,name=cookie" json:"cookie,omitempty"`
-	// Types that are valid to be assigned to Id:
-	//
-	//	*Msg_HRDCGet
-	//	*Msg_HRDCSet
-	Id isMsg_Id `protobuf_oneof:"id"`
-	// Envelope-level processing result for response messages.
-	Result        *Result `protobuf:"bytes,3,opt,name=result" json:"result,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Msg) Reset() {
-	*x = Msg{}
-	mi := &file_xponder_api_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Msg) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Msg) ProtoMessage() {}
-
-func (x *Msg) ProtoReflect() protoreflect.Message {
-	mi := &file_xponder_api_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Msg.ProtoReflect.Descriptor instead.
-func (*Msg) Descriptor() ([]byte, []int) {
-	return file_xponder_api_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Msg) GetCookie() uint32 {
-	if x != nil && x.Cookie != nil {
-		return *x.Cookie
-	}
-	return 0
-}
-
-func (x *Msg) GetId() isMsg_Id {
-	if x != nil {
-		return x.Id
-	}
-	return nil
-}
-
-func (x *Msg) GetHRDCGet() *HRDC_GetAPI {
-	if x != nil {
-		if x, ok := x.Id.(*Msg_HRDCGet); ok {
-			return x.HRDCGet
-		}
-	}
-	return nil
-}
-
-func (x *Msg) GetHRDCSet() *HRDC_SetAPI {
-	if x != nil {
-		if x, ok := x.Id.(*Msg_HRDCSet); ok {
-			return x.HRDCSet
-		}
-	}
-	return nil
-}
-
-func (x *Msg) GetResult() *Result {
-	if x != nil {
-		return x.Result
-	}
-	return nil
-}
-
-type isMsg_Id interface {
-	isMsg_Id()
-}
-
-type Msg_HRDCGet struct {
-	// Get request/response envelope for reading controller groups.
-	HRDCGet *HRDC_GetAPI `protobuf:"bytes,1900,opt,name=HRDCGet,oneof"`
-}
-
-type Msg_HRDCSet struct {
-	// Set request/response envelope for updating controller groups or operations.
-	HRDCSet *HRDC_SetAPI `protobuf:"bytes,1901,opt,name=HRDCSet,oneof"`
-}
-
-func (*Msg_HRDCGet) isMsg_Id() {}
-
-func (*Msg_HRDCSet) isMsg_Id() {}
-
 var File_xponder_api_proto protoreflect.FileDescriptor
 
 const file_xponder_api_proto_rawDesc = "" +
 	"\n" +
-	"\x11xponder/api.proto\x12\fscte.xponder\x1a\x17xponder/transport.proto\"m\n" +
-	"\x06Result\x125\n" +
-	"\x06status\x18\x01 \x02(\x0e2\x1d.scte.xponder.response_statusR\x06status\x12\x12\n" +
-	"\x04code\x18\x02 \x01(\rR\x04code\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage\"\xc1\x01\n" +
-	"\x03Msg\x12\x16\n" +
-	"\x06cookie\x18\x01 \x01(\rR\x06cookie\x126\n" +
-	"\aHRDCGet\x18\xec\x0e \x01(\v2\x19.scte.xponder.HRDC_GetAPIH\x00R\aHRDCGet\x126\n" +
-	"\aHRDCSet\x18\xed\x0e \x01(\v2\x19.scte.xponder.HRDC_SetAPIH\x00R\aHRDCSet\x12,\n" +
-	"\x06result\x18\x03 \x01(\v2\x14.scte.xponder.ResultR\x06resultB\x04\n" +
-	"\x02id*J\n" +
-	"\x0fresponse_status\x12\x1b\n" +
-	"\x17RESPONSE_STATUS_SUCCESS\x10\x00\x12\x1a\n" +
-	"\x16RESPONSE_STATUS_FAILED\x10\x01B3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x11xponder/api.proto\x12\fscte.xponder\x1a\x1acommon/device_common.proto\x1a\x1acommon/system_common.proto\x1a\x1acommon/status_common.proto\x1a\x1acommon/sensor_common.proto\x1a\x10common/api.proto\x1a\x19common/event_common.proto\x1a\x19common/reset_common.proto\x1a\x1bcommon/version_common.proto\x1a\x17common/pagination.proto\x1a\x11common/ping.proto\x1a\x17xponder/transport.proto\x1a\x18xponder/controller.proto\x1a\x14xponder/system.protoBG\n" +
+	"\x10org.scte.xponderP\x01Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
-var (
-	file_xponder_api_proto_rawDescOnce sync.Once
-	file_xponder_api_proto_rawDescData []byte
-)
-
-func file_xponder_api_proto_rawDescGZIP() []byte {
-	file_xponder_api_proto_rawDescOnce.Do(func() {
-		file_xponder_api_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_xponder_api_proto_rawDesc), len(file_xponder_api_proto_rawDesc)))
-	})
-	return file_xponder_api_proto_rawDescData
-}
-
-var file_xponder_api_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_xponder_api_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_xponder_api_proto_goTypes = []any{
-	(ResponseStatus)(0), // 0: scte.xponder.response_status
-	(*Result)(nil),      // 1: scte.xponder.Result
-	(*Msg)(nil),         // 2: scte.xponder.Msg
-	(*HRDC_GetAPI)(nil), // 3: scte.xponder.HRDC_GetAPI
-	(*HRDC_SetAPI)(nil), // 4: scte.xponder.HRDC_SetAPI
-}
+var file_xponder_api_proto_goTypes = []any{}
 var file_xponder_api_proto_depIdxs = []int32{
-	0, // 0: scte.xponder.Result.status:type_name -> scte.xponder.response_status
-	3, // 1: scte.xponder.Msg.HRDCGet:type_name -> scte.xponder.HRDC_GetAPI
-	4, // 2: scte.xponder.Msg.HRDCSet:type_name -> scte.xponder.HRDC_SetAPI
-	1, // 3: scte.xponder.Msg.result:type_name -> scte.xponder.Result
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_xponder_api_proto_init() }
@@ -303,24 +43,20 @@ func file_xponder_api_proto_init() {
 		return
 	}
 	file_xponder_transport_proto_init()
-	file_xponder_api_proto_msgTypes[1].OneofWrappers = []any{
-		(*Msg_HRDCGet)(nil),
-		(*Msg_HRDCSet)(nil),
-	}
+	file_xponder_controller_proto_init()
+	file_xponder_system_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_xponder_api_proto_rawDesc), len(file_xponder_api_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   2,
+			NumEnums:      0,
+			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_xponder_api_proto_goTypes,
 		DependencyIndexes: file_xponder_api_proto_depIdxs,
-		EnumInfos:         file_xponder_api_proto_enumTypes,
-		MessageInfos:      file_xponder_api_proto_msgTypes,
 	}.Build()
 	File_xponder_api_proto = out.File
 	file_xponder_api_proto_goTypes = nil

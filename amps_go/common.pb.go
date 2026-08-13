@@ -24,19 +24,22 @@ const (
 type PathSelectorE int32
 
 const (
-	PathSelectorE_DOWNSTREAM PathSelectorE = 1
-	PathSelectorE_UPSTREAM   PathSelectorE = 2
+	PathSelectorE_PATH_SELECTOR_UNKNOWN PathSelectorE = 0
+	PathSelectorE_DOWNSTREAM            PathSelectorE = 1
+	PathSelectorE_UPSTREAM              PathSelectorE = 2
 )
 
 // Enum value maps for PathSelectorE.
 var (
 	PathSelectorE_name = map[int32]string{
+		0: "PATH_SELECTOR_UNKNOWN",
 		1: "DOWNSTREAM",
 		2: "UPSTREAM",
 	}
 	PathSelectorE_value = map[string]int32{
-		"DOWNSTREAM": 1,
-		"UPSTREAM":   2,
+		"PATH_SELECTOR_UNKNOWN": 0,
+		"DOWNSTREAM":            1,
+		"UPSTREAM":              2,
 	}
 )
 
@@ -77,28 +80,90 @@ func (PathSelectorE) EnumDescriptor() ([]byte, []int) {
 	return file_amps_common_proto_rawDescGZIP(), []int{0}
 }
 
-type AutoAlignmentOpE int32
+type RfPortIndexE int32
 
 const (
-	// Deprecated: Marked as deprecated in amps/common.proto.
-	AutoAlignmentOpE_PRE_TUNE AutoAlignmentOpE = 1
-	// Deprecated: Marked as deprecated in amps/common.proto.
-	AutoAlignmentOpE_COARSE_TUNE AutoAlignmentOpE = 2
-	// Deprecated: Marked as deprecated in amps/common.proto.
-	AutoAlignmentOpE_FINE_TUNE AutoAlignmentOpE = 3
-	AutoAlignmentOpE_FULL_TUNE AutoAlignmentOpE = 4
-	AutoAlignmentOpE_SAVE      AutoAlignmentOpE = 5
-	AutoAlignmentOpE_REVERT    AutoAlignmentOpE = 6
-	AutoAlignmentOpE_CSM_CALC  AutoAlignmentOpE = 7
-	AutoAlignmentOpE_RMSE_CALC AutoAlignmentOpE = 8
-	// Deprecated: Marked as deprecated in amps/common.proto.
-	AutoAlignmentOpE_RSME_CALC     AutoAlignmentOpE = 8
-	AutoAlignmentOpE_SAVE_COMPLETE AutoAlignmentOpE = 9
+	RfPortIndexE_RF_PORT_INDEX_1 RfPortIndexE = 1   //Input DS RF port
+	RfPortIndexE_RF_PORT_INDEX_2 RfPortIndexE = 2   //Main DS output
+	RfPortIndexE_RF_PORT_INDEX_3 RfPortIndexE = 3   //Aux1 DS output
+	RfPortIndexE_RF_PORT_INDEX_4 RfPortIndexE = 4   //Aux2 DS output
+	RfPortIndexE_RF_PORT_ALL     RfPortIndexE = 255 //Extend SCTE-283 info model to include support for all ports.
 )
 
-// Enum value maps for AutoAlignmentOpE.
+// Enum value maps for RfPortIndexE.
 var (
-	AutoAlignmentOpE_name = map[int32]string{
+	RfPortIndexE_name = map[int32]string{
+		1:   "RF_PORT_INDEX_1",
+		2:   "RF_PORT_INDEX_2",
+		3:   "RF_PORT_INDEX_3",
+		4:   "RF_PORT_INDEX_4",
+		255: "RF_PORT_ALL",
+	}
+	RfPortIndexE_value = map[string]int32{
+		"RF_PORT_INDEX_1": 1,
+		"RF_PORT_INDEX_2": 2,
+		"RF_PORT_INDEX_3": 3,
+		"RF_PORT_INDEX_4": 4,
+		"RF_PORT_ALL":     255,
+	}
+)
+
+func (x RfPortIndexE) Enum() *RfPortIndexE {
+	p := new(RfPortIndexE)
+	*p = x
+	return p
+}
+
+func (x RfPortIndexE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RfPortIndexE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[1].Descriptor()
+}
+
+func (RfPortIndexE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[1]
+}
+
+func (x RfPortIndexE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *RfPortIndexE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = RfPortIndexE(num)
+	return nil
+}
+
+// Deprecated: Use RfPortIndexE.Descriptor instead.
+func (RfPortIndexE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{1}
+}
+
+type AlignmentOpE int32
+
+const (
+	AlignmentOpE_UNSPECIFIED   AlignmentOpE = 0
+	AlignmentOpE_PRE_TUNE      AlignmentOpE = 1
+	AlignmentOpE_COARSE_TUNE   AlignmentOpE = 2
+	AlignmentOpE_FINE_TUNE     AlignmentOpE = 3
+	AlignmentOpE_FULL_TUNE     AlignmentOpE = 4
+	AlignmentOpE_SAVE          AlignmentOpE = 5
+	AlignmentOpE_REVERT        AlignmentOpE = 6
+	AlignmentOpE_CSM_CALC      AlignmentOpE = 7
+	AlignmentOpE_RMSE_CALC     AlignmentOpE = 8
+	AlignmentOpE_SAVE_COMPLETE AlignmentOpE = 9
+)
+
+// Enum value maps for AlignmentOpE.
+var (
+	AlignmentOpE_name = map[int32]string{
+		0: "UNSPECIFIED",
 		1: "PRE_TUNE",
 		2: "COARSE_TUNE",
 		3: "FINE_TUNE",
@@ -107,10 +172,10 @@ var (
 		6: "REVERT",
 		7: "CSM_CALC",
 		8: "RMSE_CALC",
-		// Duplicate value: 8: "RSME_CALC",
 		9: "SAVE_COMPLETE",
 	}
-	AutoAlignmentOpE_value = map[string]int32{
+	AlignmentOpE_value = map[string]int32{
+		"UNSPECIFIED":   0,
 		"PRE_TUNE":      1,
 		"COARSE_TUNE":   2,
 		"FINE_TUNE":     3,
@@ -119,66 +184,65 @@ var (
 		"REVERT":        6,
 		"CSM_CALC":      7,
 		"RMSE_CALC":     8,
-		"RSME_CALC":     8,
 		"SAVE_COMPLETE": 9,
 	}
 )
 
-func (x AutoAlignmentOpE) Enum() *AutoAlignmentOpE {
-	p := new(AutoAlignmentOpE)
+func (x AlignmentOpE) Enum() *AlignmentOpE {
+	p := new(AlignmentOpE)
 	*p = x
 	return p
 }
 
-func (x AutoAlignmentOpE) String() string {
+func (x AlignmentOpE) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (AutoAlignmentOpE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[1].Descriptor()
+func (AlignmentOpE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[2].Descriptor()
 }
 
-func (AutoAlignmentOpE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[1]
+func (AlignmentOpE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[2]
 }
 
-func (x AutoAlignmentOpE) Number() protoreflect.EnumNumber {
+func (x AlignmentOpE) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
 // Deprecated: Do not use.
-func (x *AutoAlignmentOpE) UnmarshalJSON(b []byte) error {
+func (x *AlignmentOpE) UnmarshalJSON(b []byte) error {
 	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
 	if err != nil {
 		return err
 	}
-	*x = AutoAlignmentOpE(num)
+	*x = AlignmentOpE(num)
 	return nil
 }
 
-// Deprecated: Use AutoAlignmentOpE.Descriptor instead.
-func (AutoAlignmentOpE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use AlignmentOpE.Descriptor instead.
+func (AlignmentOpE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{2}
 }
 
-type AutoAlignmentStatusE int32
+type AlignmentStatusE int32
 
 const (
-	AutoAlignmentStatusE_IDLE        AutoAlignmentStatusE = 1
-	AutoAlignmentStatusE_IN_PROGRESS AutoAlignmentStatusE = 2
-	AutoAlignmentStatusE_COMPLETE    AutoAlignmentStatusE = 3
-	AutoAlignmentStatusE_ERROR       AutoAlignmentStatusE = 4
+	AlignmentStatusE_IDLE        AlignmentStatusE = 1
+	AlignmentStatusE_IN_PROGRESS AlignmentStatusE = 2
+	AlignmentStatusE_COMPLETE    AlignmentStatusE = 3
+	AlignmentStatusE_ERROR       AlignmentStatusE = 4
 )
 
-// Enum value maps for AutoAlignmentStatusE.
+// Enum value maps for AlignmentStatusE.
 var (
-	AutoAlignmentStatusE_name = map[int32]string{
+	AlignmentStatusE_name = map[int32]string{
 		1: "IDLE",
 		2: "IN_PROGRESS",
 		3: "COMPLETE",
 		4: "ERROR",
 	}
-	AutoAlignmentStatusE_value = map[string]int32{
+	AlignmentStatusE_value = map[string]int32{
 		"IDLE":        1,
 		"IN_PROGRESS": 2,
 		"COMPLETE":    3,
@@ -186,41 +250,458 @@ var (
 	}
 )
 
-func (x AutoAlignmentStatusE) Enum() *AutoAlignmentStatusE {
-	p := new(AutoAlignmentStatusE)
+func (x AlignmentStatusE) Enum() *AlignmentStatusE {
+	p := new(AlignmentStatusE)
 	*p = x
 	return p
 }
 
-func (x AutoAlignmentStatusE) String() string {
+func (x AlignmentStatusE) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (AutoAlignmentStatusE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[2].Descriptor()
+func (AlignmentStatusE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[3].Descriptor()
 }
 
-func (AutoAlignmentStatusE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[2]
+func (AlignmentStatusE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[3]
 }
 
-func (x AutoAlignmentStatusE) Number() protoreflect.EnumNumber {
+func (x AlignmentStatusE) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
 // Deprecated: Do not use.
-func (x *AutoAlignmentStatusE) UnmarshalJSON(b []byte) error {
+func (x *AlignmentStatusE) UnmarshalJSON(b []byte) error {
 	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
 	if err != nil {
 		return err
 	}
-	*x = AutoAlignmentStatusE(num)
+	*x = AlignmentStatusE(num)
 	return nil
 }
 
-// Deprecated: Use AutoAlignmentStatusE.Descriptor instead.
-func (AutoAlignmentStatusE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use AlignmentStatusE.Descriptor instead.
+func (AlignmentStatusE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{3}
+}
+
+type RfSpectrumCaptureTypeE int32
+
+const (
+	RfSpectrumCaptureTypeE_PORT1_UPSTREAM      RfSpectrumCaptureTypeE = 1
+	RfSpectrumCaptureTypeE_PORT1_DOWNSTREAM    RfSpectrumCaptureTypeE = 2
+	RfSpectrumCaptureTypeE_PORT2_UPSTREAM      RfSpectrumCaptureTypeE = 4
+	RfSpectrumCaptureTypeE_PORT2_DOWNSTREAM    RfSpectrumCaptureTypeE = 8
+	RfSpectrumCaptureTypeE_PORT3_UPSTREAM      RfSpectrumCaptureTypeE = 16
+	RfSpectrumCaptureTypeE_PORT3_DOWNSTREAM    RfSpectrumCaptureTypeE = 32
+	RfSpectrumCaptureTypeE_PORT4_UPSTREAM      RfSpectrumCaptureTypeE = 64
+	RfSpectrumCaptureTypeE_PORT4_DOWNSTREAM    RfSpectrumCaptureTypeE = 128
+	RfSpectrumCaptureTypeE_PORT_UPSTREAM_ALL   RfSpectrumCaptureTypeE = 256 //Extend SCTE-283 info model to include support for all upstream ports.
+	RfSpectrumCaptureTypeE_PORT_DOWNSTREAM_ALL RfSpectrumCaptureTypeE = 512 //Extend SCTE-283 info model to include support for all upstream ports.
+)
+
+// Enum value maps for RfSpectrumCaptureTypeE.
+var (
+	RfSpectrumCaptureTypeE_name = map[int32]string{
+		1:   "PORT1_UPSTREAM",
+		2:   "PORT1_DOWNSTREAM",
+		4:   "PORT2_UPSTREAM",
+		8:   "PORT2_DOWNSTREAM",
+		16:  "PORT3_UPSTREAM",
+		32:  "PORT3_DOWNSTREAM",
+		64:  "PORT4_UPSTREAM",
+		128: "PORT4_DOWNSTREAM",
+		256: "PORT_UPSTREAM_ALL",
+		512: "PORT_DOWNSTREAM_ALL",
+	}
+	RfSpectrumCaptureTypeE_value = map[string]int32{
+		"PORT1_UPSTREAM":      1,
+		"PORT1_DOWNSTREAM":    2,
+		"PORT2_UPSTREAM":      4,
+		"PORT2_DOWNSTREAM":    8,
+		"PORT3_UPSTREAM":      16,
+		"PORT3_DOWNSTREAM":    32,
+		"PORT4_UPSTREAM":      64,
+		"PORT4_DOWNSTREAM":    128,
+		"PORT_UPSTREAM_ALL":   256,
+		"PORT_DOWNSTREAM_ALL": 512,
+	}
+)
+
+func (x RfSpectrumCaptureTypeE) Enum() *RfSpectrumCaptureTypeE {
+	p := new(RfSpectrumCaptureTypeE)
+	*p = x
+	return p
+}
+
+func (x RfSpectrumCaptureTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RfSpectrumCaptureTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[4].Descriptor()
+}
+
+func (RfSpectrumCaptureTypeE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[4]
+}
+
+func (x RfSpectrumCaptureTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *RfSpectrumCaptureTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = RfSpectrumCaptureTypeE(num)
+	return nil
+}
+
+// Deprecated: Use RfSpectrumCaptureTypeE.Descriptor instead.
+func (RfSpectrumCaptureTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{4}
+}
+
+type AlignmentTypeE int32
+
+const (
+	AlignmentTypeE_ALIGNMENT_TYPE_DS_AUTO   AlignmentTypeE = 1
+	AlignmentTypeE_ALIGNMENT_TYPE_US_AUTO   AlignmentTypeE = 2
+	AlignmentTypeE_ALIGNMENT_TYPE_DS_MANUAL AlignmentTypeE = 4
+	AlignmentTypeE_ALIGNMENT_TYPE_US_MANUAL AlignmentTypeE = 8
+)
+
+// Enum value maps for AlignmentTypeE.
+var (
+	AlignmentTypeE_name = map[int32]string{
+		1: "ALIGNMENT_TYPE_DS_AUTO",
+		2: "ALIGNMENT_TYPE_US_AUTO",
+		4: "ALIGNMENT_TYPE_DS_MANUAL",
+		8: "ALIGNMENT_TYPE_US_MANUAL",
+	}
+	AlignmentTypeE_value = map[string]int32{
+		"ALIGNMENT_TYPE_DS_AUTO":   1,
+		"ALIGNMENT_TYPE_US_AUTO":   2,
+		"ALIGNMENT_TYPE_DS_MANUAL": 4,
+		"ALIGNMENT_TYPE_US_MANUAL": 8,
+	}
+)
+
+func (x AlignmentTypeE) Enum() *AlignmentTypeE {
+	p := new(AlignmentTypeE)
+	*p = x
+	return p
+}
+
+func (x AlignmentTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (AlignmentTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[5].Descriptor()
+}
+
+func (AlignmentTypeE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[5]
+}
+
+func (x AlignmentTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *AlignmentTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = AlignmentTypeE(num)
+	return nil
+}
+
+// Deprecated: Use AlignmentTypeE.Descriptor instead.
+func (AlignmentTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{5}
+}
+
+type RfLevelControlTypeE int32
+
+const (
+	RfLevelControlTypeE_RF_LEVEL_CONTROL_OTHER                        RfLevelControlTypeE = 0
+	RfLevelControlTypeE_RF_LEVEL_CONTROL_UNKNOWN                      RfLevelControlTypeE = 1
+	RfLevelControlTypeE_RF_LEVEL_CONTROL_QUASI_AGC                    RfLevelControlTypeE = 2
+	RfLevelControlTypeE_RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL        RfLevelControlTypeE = 3
+	RfLevelControlTypeE_RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL_SELECT RfLevelControlTypeE = 4
+)
+
+// Enum value maps for RfLevelControlTypeE.
+var (
+	RfLevelControlTypeE_name = map[int32]string{
+		0: "RF_LEVEL_CONTROL_OTHER",
+		1: "RF_LEVEL_CONTROL_UNKNOWN",
+		2: "RF_LEVEL_CONTROL_QUASI_AGC",
+		3: "RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL",
+		4: "RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL_SELECT",
+	}
+	RfLevelControlTypeE_value = map[string]int32{
+		"RF_LEVEL_CONTROL_OTHER":                        0,
+		"RF_LEVEL_CONTROL_UNKNOWN":                      1,
+		"RF_LEVEL_CONTROL_QUASI_AGC":                    2,
+		"RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL":        3,
+		"RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL_SELECT": 4,
+	}
+)
+
+func (x RfLevelControlTypeE) Enum() *RfLevelControlTypeE {
+	p := new(RfLevelControlTypeE)
+	*p = x
+	return p
+}
+
+func (x RfLevelControlTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RfLevelControlTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[6].Descriptor()
+}
+
+func (RfLevelControlTypeE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[6]
+}
+
+func (x RfLevelControlTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *RfLevelControlTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = RfLevelControlTypeE(num)
+	return nil
+}
+
+// Deprecated: Use RfLevelControlTypeE.Descriptor instead.
+func (RfLevelControlTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{6}
+}
+
+type StageTypeE int32
+
+const (
+	StageTypeE_STAGE_TYPE_OTHER      StageTypeE = 0
+	StageTypeE_STAGE_TYPE_UNKNOWN    StageTypeE = 1
+	StageTypeE_STAGE_TYPE_ATTENUATOR StageTypeE = 2
+	StageTypeE_STAGE_TYPE_EQUALIZER  StageTypeE = 3
+)
+
+// Enum value maps for StageTypeE.
+var (
+	StageTypeE_name = map[int32]string{
+		0: "STAGE_TYPE_OTHER",
+		1: "STAGE_TYPE_UNKNOWN",
+		2: "STAGE_TYPE_ATTENUATOR",
+		3: "STAGE_TYPE_EQUALIZER",
+	}
+	StageTypeE_value = map[string]int32{
+		"STAGE_TYPE_OTHER":      0,
+		"STAGE_TYPE_UNKNOWN":    1,
+		"STAGE_TYPE_ATTENUATOR": 2,
+		"STAGE_TYPE_EQUALIZER":  3,
+	}
+)
+
+func (x StageTypeE) Enum() *StageTypeE {
+	p := new(StageTypeE)
+	*p = x
+	return p
+}
+
+func (x StageTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (StageTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[7].Descriptor()
+}
+
+func (StageTypeE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[7]
+}
+
+func (x StageTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *StageTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = StageTypeE(num)
+	return nil
+}
+
+// Deprecated: Use StageTypeE.Descriptor instead.
+func (StageTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{7}
+}
+
+// *
+// SCTE-283 has type constraints of 1-8 for number of stages
+// Extend it to include cumulative stage index for vendors that can only configure cumulative attn/eq
+type StageIndexE int32
+
+const (
+	StageIndexE_STAGE_INDEX1           StageIndexE = 1
+	StageIndexE_STAGE_INDEX2           StageIndexE = 2
+	StageIndexE_STAGE_INDEX3           StageIndexE = 3
+	StageIndexE_STAGE_INDEX4           StageIndexE = 4
+	StageIndexE_STAGE_INDEX5           StageIndexE = 5
+	StageIndexE_STAGE_INDEX6           StageIndexE = 6
+	StageIndexE_STAGE_INDEX7           StageIndexE = 7
+	StageIndexE_STAGE_INDEX8           StageIndexE = 8
+	StageIndexE_STAGE_INDEX_CUMULATIVE StageIndexE = 9
+)
+
+// Enum value maps for StageIndexE.
+var (
+	StageIndexE_name = map[int32]string{
+		1: "STAGE_INDEX1",
+		2: "STAGE_INDEX2",
+		3: "STAGE_INDEX3",
+		4: "STAGE_INDEX4",
+		5: "STAGE_INDEX5",
+		6: "STAGE_INDEX6",
+		7: "STAGE_INDEX7",
+		8: "STAGE_INDEX8",
+		9: "STAGE_INDEX_CUMULATIVE",
+	}
+	StageIndexE_value = map[string]int32{
+		"STAGE_INDEX1":           1,
+		"STAGE_INDEX2":           2,
+		"STAGE_INDEX3":           3,
+		"STAGE_INDEX4":           4,
+		"STAGE_INDEX5":           5,
+		"STAGE_INDEX6":           6,
+		"STAGE_INDEX7":           7,
+		"STAGE_INDEX8":           8,
+		"STAGE_INDEX_CUMULATIVE": 9,
+	}
+)
+
+func (x StageIndexE) Enum() *StageIndexE {
+	p := new(StageIndexE)
+	*p = x
+	return p
+}
+
+func (x StageIndexE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (StageIndexE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[8].Descriptor()
+}
+
+func (StageIndexE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[8]
+}
+
+func (x StageIndexE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *StageIndexE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = StageIndexE(num)
+	return nil
+}
+
+// Deprecated: Use StageIndexE.Descriptor instead.
+func (StageIndexE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{8}
+}
+
+type StageLocationE int32
+
+const (
+	StageLocationE_STAGE_LOCATION_OTHER       StageLocationE = 0
+	StageLocationE_STAGE_LOCATION_UNKNOWN     StageLocationE = 1
+	StageLocationE_STAGE_LOCATION_INPUT       StageLocationE = 2
+	StageLocationE_STAGE_LOCATION_INTER_STAGE StageLocationE = 3
+	StageLocationE_STAGE_LOCATION_OUTPUT      StageLocationE = 4
+	StageLocationE_STAGE_LOCATION_CUMULATIVE  StageLocationE = 5
+)
+
+// Enum value maps for StageLocationE.
+var (
+	StageLocationE_name = map[int32]string{
+		0: "STAGE_LOCATION_OTHER",
+		1: "STAGE_LOCATION_UNKNOWN",
+		2: "STAGE_LOCATION_INPUT",
+		3: "STAGE_LOCATION_INTER_STAGE",
+		4: "STAGE_LOCATION_OUTPUT",
+		5: "STAGE_LOCATION_CUMULATIVE",
+	}
+	StageLocationE_value = map[string]int32{
+		"STAGE_LOCATION_OTHER":       0,
+		"STAGE_LOCATION_UNKNOWN":     1,
+		"STAGE_LOCATION_INPUT":       2,
+		"STAGE_LOCATION_INTER_STAGE": 3,
+		"STAGE_LOCATION_OUTPUT":      4,
+		"STAGE_LOCATION_CUMULATIVE":  5,
+	}
+)
+
+func (x StageLocationE) Enum() *StageLocationE {
+	p := new(StageLocationE)
+	*p = x
+	return p
+}
+
+func (x StageLocationE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (StageLocationE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[9].Descriptor()
+}
+
+func (StageLocationE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[9]
+}
+
+func (x StageLocationE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *StageLocationE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = StageLocationE(num)
+	return nil
+}
+
+// Deprecated: Use StageLocationE.Descriptor instead.
+func (StageLocationE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{9}
 }
 
 type EnclosureStatusE int32
@@ -253,11 +734,11 @@ func (x EnclosureStatusE) String() string {
 }
 
 func (EnclosureStatusE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[3].Descriptor()
+	return file_amps_common_proto_enumTypes[10].Descriptor()
 }
 
 func (EnclosureStatusE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[3]
+	return &file_amps_common_proto_enumTypes[10]
 }
 
 func (x EnclosureStatusE) Number() protoreflect.EnumNumber {
@@ -276,131 +757,7 @@ func (x *EnclosureStatusE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use EnclosureStatusE.Descriptor instead.
 func (EnclosureStatusE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{3}
-}
-
-type DsGainStageE int32
-
-const (
-	DsGainStageE_DS_INPUT_ATTN         DsGainStageE = 1
-	DsGainStageE_DS_INTERSTAGE_ATTN    DsGainStageE = 2
-	DsGainStageE_DS_OVERLOAD_PROT_ATTN DsGainStageE = 3
-	DsGainStageE_DS_CUMULATIVE_ATTN    DsGainStageE = 4
-)
-
-// Enum value maps for DsGainStageE.
-var (
-	DsGainStageE_name = map[int32]string{
-		1: "DS_INPUT_ATTN",
-		2: "DS_INTERSTAGE_ATTN",
-		3: "DS_OVERLOAD_PROT_ATTN",
-		4: "DS_CUMULATIVE_ATTN",
-	}
-	DsGainStageE_value = map[string]int32{
-		"DS_INPUT_ATTN":         1,
-		"DS_INTERSTAGE_ATTN":    2,
-		"DS_OVERLOAD_PROT_ATTN": 3,
-		"DS_CUMULATIVE_ATTN":    4,
-	}
-)
-
-func (x DsGainStageE) Enum() *DsGainStageE {
-	p := new(DsGainStageE)
-	*p = x
-	return p
-}
-
-func (x DsGainStageE) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (DsGainStageE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[4].Descriptor()
-}
-
-func (DsGainStageE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[4]
-}
-
-func (x DsGainStageE) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Do not use.
-func (x *DsGainStageE) UnmarshalJSON(b []byte) error {
-	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
-	if err != nil {
-		return err
-	}
-	*x = DsGainStageE(num)
-	return nil
-}
-
-// Deprecated: Use DsGainStageE.Descriptor instead.
-func (DsGainStageE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{4}
-}
-
-type DsEqStageE int32
-
-const (
-	DsEqStageE_DS_INPUT_EQ      DsEqStageE = 1
-	DsEqStageE_DS_INTERSTAGE_EQ DsEqStageE = 2
-	DsEqStageE_DS_OUTPUT_EQ     DsEqStageE = 3
-	DsEqStageE_DS_CUMULATIVE_EQ DsEqStageE = 4
-)
-
-// Enum value maps for DsEqStageE.
-var (
-	DsEqStageE_name = map[int32]string{
-		1: "DS_INPUT_EQ",
-		2: "DS_INTERSTAGE_EQ",
-		3: "DS_OUTPUT_EQ",
-		4: "DS_CUMULATIVE_EQ",
-	}
-	DsEqStageE_value = map[string]int32{
-		"DS_INPUT_EQ":      1,
-		"DS_INTERSTAGE_EQ": 2,
-		"DS_OUTPUT_EQ":     3,
-		"DS_CUMULATIVE_EQ": 4,
-	}
-)
-
-func (x DsEqStageE) Enum() *DsEqStageE {
-	p := new(DsEqStageE)
-	*p = x
-	return p
-}
-
-func (x DsEqStageE) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (DsEqStageE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[5].Descriptor()
-}
-
-func (DsEqStageE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[5]
-}
-
-func (x DsEqStageE) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Do not use.
-func (x *DsEqStageE) UnmarshalJSON(b []byte) error {
-	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
-	if err != nil {
-		return err
-	}
-	*x = DsEqStageE(num)
-	return nil
-}
-
-// Deprecated: Use DsEqStageE.Descriptor instead.
-func (DsEqStageE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{5}
+	return file_amps_common_proto_rawDescGZIP(), []int{10}
 }
 
 type AgcConfigE int32
@@ -436,11 +793,11 @@ func (x AgcConfigE) String() string {
 }
 
 func (AgcConfigE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[6].Descriptor()
+	return file_amps_common_proto_enumTypes[11].Descriptor()
 }
 
 func (AgcConfigE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[6]
+	return &file_amps_common_proto_enumTypes[11]
 }
 
 func (x AgcConfigE) Number() protoreflect.EnumNumber {
@@ -459,7 +816,7 @@ func (x *AgcConfigE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use AgcConfigE.Descriptor instead.
 func (AgcConfigE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{6}
+	return file_amps_common_proto_rawDescGZIP(), []int{11}
 }
 
 type UsGainStageE int32
@@ -495,11 +852,11 @@ func (x UsGainStageE) String() string {
 }
 
 func (UsGainStageE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[7].Descriptor()
+	return file_amps_common_proto_enumTypes[12].Descriptor()
 }
 
 func (UsGainStageE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[7]
+	return &file_amps_common_proto_enumTypes[12]
 }
 
 func (x UsGainStageE) Number() protoreflect.EnumNumber {
@@ -518,7 +875,7 @@ func (x *UsGainStageE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use UsGainStageE.Descriptor instead.
 func (UsGainStageE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{7}
+	return file_amps_common_proto_rawDescGZIP(), []int{12}
 }
 
 type UsEqStageE int32
@@ -551,11 +908,11 @@ func (x UsEqStageE) String() string {
 }
 
 func (UsEqStageE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[8].Descriptor()
+	return file_amps_common_proto_enumTypes[13].Descriptor()
 }
 
 func (UsEqStageE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[8]
+	return &file_amps_common_proto_enumTypes[13]
 }
 
 func (x UsEqStageE) Number() protoreflect.EnumNumber {
@@ -574,7 +931,7 @@ func (x *UsEqStageE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use UsEqStageE.Descriptor instead.
 func (UsEqStageE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{8}
+	return file_amps_common_proto_rawDescGZIP(), []int{13}
 }
 
 type IngressSwitchConfigE int32
@@ -610,11 +967,11 @@ func (x IngressSwitchConfigE) String() string {
 }
 
 func (IngressSwitchConfigE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[9].Descriptor()
+	return file_amps_common_proto_enumTypes[14].Descriptor()
 }
 
 func (IngressSwitchConfigE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[9]
+	return &file_amps_common_proto_enumTypes[14]
 }
 
 func (x IngressSwitchConfigE) Number() protoreflect.EnumNumber {
@@ -633,7 +990,7 @@ func (x *IngressSwitchConfigE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use IngressSwitchConfigE.Descriptor instead.
 func (IngressSwitchConfigE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{9}
+	return file_amps_common_proto_rawDescGZIP(), []int{14}
 }
 
 type TestPointIdE int32
@@ -672,11 +1029,11 @@ func (x TestPointIdE) String() string {
 }
 
 func (TestPointIdE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[10].Descriptor()
+	return file_amps_common_proto_enumTypes[15].Descriptor()
 }
 
 func (TestPointIdE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[10]
+	return &file_amps_common_proto_enumTypes[15]
 }
 
 func (x TestPointIdE) Number() protoreflect.EnumNumber {
@@ -695,7 +1052,7 @@ func (x *TestPointIdE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use TestPointIdE.Descriptor instead.
 func (TestPointIdE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{10}
+	return file_amps_common_proto_rawDescGZIP(), []int{15}
 }
 
 type TestPointConfigE int32
@@ -728,11 +1085,11 @@ func (x TestPointConfigE) String() string {
 }
 
 func (TestPointConfigE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[11].Descriptor()
+	return file_amps_common_proto_enumTypes[16].Descriptor()
 }
 
 func (TestPointConfigE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[11]
+	return &file_amps_common_proto_enumTypes[16]
 }
 
 func (x TestPointConfigE) Number() protoreflect.EnumNumber {
@@ -751,7 +1108,7 @@ func (x *TestPointConfigE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use TestPointConfigE.Descriptor instead.
 func (TestPointConfigE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{11}
+	return file_amps_common_proto_rawDescGZIP(), []int{16}
 }
 
 type SpectrumScanDataE int32
@@ -784,11 +1141,11 @@ func (x SpectrumScanDataE) String() string {
 }
 
 func (SpectrumScanDataE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[12].Descriptor()
+	return file_amps_common_proto_enumTypes[17].Descriptor()
 }
 
 func (SpectrumScanDataE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[12]
+	return &file_amps_common_proto_enumTypes[17]
 }
 
 func (x SpectrumScanDataE) Number() protoreflect.EnumNumber {
@@ -807,7 +1164,7 @@ func (x *SpectrumScanDataE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use SpectrumScanDataE.Descriptor instead.
 func (SpectrumScanDataE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{12}
+	return file_amps_common_proto_rawDescGZIP(), []int{17}
 }
 
 type SpectrumScanStatusE int32
@@ -843,11 +1200,11 @@ func (x SpectrumScanStatusE) String() string {
 }
 
 func (SpectrumScanStatusE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[13].Descriptor()
+	return file_amps_common_proto_enumTypes[18].Descriptor()
 }
 
 func (SpectrumScanStatusE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[13]
+	return &file_amps_common_proto_enumTypes[18]
 }
 
 func (x SpectrumScanStatusE) Number() protoreflect.EnumNumber {
@@ -866,25 +1223,28 @@ func (x *SpectrumScanStatusE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use SpectrumScanStatusE.Descriptor instead.
 func (SpectrumScanStatusE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{13}
+	return file_amps_common_proto_rawDescGZIP(), []int{18}
 }
 
 type BandwidthModeE int32
 
 const (
-	BandwidthModeE_BW_MODE_1P2GHZ BandwidthModeE = 0
-	BandwidthModeE_BW_MODE_1P8GHZ BandwidthModeE = 1
+	BandwidthModeE_BW_MODE_UNKNOWN BandwidthModeE = 0
+	BandwidthModeE_BW_MODE_1P2GHZ  BandwidthModeE = 1
+	BandwidthModeE_BW_MODE_1P8GHZ  BandwidthModeE = 2
 )
 
 // Enum value maps for BandwidthModeE.
 var (
 	BandwidthModeE_name = map[int32]string{
-		0: "BW_MODE_1P2GHZ",
-		1: "BW_MODE_1P8GHZ",
+		0: "BW_MODE_UNKNOWN",
+		1: "BW_MODE_1P2GHZ",
+		2: "BW_MODE_1P8GHZ",
 	}
 	BandwidthModeE_value = map[string]int32{
-		"BW_MODE_1P2GHZ": 0,
-		"BW_MODE_1P8GHZ": 1,
+		"BW_MODE_UNKNOWN": 0,
+		"BW_MODE_1P2GHZ":  1,
+		"BW_MODE_1P8GHZ":  2,
 	}
 )
 
@@ -899,11 +1259,11 @@ func (x BandwidthModeE) String() string {
 }
 
 func (BandwidthModeE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[14].Descriptor()
+	return file_amps_common_proto_enumTypes[19].Descriptor()
 }
 
 func (BandwidthModeE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[14]
+	return &file_amps_common_proto_enumTypes[19]
 }
 
 func (x BandwidthModeE) Number() protoreflect.EnumNumber {
@@ -922,81 +1282,146 @@ func (x *BandwidthModeE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use BandwidthModeE.Descriptor instead.
 func (BandwidthModeE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{14}
+	return file_amps_common_proto_rawDescGZIP(), []int{19}
 }
 
-type SplitE int32
+type AnnexTypeE int32
 
 const (
-	SplitE_SPLIT_42_54   SplitE = 0
-	SplitE_SPLIT_65_85   SplitE = 1
-	SplitE_SPLIT_85_108  SplitE = 2
-	SplitE_SPLIT_204_258 SplitE = 3
-	SplitE_SPLIT_300_372 SplitE = 4
-	SplitE_SPLIT_396_492 SplitE = 5
-	SplitE_SPLIT_492_606 SplitE = 6
-	SplitE_SPLIT_684_834 SplitE = 7
+	AnnexTypeE_ANNEX_UNKNOWN AnnexTypeE = 0
+	AnnexTypeE_ANNEX_A_TYPE  AnnexTypeE = 1
+	AnnexTypeE_ANNEX_B_TYPE  AnnexTypeE = 2
+	AnnexTypeE_ANNEX_C_TYPE  AnnexTypeE = 4
 )
 
-// Enum value maps for SplitE.
+// Enum value maps for AnnexTypeE.
 var (
-	SplitE_name = map[int32]string{
-		0: "SPLIT_42_54",
-		1: "SPLIT_65_85",
-		2: "SPLIT_85_108",
-		3: "SPLIT_204_258",
-		4: "SPLIT_300_372",
-		5: "SPLIT_396_492",
-		6: "SPLIT_492_606",
-		7: "SPLIT_684_834",
+	AnnexTypeE_name = map[int32]string{
+		0: "ANNEX_UNKNOWN",
+		1: "ANNEX_A_TYPE",
+		2: "ANNEX_B_TYPE",
+		4: "ANNEX_C_TYPE",
 	}
-	SplitE_value = map[string]int32{
-		"SPLIT_42_54":   0,
-		"SPLIT_65_85":   1,
-		"SPLIT_85_108":  2,
-		"SPLIT_204_258": 3,
-		"SPLIT_300_372": 4,
-		"SPLIT_396_492": 5,
-		"SPLIT_492_606": 6,
-		"SPLIT_684_834": 7,
+	AnnexTypeE_value = map[string]int32{
+		"ANNEX_UNKNOWN": 0,
+		"ANNEX_A_TYPE":  1,
+		"ANNEX_B_TYPE":  2,
+		"ANNEX_C_TYPE":  4,
 	}
 )
 
-func (x SplitE) Enum() *SplitE {
-	p := new(SplitE)
+func (x AnnexTypeE) Enum() *AnnexTypeE {
+	p := new(AnnexTypeE)
 	*p = x
 	return p
 }
 
-func (x SplitE) String() string {
+func (x AnnexTypeE) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (SplitE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[15].Descriptor()
+func (AnnexTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[20].Descriptor()
 }
 
-func (SplitE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[15]
+func (AnnexTypeE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[20]
 }
 
-func (x SplitE) Number() protoreflect.EnumNumber {
+func (x AnnexTypeE) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
 // Deprecated: Do not use.
-func (x *SplitE) UnmarshalJSON(b []byte) error {
+func (x *AnnexTypeE) UnmarshalJSON(b []byte) error {
 	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
 	if err != nil {
 		return err
 	}
-	*x = SplitE(num)
+	*x = AnnexTypeE(num)
 	return nil
 }
 
-// Deprecated: Use SplitE.Descriptor instead.
-func (SplitE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{15}
+// Deprecated: Use AnnexTypeE.Descriptor instead.
+func (AnnexTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{20}
+}
+
+type SplitTypeE int32
+
+const (
+	SplitTypeE_SPLIT_UNKNOWN SplitTypeE = 0
+	SplitTypeE_SPLIT_42_54   SplitTypeE = 1
+	SplitTypeE_SPLIT_65_85   SplitTypeE = 2
+	SplitTypeE_SPLIT_85_108  SplitTypeE = 4
+	SplitTypeE_SPLIT_204_258 SplitTypeE = 8
+	SplitTypeE_SPLIT_300_372 SplitTypeE = 16
+	SplitTypeE_SPLIT_396_492 SplitTypeE = 32
+	SplitTypeE_SPLIT_492_606 SplitTypeE = 64
+	SplitTypeE_SPLIT_684_834 SplitTypeE = 128
+)
+
+// Enum value maps for SplitTypeE.
+var (
+	SplitTypeE_name = map[int32]string{
+		0:   "SPLIT_UNKNOWN",
+		1:   "SPLIT_42_54",
+		2:   "SPLIT_65_85",
+		4:   "SPLIT_85_108",
+		8:   "SPLIT_204_258",
+		16:  "SPLIT_300_372",
+		32:  "SPLIT_396_492",
+		64:  "SPLIT_492_606",
+		128: "SPLIT_684_834",
+	}
+	SplitTypeE_value = map[string]int32{
+		"SPLIT_UNKNOWN": 0,
+		"SPLIT_42_54":   1,
+		"SPLIT_65_85":   2,
+		"SPLIT_85_108":  4,
+		"SPLIT_204_258": 8,
+		"SPLIT_300_372": 16,
+		"SPLIT_396_492": 32,
+		"SPLIT_492_606": 64,
+		"SPLIT_684_834": 128,
+	}
+)
+
+func (x SplitTypeE) Enum() *SplitTypeE {
+	p := new(SplitTypeE)
+	*p = x
+	return p
+}
+
+func (x SplitTypeE) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SplitTypeE) Descriptor() protoreflect.EnumDescriptor {
+	return file_amps_common_proto_enumTypes[21].Descriptor()
+}
+
+func (SplitTypeE) Type() protoreflect.EnumType {
+	return &file_amps_common_proto_enumTypes[21]
+}
+
+func (x SplitTypeE) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Do not use.
+func (x *SplitTypeE) UnmarshalJSON(b []byte) error {
+	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
+	if err != nil {
+		return err
+	}
+	*x = SplitTypeE(num)
+	return nil
+}
+
+// Deprecated: Use SplitTypeE.Descriptor instead.
+func (SplitTypeE) EnumDescriptor() ([]byte, []int) {
+	return file_amps_common_proto_rawDescGZIP(), []int{21}
 }
 
 type HpftModuleE int32
@@ -1041,11 +1466,11 @@ func (x HpftModuleE) String() string {
 }
 
 func (HpftModuleE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[16].Descriptor()
+	return file_amps_common_proto_enumTypes[22].Descriptor()
 }
 
 func (HpftModuleE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[16]
+	return &file_amps_common_proto_enumTypes[22]
 }
 
 func (x HpftModuleE) Number() protoreflect.EnumNumber {
@@ -1064,7 +1489,7 @@ func (x *HpftModuleE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use HpftModuleE.Descriptor instead.
 func (HpftModuleE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{16}
+	return file_amps_common_proto_rawDescGZIP(), []int{22}
 }
 
 type LpftModuleE int32
@@ -1121,11 +1546,11 @@ func (x LpftModuleE) String() string {
 }
 
 func (LpftModuleE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[17].Descriptor()
+	return file_amps_common_proto_enumTypes[23].Descriptor()
 }
 
 func (LpftModuleE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[17]
+	return &file_amps_common_proto_enumTypes[23]
 }
 
 func (x LpftModuleE) Number() protoreflect.EnumNumber {
@@ -1144,7 +1569,7 @@ func (x *LpftModuleE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use LpftModuleE.Descriptor instead.
 func (LpftModuleE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{17}
+	return file_amps_common_proto_rawDescGZIP(), []int{23}
 }
 
 type InvEqModuleE int32
@@ -1180,11 +1605,11 @@ func (x InvEqModuleE) String() string {
 }
 
 func (InvEqModuleE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[18].Descriptor()
+	return file_amps_common_proto_enumTypes[24].Descriptor()
 }
 
 func (InvEqModuleE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[18]
+	return &file_amps_common_proto_enumTypes[24]
 }
 
 func (x InvEqModuleE) Number() protoreflect.EnumNumber {
@@ -1203,7 +1628,7 @@ func (x *InvEqModuleE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use InvEqModuleE.Descriptor instead.
 func (InvEqModuleE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{18}
+	return file_amps_common_proto_rawDescGZIP(), []int{24}
 }
 
 type AnnexE int32
@@ -1236,11 +1661,11 @@ func (x AnnexE) String() string {
 }
 
 func (AnnexE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[19].Descriptor()
+	return file_amps_common_proto_enumTypes[25].Descriptor()
 }
 
 func (AnnexE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[19]
+	return &file_amps_common_proto_enumTypes[25]
 }
 
 func (x AnnexE) Number() protoreflect.EnumNumber {
@@ -1259,7 +1684,7 @@ func (x *AnnexE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use AnnexE.Descriptor instead.
 func (AnnexE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{19}
+	return file_amps_common_proto_rawDescGZIP(), []int{25}
 }
 
 type IngressPortSelectE int32
@@ -1295,11 +1720,11 @@ func (x IngressPortSelectE) String() string {
 }
 
 func (IngressPortSelectE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[20].Descriptor()
+	return file_amps_common_proto_enumTypes[26].Descriptor()
 }
 
 func (IngressPortSelectE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[20]
+	return &file_amps_common_proto_enumTypes[26]
 }
 
 func (x IngressPortSelectE) Number() protoreflect.EnumNumber {
@@ -1318,7 +1743,7 @@ func (x *IngressPortSelectE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use IngressPortSelectE.Descriptor instead.
 func (IngressPortSelectE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{20}
+	return file_amps_common_proto_rawDescGZIP(), []int{26}
 }
 
 type ErrorCodeE int32
@@ -1357,11 +1782,11 @@ func (x ErrorCodeE) String() string {
 }
 
 func (ErrorCodeE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[21].Descriptor()
+	return file_amps_common_proto_enumTypes[27].Descriptor()
 }
 
 func (ErrorCodeE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[21]
+	return &file_amps_common_proto_enumTypes[27]
 }
 
 func (x ErrorCodeE) Number() protoreflect.EnumNumber {
@@ -1380,7 +1805,7 @@ func (x *ErrorCodeE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use ErrorCodeE.Descriptor instead.
 func (ErrorCodeE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{21}
+	return file_amps_common_proto_rawDescGZIP(), []int{27}
 }
 
 type AmplifierTypeE int32
@@ -1425,11 +1850,11 @@ func (x AmplifierTypeE) String() string {
 }
 
 func (AmplifierTypeE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[22].Descriptor()
+	return file_amps_common_proto_enumTypes[28].Descriptor()
 }
 
 func (AmplifierTypeE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[22]
+	return &file_amps_common_proto_enumTypes[28]
 }
 
 func (x AmplifierTypeE) Number() protoreflect.EnumNumber {
@@ -1448,12 +1873,13 @@ func (x *AmplifierTypeE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use AmplifierTypeE.Descriptor instead.
 func (AmplifierTypeE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{22}
+	return file_amps_common_proto_rawDescGZIP(), []int{28}
 }
 
 type PwrSupplyRedundancyModeE int32
 
 const (
+	PwrSupplyRedundancyModeE_PS_REDUNDANCY_MODE_NONE              PwrSupplyRedundancyModeE = 0
 	PwrSupplyRedundancyModeE_PS_REDUNDANCY_MODE_OTHER             PwrSupplyRedundancyModeE = 1
 	PwrSupplyRedundancyModeE_PS_REDUNDANCY_MODE_UNKNOWN           PwrSupplyRedundancyModeE = 2
 	PwrSupplyRedundancyModeE_PS_REDUNDANCY_MODE_LOADSHARING       PwrSupplyRedundancyModeE = 3
@@ -1463,12 +1889,14 @@ const (
 // Enum value maps for PwrSupplyRedundancyModeE.
 var (
 	PwrSupplyRedundancyModeE_name = map[int32]string{
+		0: "PS_REDUNDANCY_MODE_NONE",
 		1: "PS_REDUNDANCY_MODE_OTHER",
 		2: "PS_REDUNDANCY_MODE_UNKNOWN",
 		3: "PS_REDUNDANCY_MODE_LOADSHARING",
 		4: "PS_REDUNDANCY_MODE_SWITCHEDREDUNDANT",
 	}
 	PwrSupplyRedundancyModeE_value = map[string]int32{
+		"PS_REDUNDANCY_MODE_NONE":              0,
 		"PS_REDUNDANCY_MODE_OTHER":             1,
 		"PS_REDUNDANCY_MODE_UNKNOWN":           2,
 		"PS_REDUNDANCY_MODE_LOADSHARING":       3,
@@ -1487,11 +1915,11 @@ func (x PwrSupplyRedundancyModeE) String() string {
 }
 
 func (PwrSupplyRedundancyModeE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[23].Descriptor()
+	return file_amps_common_proto_enumTypes[29].Descriptor()
 }
 
 func (PwrSupplyRedundancyModeE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[23]
+	return &file_amps_common_proto_enumTypes[29]
 }
 
 func (x PwrSupplyRedundancyModeE) Number() protoreflect.EnumNumber {
@@ -1510,7 +1938,7 @@ func (x *PwrSupplyRedundancyModeE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use PwrSupplyRedundancyModeE.Descriptor instead.
 func (PwrSupplyRedundancyModeE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{23}
+	return file_amps_common_proto_rawDescGZIP(), []int{29}
 }
 
 type EvPriorityE int32
@@ -1561,11 +1989,11 @@ func (x EvPriorityE) String() string {
 }
 
 func (EvPriorityE) Descriptor() protoreflect.EnumDescriptor {
-	return file_amps_common_proto_enumTypes[24].Descriptor()
+	return file_amps_common_proto_enumTypes[30].Descriptor()
 }
 
 func (EvPriorityE) Type() protoreflect.EnumType {
-	return &file_amps_common_proto_enumTypes[24]
+	return &file_amps_common_proto_enumTypes[30]
 }
 
 func (x EvPriorityE) Number() protoreflect.EnumNumber {
@@ -1584,7 +2012,7 @@ func (x *EvPriorityE) UnmarshalJSON(b []byte) error {
 
 // Deprecated: Use EvPriorityE.Descriptor instead.
 func (EvPriorityE) EnumDescriptor() ([]byte, []int) {
-	return file_amps_common_proto_rawDescGZIP(), []int{24}
+	return file_amps_common_proto_rawDescGZIP(), []int{30}
 }
 
 type AnalogOutRead struct {
@@ -1852,42 +2280,83 @@ const file_amps_common_proto_rawDesc = "" +
 	"\x06result\x18\x03 \x01(\x11R\x06result\"^\n" +
 	"\fFragmentInfo\x12%\n" +
 	"\x0efragment_index\x18\x01 \x01(\rR\rfragmentIndex\x12'\n" +
-	"\x0ftotal_fragments\x18\x02 \x01(\rR\x0etotalFragments*/\n" +
-	"\x0fpath_selector_e\x12\x0e\n" +
+	"\x0ftotal_fragments\x18\x02 \x01(\rR\x0etotalFragments*J\n" +
+	"\x0fpath_selector_e\x12\x19\n" +
+	"\x15PATH_SELECTOR_UNKNOWN\x10\x00\x12\x0e\n" +
 	"\n" +
 	"DOWNSTREAM\x10\x01\x12\f\n" +
-	"\bUPSTREAM\x10\x02*\xbb\x01\n" +
-	"\x13auto_alignment_op_e\x12\x10\n" +
-	"\bPRE_TUNE\x10\x01\x1a\x02\b\x01\x12\x13\n" +
-	"\vCOARSE_TUNE\x10\x02\x1a\x02\b\x01\x12\x11\n" +
-	"\tFINE_TUNE\x10\x03\x1a\x02\b\x01\x12\r\n" +
+	"\bUPSTREAM\x10\x02*w\n" +
+	"\x0frf_port_index_e\x12\x13\n" +
+	"\x0fRF_PORT_INDEX_1\x10\x01\x12\x13\n" +
+	"\x0fRF_PORT_INDEX_2\x10\x02\x12\x13\n" +
+	"\x0fRF_PORT_INDEX_3\x10\x03\x12\x13\n" +
+	"\x0fRF_PORT_INDEX_4\x10\x04\x12\x10\n" +
+	"\vRF_PORT_ALL\x10\xff\x01*\xa4\x01\n" +
+	"\x0ealignment_op_e\x12\x0f\n" +
+	"\vUNSPECIFIED\x10\x00\x12\f\n" +
+	"\bPRE_TUNE\x10\x01\x12\x0f\n" +
+	"\vCOARSE_TUNE\x10\x02\x12\r\n" +
+	"\tFINE_TUNE\x10\x03\x12\r\n" +
 	"\tFULL_TUNE\x10\x04\x12\b\n" +
 	"\x04SAVE\x10\x05\x12\n" +
 	"\n" +
 	"\x06REVERT\x10\x06\x12\f\n" +
 	"\bCSM_CALC\x10\a\x12\r\n" +
 	"\tRMSE_CALC\x10\b\x12\x11\n" +
-	"\tRSME_CALC\x10\b\x1a\x02\b\x01\x12\x11\n" +
-	"\rSAVE_COMPLETE\x10\t\x1a\x02\x10\x01*M\n" +
-	"\x17auto_alignment_status_e\x12\b\n" +
+	"\rSAVE_COMPLETE\x10\t*H\n" +
+	"\x12alignment_status_e\x12\b\n" +
 	"\x04IDLE\x10\x01\x12\x0f\n" +
 	"\vIN_PROGRESS\x10\x02\x12\f\n" +
 	"\bCOMPLETE\x10\x03\x12\t\n" +
-	"\x05ERROR\x10\x04**\n" +
+	"\x05ERROR\x10\x04*\xf7\x01\n" +
+	"\x1arf_spectrum_capture_type_e\x12\x12\n" +
+	"\x0ePORT1_UPSTREAM\x10\x01\x12\x14\n" +
+	"\x10PORT1_DOWNSTREAM\x10\x02\x12\x12\n" +
+	"\x0ePORT2_UPSTREAM\x10\x04\x12\x14\n" +
+	"\x10PORT2_DOWNSTREAM\x10\b\x12\x12\n" +
+	"\x0ePORT3_UPSTREAM\x10\x10\x12\x14\n" +
+	"\x10PORT3_DOWNSTREAM\x10 \x12\x12\n" +
+	"\x0ePORT4_UPSTREAM\x10@\x12\x15\n" +
+	"\x10PORT4_DOWNSTREAM\x10\x80\x01\x12\x16\n" +
+	"\x11PORT_UPSTREAM_ALL\x10\x80\x02\x12\x18\n" +
+	"\x13PORT_DOWNSTREAM_ALL\x10\x80\x04*\x86\x01\n" +
+	"\x10alignment_type_e\x12\x1a\n" +
+	"\x16ALIGNMENT_TYPE_DS_AUTO\x10\x01\x12\x1a\n" +
+	"\x16ALIGNMENT_TYPE_US_AUTO\x10\x02\x12\x1c\n" +
+	"\x18ALIGNMENT_TYPE_DS_MANUAL\x10\x04\x12\x1c\n" +
+	"\x18ALIGNMENT_TYPE_US_MANUAL\x10\b*\xd2\x01\n" +
+	"\x17rf_level_control_type_e\x12\x1a\n" +
+	"\x16RF_LEVEL_CONTROL_OTHER\x10\x00\x12\x1c\n" +
+	"\x18RF_LEVEL_CONTROL_UNKNOWN\x10\x01\x12\x1e\n" +
+	"\x1aRF_LEVEL_CONTROL_QUASI_AGC\x10\x02\x12*\n" +
+	"&RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL\x10\x03\x121\n" +
+	"-RF_LEVEL_CONTROL_THERMAL_LEVEL_CONTROL_SELECT\x10\x04*q\n" +
+	"\fstage_type_e\x12\x14\n" +
+	"\x10STAGE_TYPE_OTHER\x10\x00\x12\x16\n" +
+	"\x12STAGE_TYPE_UNKNOWN\x10\x01\x12\x19\n" +
+	"\x15STAGE_TYPE_ATTENUATOR\x10\x02\x12\x18\n" +
+	"\x14STAGE_TYPE_EQUALIZER\x10\x03*\xbb\x01\n" +
+	"\rstage_index_e\x12\x10\n" +
+	"\fSTAGE_INDEX1\x10\x01\x12\x10\n" +
+	"\fSTAGE_INDEX2\x10\x02\x12\x10\n" +
+	"\fSTAGE_INDEX3\x10\x03\x12\x10\n" +
+	"\fSTAGE_INDEX4\x10\x04\x12\x10\n" +
+	"\fSTAGE_INDEX5\x10\x05\x12\x10\n" +
+	"\fSTAGE_INDEX6\x10\x06\x12\x10\n" +
+	"\fSTAGE_INDEX7\x10\a\x12\x10\n" +
+	"\fSTAGE_INDEX8\x10\b\x12\x1a\n" +
+	"\x16STAGE_INDEX_CUMULATIVE\x10\t*\xbc\x01\n" +
+	"\x10stage_location_e\x12\x18\n" +
+	"\x14STAGE_LOCATION_OTHER\x10\x00\x12\x1a\n" +
+	"\x16STAGE_LOCATION_UNKNOWN\x10\x01\x12\x18\n" +
+	"\x14STAGE_LOCATION_INPUT\x10\x02\x12\x1e\n" +
+	"\x1aSTAGE_LOCATION_INTER_STAGE\x10\x03\x12\x19\n" +
+	"\x15STAGE_LOCATION_OUTPUT\x10\x04\x12\x1d\n" +
+	"\x19STAGE_LOCATION_CUMULATIVE\x10\x05**\n" +
 	"\x12enclosure_status_e\x12\n" +
 	"\n" +
 	"\x06CLOSED\x10\x01\x12\b\n" +
-	"\x04OPEN\x10\x02*o\n" +
-	"\x0fds_gain_stage_e\x12\x11\n" +
-	"\rDS_INPUT_ATTN\x10\x01\x12\x16\n" +
-	"\x12DS_INTERSTAGE_ATTN\x10\x02\x12\x19\n" +
-	"\x15DS_OVERLOAD_PROT_ATTN\x10\x03\x12\x16\n" +
-	"\x12DS_CUMULATIVE_ATTN\x10\x04*^\n" +
-	"\rds_eq_stage_e\x12\x0f\n" +
-	"\vDS_INPUT_EQ\x10\x01\x12\x14\n" +
-	"\x10DS_INTERSTAGE_EQ\x10\x02\x12\x10\n" +
-	"\fDS_OUTPUT_EQ\x10\x03\x12\x14\n" +
-	"\x10DS_CUMULATIVE_EQ\x10\x04*/\n" +
+	"\x04OPEN\x10\x02*/\n" +
 	"\fagc_config_e\x12\v\n" +
 	"\aTHERMAL\x10\x01\x12\n" +
 	"\n" +
@@ -1920,19 +2389,26 @@ const file_amps_common_proto_rawDesc = "" +
 	"\x16spectrum_scan_status_e\x12\x17\n" +
 	"\x13SCAN_STATUS_INVALID\x10\x00\x12\x1b\n" +
 	"\x17SCAN_STATUS_IN_PROGRESS\x10\x01\x12\x15\n" +
-	"\x11SCAN_STATUS_VALID\x10\x02*:\n" +
-	"\x10bandwidth_mode_e\x12\x12\n" +
-	"\x0eBW_MODE_1P2GHZ\x10\x00\x12\x12\n" +
-	"\x0eBW_MODE_1P8GHZ\x10\x01*\x9c\x01\n" +
-	"\asplit_e\x12\x0f\n" +
-	"\vSPLIT_42_54\x10\x00\x12\x0f\n" +
-	"\vSPLIT_65_85\x10\x01\x12\x10\n" +
-	"\fSPLIT_85_108\x10\x02\x12\x11\n" +
-	"\rSPLIT_204_258\x10\x03\x12\x11\n" +
-	"\rSPLIT_300_372\x10\x04\x12\x11\n" +
-	"\rSPLIT_396_492\x10\x05\x12\x11\n" +
-	"\rSPLIT_492_606\x10\x06\x12\x11\n" +
-	"\rSPLIT_684_834\x10\a*\x91\x01\n" +
+	"\x11SCAN_STATUS_VALID\x10\x02*O\n" +
+	"\x10bandwidth_mode_e\x12\x13\n" +
+	"\x0fBW_MODE_UNKNOWN\x10\x00\x12\x12\n" +
+	"\x0eBW_MODE_1P2GHZ\x10\x01\x12\x12\n" +
+	"\x0eBW_MODE_1P8GHZ\x10\x02*W\n" +
+	"\fannex_type_e\x12\x11\n" +
+	"\rANNEX_UNKNOWN\x10\x00\x12\x10\n" +
+	"\fANNEX_A_TYPE\x10\x01\x12\x10\n" +
+	"\fANNEX_B_TYPE\x10\x02\x12\x10\n" +
+	"\fANNEX_C_TYPE\x10\x04*\xb5\x01\n" +
+	"\fsplit_type_e\x12\x11\n" +
+	"\rSPLIT_UNKNOWN\x10\x00\x12\x0f\n" +
+	"\vSPLIT_42_54\x10\x01\x12\x0f\n" +
+	"\vSPLIT_65_85\x10\x02\x12\x10\n" +
+	"\fSPLIT_85_108\x10\x04\x12\x11\n" +
+	"\rSPLIT_204_258\x10\b\x12\x11\n" +
+	"\rSPLIT_300_372\x10\x10\x12\x11\n" +
+	"\rSPLIT_396_492\x10 \x12\x11\n" +
+	"\rSPLIT_492_606\x10@\x12\x12\n" +
+	"\rSPLIT_684_834\x10\x80\x01*\x91\x01\n" +
 	"\rhpft_module_e\x12\x17\n" +
 	"\x13HPFT_MODULE_MISSING\x10\x00\x12\x13\n" +
 	"\x0fHPFT_MODULE_108\x10\x01\x12\x13\n" +
@@ -1973,8 +2449,9 @@ const file_amps_common_proto_rawDesc = "" +
 	"\x12AMP_TYPE_MULTIPORT\x10\x03\x12\x19\n" +
 	"\x15AMP_TYPE_LINEEXTENDER\x10\x04\x12\x14\n" +
 	"\x10AMP_TYPE_BOOSTER\x10\x05\x12\x14\n" +
-	"\x10AMP_TYPE_COMPACT\x10\x06*\xaa\x01\n" +
-	"\x1cpwr_supply_redundancy_mode_e\x12\x1c\n" +
+	"\x10AMP_TYPE_COMPACT\x10\x06*\xc7\x01\n" +
+	"\x1cpwr_supply_redundancy_mode_e\x12\x1b\n" +
+	"\x17PS_REDUNDANCY_MODE_NONE\x10\x00\x12\x1c\n" +
 	"\x18PS_REDUNDANCY_MODE_OTHER\x10\x01\x12\x1e\n" +
 	"\x1aPS_REDUNDANCY_MODE_UNKNOWN\x10\x02\x12\"\n" +
 	"\x1ePS_REDUNDANCY_MODE_LOADSHARING\x10\x03\x12(\n" +
@@ -1988,7 +2465,8 @@ const file_amps_common_proto_rawDesc = "" +
 	"EV_WARNING\x10\x05\x12\r\n" +
 	"\tEV_NOTICE\x10\x06\x12\v\n" +
 	"\aEV_INFO\x10\a\x12\f\n" +
-	"\bEV_DEBUG\x10\bB,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\bEV_DEBUG\x10\bB=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_common_proto_rawDescOnce sync.Once
@@ -2002,38 +2480,44 @@ func file_amps_common_proto_rawDescGZIP() []byte {
 	return file_amps_common_proto_rawDescData
 }
 
-var file_amps_common_proto_enumTypes = make([]protoimpl.EnumInfo, 25)
+var file_amps_common_proto_enumTypes = make([]protoimpl.EnumInfo, 31)
 var file_amps_common_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_amps_common_proto_goTypes = []any{
 	(PathSelectorE)(0),            // 0: scte.amp.path_selector_e
-	(AutoAlignmentOpE)(0),         // 1: scte.amp.auto_alignment_op_e
-	(AutoAlignmentStatusE)(0),     // 2: scte.amp.auto_alignment_status_e
-	(EnclosureStatusE)(0),         // 3: scte.amp.enclosure_status_e
-	(DsGainStageE)(0),             // 4: scte.amp.ds_gain_stage_e
-	(DsEqStageE)(0),               // 5: scte.amp.ds_eq_stage_e
-	(AgcConfigE)(0),               // 6: scte.amp.agc_config_e
-	(UsGainStageE)(0),             // 7: scte.amp.us_gain_stage_e
-	(UsEqStageE)(0),               // 8: scte.amp.us_eq_stage_e
-	(IngressSwitchConfigE)(0),     // 9: scte.amp.ingress_switch_config_e
-	(TestPointIdE)(0),             // 10: scte.amp.test_point_id_e
-	(TestPointConfigE)(0),         // 11: scte.amp.test_point_config_e
-	(SpectrumScanDataE)(0),        // 12: scte.amp.spectrum_scan_data_e
-	(SpectrumScanStatusE)(0),      // 13: scte.amp.spectrum_scan_status_e
-	(BandwidthModeE)(0),           // 14: scte.amp.bandwidth_mode_e
-	(SplitE)(0),                   // 15: scte.amp.split_e
-	(HpftModuleE)(0),              // 16: scte.amp.hpft_module_e
-	(LpftModuleE)(0),              // 17: scte.amp.lpft_module_e
-	(InvEqModuleE)(0),             // 18: scte.amp.inv_eq_module_e
-	(AnnexE)(0),                   // 19: scte.amp.annex_e
-	(IngressPortSelectE)(0),       // 20: scte.amp.ingress_port_select_e
-	(ErrorCodeE)(0),               // 21: scte.amp.error_code_e
-	(AmplifierTypeE)(0),           // 22: scte.amp.amplifier_type_e
-	(PwrSupplyRedundancyModeE)(0), // 23: scte.amp.pwr_supply_redundancy_mode_e
-	(EvPriorityE)(0),              // 24: scte.amp.ev_priority_e
-	(*AnalogOutRead)(nil),         // 25: scte.amp.AnalogOutRead
-	(*AnalogOutWrite)(nil),        // 26: scte.amp.AnalogOutWrite
-	(*AnalogInRead)(nil),          // 27: scte.amp.AnalogInRead
-	(*FragmentInfo)(nil),          // 28: scte.amp.FragmentInfo
+	(RfPortIndexE)(0),             // 1: scte.amp.rf_port_index_e
+	(AlignmentOpE)(0),             // 2: scte.amp.alignment_op_e
+	(AlignmentStatusE)(0),         // 3: scte.amp.alignment_status_e
+	(RfSpectrumCaptureTypeE)(0),   // 4: scte.amp.rf_spectrum_capture_type_e
+	(AlignmentTypeE)(0),           // 5: scte.amp.alignment_type_e
+	(RfLevelControlTypeE)(0),      // 6: scte.amp.rf_level_control_type_e
+	(StageTypeE)(0),               // 7: scte.amp.stage_type_e
+	(StageIndexE)(0),              // 8: scte.amp.stage_index_e
+	(StageLocationE)(0),           // 9: scte.amp.stage_location_e
+	(EnclosureStatusE)(0),         // 10: scte.amp.enclosure_status_e
+	(AgcConfigE)(0),               // 11: scte.amp.agc_config_e
+	(UsGainStageE)(0),             // 12: scte.amp.us_gain_stage_e
+	(UsEqStageE)(0),               // 13: scte.amp.us_eq_stage_e
+	(IngressSwitchConfigE)(0),     // 14: scte.amp.ingress_switch_config_e
+	(TestPointIdE)(0),             // 15: scte.amp.test_point_id_e
+	(TestPointConfigE)(0),         // 16: scte.amp.test_point_config_e
+	(SpectrumScanDataE)(0),        // 17: scte.amp.spectrum_scan_data_e
+	(SpectrumScanStatusE)(0),      // 18: scte.amp.spectrum_scan_status_e
+	(BandwidthModeE)(0),           // 19: scte.amp.bandwidth_mode_e
+	(AnnexTypeE)(0),               // 20: scte.amp.annex_type_e
+	(SplitTypeE)(0),               // 21: scte.amp.split_type_e
+	(HpftModuleE)(0),              // 22: scte.amp.hpft_module_e
+	(LpftModuleE)(0),              // 23: scte.amp.lpft_module_e
+	(InvEqModuleE)(0),             // 24: scte.amp.inv_eq_module_e
+	(AnnexE)(0),                   // 25: scte.amp.annex_e
+	(IngressPortSelectE)(0),       // 26: scte.amp.ingress_port_select_e
+	(ErrorCodeE)(0),               // 27: scte.amp.error_code_e
+	(AmplifierTypeE)(0),           // 28: scte.amp.amplifier_type_e
+	(PwrSupplyRedundancyModeE)(0), // 29: scte.amp.pwr_supply_redundancy_mode_e
+	(EvPriorityE)(0),              // 30: scte.amp.ev_priority_e
+	(*AnalogOutRead)(nil),         // 31: scte.amp.AnalogOutRead
+	(*AnalogOutWrite)(nil),        // 32: scte.amp.AnalogOutWrite
+	(*AnalogInRead)(nil),          // 33: scte.amp.AnalogInRead
+	(*FragmentInfo)(nil),          // 34: scte.amp.FragmentInfo
 }
 var file_amps_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -2053,7 +2537,7 @@ func file_amps_common_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_common_proto_rawDesc), len(file_amps_common_proto_rawDesc)),
-			NumEnums:      25,
+			NumEnums:      31,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,

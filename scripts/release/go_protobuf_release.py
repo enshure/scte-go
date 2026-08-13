@@ -55,6 +55,7 @@ def resolve_go_module_prefix() -> str:
 GO_MODULE_PREFIX = resolve_go_module_prefix()
 
 COMMON_PROTO_FILES = [
+    "api.proto",
     "device_common.proto",
     "error_common.proto",
     "event_common.proto",
@@ -346,12 +347,7 @@ def build_tree_stage(stage_root: Path, spec: dict[str, object], shared_symbols: 
     staged_files: list[Path] = []
     for proto_name in spec["tree_proto_files"]:
         dest = tree_root / proto_name
-        if proto_name in {"api.proto", "transport.proto"}:
-            content = Path("proto/common/transport.proto").read_text()
-            if proto_name == "api.proto":
-                content = Path("proto/common/api.proto").read_text()
-        else:
-            content = spec["source_dir"].joinpath(proto_name).read_text()
+        content = spec["source_dir"].joinpath(proto_name).read_text()
         content = rewrite_tree_imports(content, tree_name, spec["tree_proto_files"])
         content = qualify_common_references(content, shared_symbols)
         content = unqualify_tree_references(content)

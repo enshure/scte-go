@@ -297,7 +297,8 @@ const file_common_vendor_common_proto_rawDesc = "" +
 	"\x0fpagination_info\x18\x02 \x01(\v2#.scte.common.ResponsePaginationInfoR\x0epaginationInfo*N\n" +
 	"\x13entity_permission_e\x12\x1a\n" +
 	"\x16ENTITY_PERMISSION_READ\x10\x01\x12\x1b\n" +
-	"\x17ENTITY_PERMISSION_WRITE\x10\x02B1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x17ENTITY_PERMISSION_WRITE\x10\x02BD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_vendor_common_proto_rawDescOnce sync.Once

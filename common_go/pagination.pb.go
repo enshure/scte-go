@@ -71,7 +71,8 @@ const file_common_pagination_proto_rawDesc = "" +
 	"\n" +
 	"\x17common/pagination.proto\x12\vscte.common\"B\n" +
 	"\x16ResponsePaginationInfo\x12(\n" +
-	"\x10next_page_cursor\x18\x01 \x01(\rR\x0enextPageCursorB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x10next_page_cursor\x18\x01 \x01(\rR\x0enextPageCursorBD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_pagination_proto_rawDescOnce sync.Once

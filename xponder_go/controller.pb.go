@@ -31,7 +31,6 @@ const (
 	GroupId_VENDOR               GroupId = 5
 	GroupId_VERSION_SUMMARY      GroupId = 6
 	GroupId_SYSTEM_CFG           GroupId = 11
-	GroupId_LOCATION             GroupId = 12
 	GroupId_MANAGED_DEVICE       GroupId = 13
 	GroupId_RESET_CAPABILITIES   GroupId = 20
 	GroupId_RESET_HISTORY_STATUS GroupId = 21
@@ -40,6 +39,10 @@ const (
 	GroupId_ENABLE_AUTO_REBOOT   GroupId = 24
 	GroupId_EVENT_CAPABILITIES   GroupId = 30
 	GroupId_EVENT_NOTIFICATION   GroupId = 31
+	GroupId_EVENT_THROTTLE_CFG   GroupId = 32
+	GroupId_EVENT_REPORTING_CFG  GroupId = 33
+	GroupId_EVENT_STATUS         GroupId = 34
+	GroupId_EVENT_LOG            GroupId = 35
 	GroupId_SENSOR_DESCRIPTOR    GroupId = 40
 	GroupId_SENSOR_READING       GroupId = 41
 	GroupId_PING                 GroupId = 101
@@ -53,7 +56,6 @@ var (
 		5:   "VENDOR",
 		6:   "VERSION_SUMMARY",
 		11:  "SYSTEM_CFG",
-		12:  "LOCATION",
 		13:  "MANAGED_DEVICE",
 		20:  "RESET_CAPABILITIES",
 		21:  "RESET_HISTORY_STATUS",
@@ -62,6 +64,10 @@ var (
 		24:  "ENABLE_AUTO_REBOOT",
 		30:  "EVENT_CAPABILITIES",
 		31:  "EVENT_NOTIFICATION",
+		32:  "EVENT_THROTTLE_CFG",
+		33:  "EVENT_REPORTING_CFG",
+		34:  "EVENT_STATUS",
+		35:  "EVENT_LOG",
 		40:  "SENSOR_DESCRIPTOR",
 		41:  "SENSOR_READING",
 		101: "PING",
@@ -72,7 +78,6 @@ var (
 		"VENDOR":               5,
 		"VERSION_SUMMARY":      6,
 		"SYSTEM_CFG":           11,
-		"LOCATION":             12,
 		"MANAGED_DEVICE":       13,
 		"RESET_CAPABILITIES":   20,
 		"RESET_HISTORY_STATUS": 21,
@@ -81,6 +86,10 @@ var (
 		"ENABLE_AUTO_REBOOT":   24,
 		"EVENT_CAPABILITIES":   30,
 		"EVENT_NOTIFICATION":   31,
+		"EVENT_THROTTLE_CFG":   32,
+		"EVENT_REPORTING_CFG":  33,
+		"EVENT_STATUS":         34,
+		"EVENT_LOG":            35,
 		"SENSOR_DESCRIPTOR":    40,
 		"SENSOR_READING":       41,
 		"PING":                 101,
@@ -247,6 +256,8 @@ type ControllerGetGroupResponse struct {
 	//	*ControllerGetGroupResponse_EnableAutoReboot
 	//	*ControllerGetGroupResponse_EventCapabilities
 	//	*ControllerGetGroupResponse_EventNotification
+	//	*ControllerGetGroupResponse_EventStatus
+	//	*ControllerGetGroupResponse_EventLog
 	//	*ControllerGetGroupResponse_Sensors
 	//	*ControllerGetGroupResponse_SensorDescriptors
 	//	*ControllerGetGroupResponse_SensorsData
@@ -424,6 +435,24 @@ func (x *ControllerGetGroupResponse) GetEventNotification() *common_go.EventNoti
 	return nil
 }
 
+func (x *ControllerGetGroupResponse) GetEventStatus() *common_go.EventStatus {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventStatus); ok {
+			return x.EventStatus
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetEventLog() *common_go.EventLog {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventLog); ok {
+			return x.EventLog
+		}
+	}
+	return nil
+}
+
 func (x *ControllerGetGroupResponse) GetSensors() *common_go.Sensors {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_Sensors); ok {
@@ -530,6 +559,14 @@ type ControllerGetGroupResponse_EventNotification struct {
 	EventNotification *common_go.EventNotification `protobuf:"bytes,31,opt,name=event_notification,json=eventNotification,oneof"`
 }
 
+type ControllerGetGroupResponse_EventStatus struct {
+	EventStatus *common_go.EventStatus `protobuf:"bytes,47,opt,name=event_status,json=eventStatus,oneof"`
+}
+
+type ControllerGetGroupResponse_EventLog struct {
+	EventLog *common_go.EventLog `protobuf:"bytes,48,opt,name=event_log,json=eventLog,oneof"`
+}
+
 type ControllerGetGroupResponse_Sensors struct {
 	Sensors *common_go.Sensors `protobuf:"bytes,32,opt,name=sensors,oneof"`
 }
@@ -577,6 +614,10 @@ func (*ControllerGetGroupResponse_EnableAutoReboot) isControllerGetGroupResponse
 func (*ControllerGetGroupResponse_EventCapabilities) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_EventNotification) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_EventStatus) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_EventLog) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_Sensors) isControllerGetGroupResponse_Payload() {}
 
@@ -657,7 +698,6 @@ type ControllerSetRequest struct {
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ControllerSetRequest_SystemCfg
-	//	*ControllerSetRequest_Location
 	//	*ControllerSetRequest_Reset_
 	//	*ControllerSetRequest_DisableAutoReboot
 	//	*ControllerSetRequest_EnableAutoReboot
@@ -728,15 +768,6 @@ func (x *ControllerSetRequest) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerSetRequest) GetLocation() *common_go.Location {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerSetRequest_Location); ok {
-			return x.Location
-		}
-	}
-	return nil
-}
-
 func (x *ControllerSetRequest) GetReset_() *common_go.Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetRequest_Reset_); ok {
@@ -790,10 +821,6 @@ type ControllerSetRequest_SystemCfg struct {
 	SystemCfg *common_go.SystemCfg `protobuf:"bytes,10,opt,name=system_cfg,json=systemCfg,oneof"`
 }
 
-type ControllerSetRequest_Location struct {
-	Location *common_go.Location `protobuf:"bytes,11,opt,name=location,oneof"`
-}
-
 type ControllerSetRequest_Reset_ struct {
 	Reset_ *common_go.Reset `protobuf:"bytes,12,opt,name=reset,oneof"`
 }
@@ -816,8 +843,6 @@ type ControllerSetRequest_EventThrottleCfg struct {
 
 func (*ControllerSetRequest_SystemCfg) isControllerSetRequest_Payload() {}
 
-func (*ControllerSetRequest_Location) isControllerSetRequest_Payload() {}
-
 func (*ControllerSetRequest_Reset_) isControllerSetRequest_Payload() {}
 
 func (*ControllerSetRequest_DisableAutoReboot) isControllerSetRequest_Payload() {}
@@ -838,7 +863,6 @@ type ControllerSetResponse struct {
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ControllerSetResponse_SystemCfg
-	//	*ControllerSetResponse_Location
 	//	*ControllerSetResponse_Reset_
 	//	*ControllerSetResponse_DisableAutoReboot
 	//	*ControllerSetResponse_EnableAutoReboot
@@ -930,15 +954,6 @@ func (x *ControllerSetResponse) GetSystemCfg() *common_go.SystemCfg {
 	return nil
 }
 
-func (x *ControllerSetResponse) GetLocation() *common_go.Location {
-	if x != nil {
-		if x, ok := x.Payload.(*ControllerSetResponse_Location); ok {
-			return x.Location
-		}
-	}
-	return nil
-}
-
 func (x *ControllerSetResponse) GetReset_() *common_go.Reset {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetResponse_Reset_); ok {
@@ -992,10 +1007,6 @@ type ControllerSetResponse_SystemCfg struct {
 	SystemCfg *common_go.SystemCfg `protobuf:"bytes,10,opt,name=system_cfg,json=systemCfg,oneof"`
 }
 
-type ControllerSetResponse_Location struct {
-	Location *common_go.Location `protobuf:"bytes,11,opt,name=location,oneof"`
-}
-
 type ControllerSetResponse_Reset_ struct {
 	Reset_ *common_go.Reset `protobuf:"bytes,12,opt,name=reset,oneof"`
 }
@@ -1018,8 +1029,6 @@ type ControllerSetResponse_EventThrottleCfg struct {
 
 func (*ControllerSetResponse_SystemCfg) isControllerSetResponse_Payload() {}
 
-func (*ControllerSetResponse_Location) isControllerSetResponse_Payload() {}
-
 func (*ControllerSetResponse_Reset_) isControllerSetResponse_Payload() {}
 
 func (*ControllerSetResponse_DisableAutoReboot) isControllerSetResponse_Payload() {}
@@ -1040,7 +1049,7 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x05index\x18\x02 \x01(\rR\x05index\"r\n" +
 	"\x14ControllerGetRequest\x123\n" +
 	"\x06groups\x18\x01 \x03(\v2\x1b.scte.xponder.GroupSelectorR\x06groups\x12%\n" +
-	"\x04ping\x18e \x01(\v2\x11.scte.common.PingR\x04ping\"\x98\v\n" +
+	"\x04ping\x18e \x01(\v2\x11.scte.common.PingR\x04ping\"\x8d\f\n" +
 	"\x1aControllerGetGroupResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12B\n" +
@@ -1057,7 +1066,9 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x13disable_auto_reboot\x18\x18 \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
 	"\x12enable_auto_reboot\x18\x19 \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12O\n" +
 	"\x12event_capabilities\x18\x1a \x01(\v2\x1e.scte.common.EventCapabilitiesH\x00R\x11eventCapabilities\x12O\n" +
-	"\x12event_notification\x18\x1f \x01(\v2\x1e.scte.common.EventNotificationH\x00R\x11eventNotification\x120\n" +
+	"\x12event_notification\x18\x1f \x01(\v2\x1e.scte.common.EventNotificationH\x00R\x11eventNotification\x12=\n" +
+	"\fevent_status\x18/ \x01(\v2\x18.scte.common.EventStatusH\x00R\veventStatus\x124\n" +
+	"\tevent_log\x180 \x01(\v2\x15.scte.common.EventLogH\x00R\beventLog\x120\n" +
 	"\asensors\x18  \x01(\v2\x14.scte.common.SensorsH\x00R\asensors\x12O\n" +
 	"\x12sensor_descriptors\x18! \x01(\v2\x1e.scte.common.SensorDescriptorsH\x00R\x11sensorDescriptors\x12=\n" +
 	"\fsensors_data\x18\" \x01(\v2\x18.scte.common.SensorsDataH\x00R\vsensorsData\x12G\n" +
@@ -1069,20 +1080,19 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x06result\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\x06result\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12@\n" +
 	"\x06groups\x18\n" +
-	" \x03(\v2(.scte.xponder.ControllerGetGroupResponseR\x06groups\"\xc5\x04\n" +
+	" \x03(\v2(.scte.xponder.ControllerGetGroupResponseR\x06groups\"\x90\x04\n" +
 	"\x14ControllerSetRequest\x120\n" +
 	"\bgroup_id\x18\x01 \x01(\x0e2\x15.scte.xponder.GroupIdR\agroupId\x12\x14\n" +
 	"\x05index\x18\x02 \x01(\rR\x05index\x127\n" +
 	"\n" +
 	"system_cfg\x18\n" +
-	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x123\n" +
-	"\blocation\x18\v \x01(\v2\x15.scte.common.LocationH\x00R\blocation\x12*\n" +
+	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12*\n" +
 	"\x05reset\x18\f \x01(\v2\x12.scte.common.ResetH\x00R\x05reset\x12P\n" +
 	"\x13disable_auto_reboot\x18\r \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12M\n" +
 	"\x12event_throttle_cfg\x18( \x01(\v2\x1d.scte.common.EventThrottleCfgH\x00R\x10eventThrottleCfgB\t\n" +
-	"\apayload\"\xba\x05\n" +
+	"\apayload\"\x85\x05\n" +
 	"\x15ControllerSetResponse\x120\n" +
 	"\bgroup_id\x18\x01 \x01(\x0e2\x15.scte.xponder.GroupIdR\agroupId\x12\x14\n" +
 	"\x05index\x18\x02 \x01(\rR\x05index\x12\x16\n" +
@@ -1091,14 +1101,13 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\x127\n" +
 	"\n" +
 	"system_cfg\x18\n" +
-	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x123\n" +
-	"\blocation\x18\v \x01(\v2\x15.scte.common.LocationH\x00R\blocation\x12*\n" +
+	" \x01(\v2\x16.scte.common.SystemCfgH\x00R\tsystemCfg\x12*\n" +
 	"\x05reset\x18\f \x01(\v2\x12.scte.common.ResetH\x00R\x05reset\x12P\n" +
 	"\x13disable_auto_reboot\x18\r \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12M\n" +
 	"\x12event_throttle_cfg\x18( \x01(\v2\x1d.scte.common.EventThrottleCfgH\x00R\x10eventThrottleCfgB\t\n" +
-	"\apayload*\xd6\x02\n" +
+	"\apayload*\x9a\x03\n" +
 	"\aGroupId\x12\x11\n" +
 	"\rSYSTEM_STATUS\x10\x03\x12\x12\n" +
 	"\x0eIDENTIFICATION\x10\x04\x12\n" +
@@ -1106,8 +1115,7 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x06VENDOR\x10\x05\x12\x13\n" +
 	"\x0fVERSION_SUMMARY\x10\x06\x12\x0e\n" +
 	"\n" +
-	"SYSTEM_CFG\x10\v\x12\f\n" +
-	"\bLOCATION\x10\f\x12\x12\n" +
+	"SYSTEM_CFG\x10\v\x12\x12\n" +
 	"\x0eMANAGED_DEVICE\x10\r\x12\x16\n" +
 	"\x12RESET_CAPABILITIES\x10\x14\x12\x18\n" +
 	"\x14RESET_HISTORY_STATUS\x10\x15\x12\t\n" +
@@ -1115,10 +1123,15 @@ const file_xponder_controller_proto_rawDesc = "" +
 	"\x13DISABLE_AUTO_REBOOT\x10\x17\x12\x16\n" +
 	"\x12ENABLE_AUTO_REBOOT\x10\x18\x12\x16\n" +
 	"\x12EVENT_CAPABILITIES\x10\x1e\x12\x16\n" +
-	"\x12EVENT_NOTIFICATION\x10\x1f\x12\x15\n" +
+	"\x12EVENT_NOTIFICATION\x10\x1f\x12\x16\n" +
+	"\x12EVENT_THROTTLE_CFG\x10 \x12\x17\n" +
+	"\x13EVENT_REPORTING_CFG\x10!\x12\x10\n" +
+	"\fEVENT_STATUS\x10\"\x12\r\n" +
+	"\tEVENT_LOG\x10#\x12\x15\n" +
 	"\x11SENSOR_DESCRIPTOR\x10(\x12\x12\n" +
 	"\x0eSENSOR_READING\x10)\x12\b\n" +
-	"\x04PING\x10eB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
+	"\x04PING\x10eBG\n" +
+	"\x10org.scte.xponderP\x01Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_controller_proto_rawDescOnce sync.Once
@@ -1157,13 +1170,14 @@ var file_xponder_controller_proto_goTypes = []any{
 	(*common_go.EnableAutoReboot)(nil),   // 19: scte.common.EnableAutoReboot
 	(*common_go.EventCapabilities)(nil),  // 20: scte.common.EventCapabilities
 	(*common_go.EventNotification)(nil),  // 21: scte.common.EventNotification
-	(*common_go.Sensors)(nil),            // 22: scte.common.Sensors
-	(*common_go.SensorDescriptors)(nil),  // 23: scte.common.SensorDescriptors
-	(*common_go.SensorsData)(nil),        // 24: scte.common.SensorsData
-	(*ManagedDevices)(nil),               // 25: scte.xponder.ManagedDevices
-	(*common_go.EventThrottleCfg)(nil),   // 26: scte.common.EventThrottleCfg
-	(*common_go.Location)(nil),           // 27: scte.common.Location
-	(*common_go.EventReportingCfg)(nil),  // 28: scte.common.EventReportingCfg
+	(*common_go.EventStatus)(nil),        // 22: scte.common.EventStatus
+	(*common_go.EventLog)(nil),           // 23: scte.common.EventLog
+	(*common_go.Sensors)(nil),            // 24: scte.common.Sensors
+	(*common_go.SensorDescriptors)(nil),  // 25: scte.common.SensorDescriptors
+	(*common_go.SensorsData)(nil),        // 26: scte.common.SensorsData
+	(*ManagedDevices)(nil),               // 27: scte.xponder.ManagedDevices
+	(*common_go.EventThrottleCfg)(nil),   // 28: scte.common.EventThrottleCfg
+	(*common_go.EventReportingCfg)(nil),  // 29: scte.common.EventReportingCfg
 }
 var file_xponder_controller_proto_depIdxs = []int32{
 	0,  // 0: scte.xponder.GroupSelector.group_id:type_name -> scte.xponder.GroupId
@@ -1183,31 +1197,31 @@ var file_xponder_controller_proto_depIdxs = []int32{
 	19, // 14: scte.xponder.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
 	20, // 15: scte.xponder.ControllerGetGroupResponse.event_capabilities:type_name -> scte.common.EventCapabilities
 	21, // 16: scte.xponder.ControllerGetGroupResponse.event_notification:type_name -> scte.common.EventNotification
-	22, // 17: scte.xponder.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
-	23, // 18: scte.xponder.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
-	24, // 19: scte.xponder.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
-	25, // 20: scte.xponder.ControllerGetGroupResponse.managed_devices:type_name -> scte.xponder.ManagedDevices
-	26, // 21: scte.xponder.ControllerGetGroupResponse.event_throttle_cfg:type_name -> scte.common.EventThrottleCfg
-	7,  // 22: scte.xponder.ControllerGetGroupResponse.ping:type_name -> scte.common.Ping
-	8,  // 23: scte.xponder.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
-	3,  // 24: scte.xponder.ControllerGetResponse.groups:type_name -> scte.xponder.ControllerGetGroupResponse
-	0,  // 25: scte.xponder.ControllerSetRequest.group_id:type_name -> scte.xponder.GroupId
-	14, // 26: scte.xponder.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
-	27, // 27: scte.xponder.ControllerSetRequest.location:type_name -> scte.common.Location
-	17, // 28: scte.xponder.ControllerSetRequest.reset:type_name -> scte.common.Reset
-	18, // 29: scte.xponder.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
-	19, // 30: scte.xponder.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	28, // 31: scte.xponder.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	26, // 32: scte.xponder.ControllerSetRequest.event_throttle_cfg:type_name -> scte.common.EventThrottleCfg
-	0,  // 33: scte.xponder.ControllerSetResponse.group_id:type_name -> scte.xponder.GroupId
-	8,  // 34: scte.xponder.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
-	14, // 35: scte.xponder.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
-	27, // 36: scte.xponder.ControllerSetResponse.location:type_name -> scte.common.Location
+	22, // 17: scte.xponder.ControllerGetGroupResponse.event_status:type_name -> scte.common.EventStatus
+	23, // 18: scte.xponder.ControllerGetGroupResponse.event_log:type_name -> scte.common.EventLog
+	24, // 19: scte.xponder.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
+	25, // 20: scte.xponder.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
+	26, // 21: scte.xponder.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
+	27, // 22: scte.xponder.ControllerGetGroupResponse.managed_devices:type_name -> scte.xponder.ManagedDevices
+	28, // 23: scte.xponder.ControllerGetGroupResponse.event_throttle_cfg:type_name -> scte.common.EventThrottleCfg
+	7,  // 24: scte.xponder.ControllerGetGroupResponse.ping:type_name -> scte.common.Ping
+	8,  // 25: scte.xponder.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
+	3,  // 26: scte.xponder.ControllerGetResponse.groups:type_name -> scte.xponder.ControllerGetGroupResponse
+	0,  // 27: scte.xponder.ControllerSetRequest.group_id:type_name -> scte.xponder.GroupId
+	14, // 28: scte.xponder.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
+	17, // 29: scte.xponder.ControllerSetRequest.reset:type_name -> scte.common.Reset
+	18, // 30: scte.xponder.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	19, // 31: scte.xponder.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
+	29, // 32: scte.xponder.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	28, // 33: scte.xponder.ControllerSetRequest.event_throttle_cfg:type_name -> scte.common.EventThrottleCfg
+	0,  // 34: scte.xponder.ControllerSetResponse.group_id:type_name -> scte.xponder.GroupId
+	8,  // 35: scte.xponder.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
+	14, // 36: scte.xponder.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
 	17, // 37: scte.xponder.ControllerSetResponse.reset:type_name -> scte.common.Reset
 	18, // 38: scte.xponder.ControllerSetResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
 	19, // 39: scte.xponder.ControllerSetResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	28, // 40: scte.xponder.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	26, // 41: scte.xponder.ControllerSetResponse.event_throttle_cfg:type_name -> scte.common.EventThrottleCfg
+	29, // 40: scte.xponder.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	28, // 41: scte.xponder.ControllerSetResponse.event_throttle_cfg:type_name -> scte.common.EventThrottleCfg
 	42, // [42:42] is the sub-list for method output_type
 	42, // [42:42] is the sub-list for method input_type
 	42, // [42:42] is the sub-list for extension type_name
@@ -1234,6 +1248,8 @@ func file_xponder_controller_proto_init() {
 		(*ControllerGetGroupResponse_EnableAutoReboot)(nil),
 		(*ControllerGetGroupResponse_EventCapabilities)(nil),
 		(*ControllerGetGroupResponse_EventNotification)(nil),
+		(*ControllerGetGroupResponse_EventStatus)(nil),
+		(*ControllerGetGroupResponse_EventLog)(nil),
 		(*ControllerGetGroupResponse_Sensors)(nil),
 		(*ControllerGetGroupResponse_SensorDescriptors)(nil),
 		(*ControllerGetGroupResponse_SensorsData)(nil),
@@ -1243,7 +1259,6 @@ func file_xponder_controller_proto_init() {
 	}
 	file_xponder_controller_proto_msgTypes[4].OneofWrappers = []any{
 		(*ControllerSetRequest_SystemCfg)(nil),
-		(*ControllerSetRequest_Location)(nil),
 		(*ControllerSetRequest_Reset_)(nil),
 		(*ControllerSetRequest_DisableAutoReboot)(nil),
 		(*ControllerSetRequest_EnableAutoReboot)(nil),
@@ -1252,7 +1267,6 @@ func file_xponder_controller_proto_init() {
 	}
 	file_xponder_controller_proto_msgTypes[5].OneofWrappers = []any{
 		(*ControllerSetResponse_SystemCfg)(nil),
-		(*ControllerSetResponse_Location)(nil),
 		(*ControllerSetResponse_Reset_)(nil),
 		(*ControllerSetResponse_DisableAutoReboot)(nil),
 		(*ControllerSetResponse_EnableAutoReboot)(nil),

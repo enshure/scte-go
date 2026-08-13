@@ -24,6 +24,7 @@ const (
 type EventPriorityE int32
 
 const (
+	EventPriorityE_EVENT_PRIORITY_UNKNOWN   EventPriorityE = 0
 	EventPriorityE_EVENT_PRIORITY_EMERGENCY EventPriorityE = 1
 	EventPriorityE_EVENT_PRIORITY_ALERT     EventPriorityE = 2
 	EventPriorityE_EVENT_PRIORITY_CRITICAL  EventPriorityE = 3
@@ -37,6 +38,7 @@ const (
 // Enum value maps for EventPriorityE.
 var (
 	EventPriorityE_name = map[int32]string{
+		0: "EVENT_PRIORITY_UNKNOWN",
 		1: "EVENT_PRIORITY_EMERGENCY",
 		2: "EVENT_PRIORITY_ALERT",
 		3: "EVENT_PRIORITY_CRITICAL",
@@ -47,6 +49,7 @@ var (
 		8: "EVENT_PRIORITY_DEBUG",
 	}
 	EventPriorityE_value = map[string]int32{
+		"EVENT_PRIORITY_UNKNOWN":   0,
 		"EVENT_PRIORITY_EMERGENCY": 1,
 		"EVENT_PRIORITY_ALERT":     2,
 		"EVENT_PRIORITY_CRITICAL":  3,
@@ -98,6 +101,7 @@ func (EventPriorityE) EnumDescriptor() ([]byte, []int) {
 type EventTransitionE int32
 
 const (
+	EventTransitionE_EVENT_TRANSITION_UNKNOWN           EventTransitionE = 0
 	EventTransitionE_EVENT_TRANSITION_ASSERT            EventTransitionE = 1
 	EventTransitionE_EVENT_TRANSITION_CLEAR             EventTransitionE = 2
 	EventTransitionE_EVENT_TRANSITION_NOTIFICATION_ONLY EventTransitionE = 3
@@ -106,11 +110,13 @@ const (
 // Enum value maps for EventTransitionE.
 var (
 	EventTransitionE_name = map[int32]string{
+		0: "EVENT_TRANSITION_UNKNOWN",
 		1: "EVENT_TRANSITION_ASSERT",
 		2: "EVENT_TRANSITION_CLEAR",
 		3: "EVENT_TRANSITION_NOTIFICATION_ONLY",
 	}
 	EventTransitionE_value = map[string]int32{
+		"EVENT_TRANSITION_UNKNOWN":           0,
 		"EVENT_TRANSITION_ASSERT":            1,
 		"EVENT_TRANSITION_CLEAR":             2,
 		"EVENT_TRANSITION_NOTIFICATION_ONLY": 3,
@@ -384,7 +390,7 @@ func (x *Event) GetLevel() EventPriorityE {
 	if x != nil && x.Level != nil {
 		return *x.Level
 	}
-	return EventPriorityE_EVENT_PRIORITY_EMERGENCY
+	return EventPriorityE_EVENT_PRIORITY_UNKNOWN
 }
 
 func (x *Event) GetText() string {
@@ -509,7 +515,7 @@ func (x *EventNotification) GetTransition() EventTransitionE {
 	if x != nil && x.Transition != nil {
 		return *x.Transition
 	}
-	return EventTransitionE_EVENT_TRANSITION_ASSERT
+	return EventTransitionE_EVENT_TRANSITION_UNKNOWN
 }
 
 func (x *EventNotification) GetActiveEventsBitmask() []uint32 {
@@ -633,7 +639,7 @@ func (x *EventReportingCfg) GetPriority() EventPriorityE {
 	if x != nil && x.Priority != nil {
 		return *x.Priority
 	}
-	return EventPriorityE_EVENT_PRIORITY_EMERGENCY
+	return EventPriorityE_EVENT_PRIORITY_UNKNOWN
 }
 
 func (x *EventReportingCfg) GetReporting() uint32 {
@@ -689,8 +695,9 @@ const file_common_event_common_proto_rawDesc = "" +
 	"\x11EventReportingCfg\x129\n" +
 	"\bpriority\x18\x01 \x01(\x0e2\x1d.scte.common.event_priority_eR\bpriority\x12\x1f\n" +
 	"\treporting\x18\x02 \x01(\r:\x010R\treporting\x12\x1b\n" +
-	"\x05write\x18\x03 \x01(\b:\x05falseR\x05write*\xeb\x01\n" +
-	"\x10event_priority_e\x12\x1c\n" +
+	"\x05write\x18\x03 \x01(\b:\x05falseR\x05write*\x87\x02\n" +
+	"\x10event_priority_e\x12\x1a\n" +
+	"\x16EVENT_PRIORITY_UNKNOWN\x10\x00\x12\x1c\n" +
 	"\x18EVENT_PRIORITY_EMERGENCY\x10\x01\x12\x18\n" +
 	"\x14EVENT_PRIORITY_ALERT\x10\x02\x12\x1b\n" +
 	"\x17EVENT_PRIORITY_CRITICAL\x10\x03\x12\x18\n" +
@@ -698,11 +705,13 @@ const file_common_event_common_proto_rawDesc = "" +
 	"\x16EVENT_PRIORITY_WARNING\x10\x05\x12\x19\n" +
 	"\x15EVENT_PRIORITY_NOTICE\x10\x06\x12\x17\n" +
 	"\x13EVENT_PRIORITY_INFO\x10\a\x12\x18\n" +
-	"\x14EVENT_PRIORITY_DEBUG\x10\b*u\n" +
-	"\x12event_transition_e\x12\x1b\n" +
+	"\x14EVENT_PRIORITY_DEBUG\x10\b*\x93\x01\n" +
+	"\x12event_transition_e\x12\x1c\n" +
+	"\x18EVENT_TRANSITION_UNKNOWN\x10\x00\x12\x1b\n" +
 	"\x17EVENT_TRANSITION_ASSERT\x10\x01\x12\x1a\n" +
 	"\x16EVENT_TRANSITION_CLEAR\x10\x02\x12&\n" +
-	"\"EVENT_TRANSITION_NOTIFICATION_ONLY\x10\x03B1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\"EVENT_TRANSITION_NOTIFICATION_ONLY\x10\x03BD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_event_common_proto_rawDescOnce sync.Once

@@ -451,7 +451,8 @@ const file_common_device_common_proto_rawDesc = "" +
 	"\x10us_device_type_e\x12\x10\n" +
 	"\fUS_AMPLIFIER\x10\x00\x12\v\n" +
 	"\aUS_NODE\x10\x01\x12\f\n" +
-	"\bUS_OTHER\x10\x02B1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\bUS_OTHER\x10\x02BD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_device_common_proto_rawDescOnce sync.Once

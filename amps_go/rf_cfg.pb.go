@@ -88,22 +88,22 @@ func (AdminStatusE) EnumDescriptor() ([]byte, []int) {
 type IngressSwitchStatesE int32
 
 const (
-	IngressSwitchStatesE_SAMP_INGRESS_SWITCH_ON         IngressSwitchStatesE = 1
-	IngressSwitchStatesE_SAMP_INGRESS_SWITCH_OFF        IngressSwitchStatesE = 2
-	IngressSwitchStatesE_SAMP_INGRESS_SWITCH_ATTENUATED IngressSwitchStatesE = 3
+	IngressSwitchStatesE_INGRESS_SWITCH_ON         IngressSwitchStatesE = 1
+	IngressSwitchStatesE_INGRESS_SWITCH_OFF        IngressSwitchStatesE = 2
+	IngressSwitchStatesE_INGRESS_SWITCH_ATTENUATED IngressSwitchStatesE = 3
 )
 
 // Enum value maps for IngressSwitchStatesE.
 var (
 	IngressSwitchStatesE_name = map[int32]string{
-		1: "SAMP_INGRESS_SWITCH_ON",
-		2: "SAMP_INGRESS_SWITCH_OFF",
-		3: "SAMP_INGRESS_SWITCH_ATTENUATED",
+		1: "INGRESS_SWITCH_ON",
+		2: "INGRESS_SWITCH_OFF",
+		3: "INGRESS_SWITCH_ATTENUATED",
 	}
 	IngressSwitchStatesE_value = map[string]int32{
-		"SAMP_INGRESS_SWITCH_ON":         1,
-		"SAMP_INGRESS_SWITCH_OFF":        2,
-		"SAMP_INGRESS_SWITCH_ATTENUATED": 3,
+		"INGRESS_SWITCH_ON":         1,
+		"INGRESS_SWITCH_OFF":        2,
+		"INGRESS_SWITCH_ATTENUATED": 3,
 	}
 )
 
@@ -200,18 +200,519 @@ func (PilotTypeE) EnumDescriptor() ([]byte, []int) {
 	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{2}
 }
 
+// SCTE-283 Extension: Tell the amp which auto alignemnt operation to perform, and optionally how long to wait before reverting if not saved.
+type AutoAlignOperationRequest struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	AutoAlignRequestType *AlignmentOpE          `protobuf:"varint,1,opt,name=auto_align_request_type,json=autoAlignRequestType,enum=scte.amp.AlignmentOpE" json:"auto_align_request_type,omitempty"` //Type of auto alignment operation to perform, default is full tune.
+	RevertTimeoutSec     *uint32                `protobuf:"varint,2,opt,name=revert_timeout_sec,json=revertTimeoutSec" json:"revert_timeout_sec,omitempty"`                                          // time in seconds before auto revert if not saved
+	Direction            *PathSelectorE         `protobuf:"varint,3,opt,name=direction,enum=scte.amp.PathSelectorE" json:"direction,omitempty"`                                                      // us/ds path to perform the alignment on, default is downstream
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *AutoAlignOperationRequest) Reset() {
+	*x = AutoAlignOperationRequest{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AutoAlignOperationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AutoAlignOperationRequest) ProtoMessage() {}
+
+func (x *AutoAlignOperationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AutoAlignOperationRequest.ProtoReflect.Descriptor instead.
+func (*AutoAlignOperationRequest) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AutoAlignOperationRequest) GetAutoAlignRequestType() AlignmentOpE {
+	if x != nil && x.AutoAlignRequestType != nil {
+		return *x.AutoAlignRequestType
+	}
+	return AlignmentOpE_UNSPECIFIED
+}
+
+func (x *AutoAlignOperationRequest) GetRevertTimeoutSec() uint32 {
+	if x != nil && x.RevertTimeoutSec != nil {
+		return *x.RevertTimeoutSec
+	}
+	return 0
+}
+
+func (x *AutoAlignOperationRequest) GetDirection() PathSelectorE {
+	if x != nil && x.Direction != nil {
+		return *x.Direction
+	}
+	return PathSelectorE_PATH_SELECTOR_UNKNOWN
+}
+
+// SCTE-283 Extension: This is the response to the AutoAlignOperationRequest, which includes the status of the auto alignment operation and
+// optionally the spectrum capture point values at the marker frequencies.
+type DsAutoAlignOperationResponse struct {
+	state                      protoimpl.MessageState       `protogen:"open.v1"`
+	DsAutoAlignOperationStatus *DsAutoAlignOperationStatus  `protobuf:"bytes,1,req,name=ds_auto_align_operation_status,json=dsAutoAlignOperationStatus" json:"ds_auto_align_operation_status,omitempty"`
+	FreqPwrValues              []*SpectrumCapturePointValue `protobuf:"bytes,2,rep,name=freq_pwr_values,json=freqPwrValues" json:"freq_pwr_values,omitempty"` // The frequency, power, reference power values at the DS marker frequencies.
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
+}
+
+func (x *DsAutoAlignOperationResponse) Reset() {
+	*x = DsAutoAlignOperationResponse{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DsAutoAlignOperationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DsAutoAlignOperationResponse) ProtoMessage() {}
+
+func (x *DsAutoAlignOperationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DsAutoAlignOperationResponse.ProtoReflect.Descriptor instead.
+func (*DsAutoAlignOperationResponse) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *DsAutoAlignOperationResponse) GetDsAutoAlignOperationStatus() *DsAutoAlignOperationStatus {
+	if x != nil {
+		return x.DsAutoAlignOperationStatus
+	}
+	return nil
+}
+
+func (x *DsAutoAlignOperationResponse) GetFreqPwrValues() []*SpectrumCapturePointValue {
+	if x != nil {
+		return x.FreqPwrValues
+	}
+	return nil
+}
+
+// SCTE-283 Extension: This is the status of the auto alignment operation, including the current status, RF detector mode, cable length, gamma, phi, and total composite power.
+type DsAutoAlignOperationStatus struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	AutoAlignStatus     *AlignmentStatusE      `protobuf:"varint,1,opt,name=auto_align_status,json=autoAlignStatus,enum=scte.amp.AlignmentStatusE" json:"auto_align_status,omitempty"` //idle, in progress, complete, error.
+	RfDetMode           *uint32                `protobuf:"varint,2,opt,name=rf_det_mode,json=rfDetMode" json:"rf_det_mode,omitempty"`                                                  //RF detector
+	CsmCableLength      *float32               `protobuf:"fixed32,3,opt,name=csm_cable_length,json=csmCableLength" json:"csm_cable_length,omitempty"`
+	CsmGamma            *float32               `protobuf:"fixed32,4,opt,name=csm_gamma,json=csmGamma" json:"csm_gamma,omitempty"`
+	CsmPhi              *float32               `protobuf:"fixed32,5,opt,name=csm_phi,json=csmPhi" json:"csm_phi,omitempty"`
+	TotalCompositePower *float32               `protobuf:"fixed32,6,opt,name=total_composite_power,json=totalCompositePower" json:"total_composite_power,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *DsAutoAlignOperationStatus) Reset() {
+	*x = DsAutoAlignOperationStatus{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DsAutoAlignOperationStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DsAutoAlignOperationStatus) ProtoMessage() {}
+
+func (x *DsAutoAlignOperationStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DsAutoAlignOperationStatus.ProtoReflect.Descriptor instead.
+func (*DsAutoAlignOperationStatus) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DsAutoAlignOperationStatus) GetAutoAlignStatus() AlignmentStatusE {
+	if x != nil && x.AutoAlignStatus != nil {
+		return *x.AutoAlignStatus
+	}
+	return AlignmentStatusE_IDLE
+}
+
+func (x *DsAutoAlignOperationStatus) GetRfDetMode() uint32 {
+	if x != nil && x.RfDetMode != nil {
+		return *x.RfDetMode
+	}
+	return 0
+}
+
+func (x *DsAutoAlignOperationStatus) GetCsmCableLength() float32 {
+	if x != nil && x.CsmCableLength != nil {
+		return *x.CsmCableLength
+	}
+	return 0
+}
+
+func (x *DsAutoAlignOperationStatus) GetCsmGamma() float32 {
+	if x != nil && x.CsmGamma != nil {
+		return *x.CsmGamma
+	}
+	return 0
+}
+
+func (x *DsAutoAlignOperationStatus) GetCsmPhi() float32 {
+	if x != nil && x.CsmPhi != nil {
+		return *x.CsmPhi
+	}
+	return 0
+}
+
+func (x *DsAutoAlignOperationStatus) GetTotalCompositePower() float32 {
+	if x != nil && x.TotalCompositePower != nil {
+		return *x.TotalCompositePower
+	}
+	return 0
+}
+
+// SCTE-283 Extension: This is the response to the AutoAlignOperationRequest for the upstream path, which includes the status of the auto alignment operation and
+type UsAutoAlignOperationResponse struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	UsAutoAlignStatus         *AlignmentStatusE      `protobuf:"varint,1,opt,name=us_auto_align_status,json=usAutoAlignStatus,enum=scte.amp.AlignmentStatusE" json:"us_auto_align_status,omitempty"`
+	RfDetMode                 *uint32                `protobuf:"varint,2,opt,name=rf_det_mode,json=rfDetMode" json:"rf_det_mode,omitempty"` // ??
+	TotalEqualizationTenthsDb *int32                 `protobuf:"zigzag32,3,opt,name=total_equalization_tenths_db,json=totalEqualizationTenthsDb" json:"total_equalization_tenths_db,omitempty"`
+	TotalAttenuationTenthsDb  *uint32                `protobuf:"varint,4,opt,name=total_attenuation_tenths_db,json=totalAttenuationTenthsDb" json:"total_attenuation_tenths_db,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *UsAutoAlignOperationResponse) Reset() {
+	*x = UsAutoAlignOperationResponse{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UsAutoAlignOperationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UsAutoAlignOperationResponse) ProtoMessage() {}
+
+func (x *UsAutoAlignOperationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UsAutoAlignOperationResponse.ProtoReflect.Descriptor instead.
+func (*UsAutoAlignOperationResponse) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UsAutoAlignOperationResponse) GetUsAutoAlignStatus() AlignmentStatusE {
+	if x != nil && x.UsAutoAlignStatus != nil {
+		return *x.UsAutoAlignStatus
+	}
+	return AlignmentStatusE_IDLE
+}
+
+func (x *UsAutoAlignOperationResponse) GetRfDetMode() uint32 {
+	if x != nil && x.RfDetMode != nil {
+		return *x.RfDetMode
+	}
+	return 0
+}
+
+func (x *UsAutoAlignOperationResponse) GetTotalEqualizationTenthsDb() int32 {
+	if x != nil && x.TotalEqualizationTenthsDb != nil {
+		return *x.TotalEqualizationTenthsDb
+	}
+	return 0
+}
+
+func (x *UsAutoAlignOperationResponse) GetTotalAttenuationTenthsDb() uint32 {
+	if x != nil && x.TotalAttenuationTenthsDb != nil {
+		return *x.TotalAttenuationTenthsDb
+	}
+	return 0
+}
+
+// SCTE-283 Extension: Per stage manual alignment control values.
+type ManualAlignControlValue struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	StageIndex         *StageIndexE           `protobuf:"varint,1,opt,name=stage_index,json=stageIndex,enum=scte.amp.StageIndexE" json:"stage_index,omitempty"`     //SCTE-283: stage index is 1-based, and corresponds to the stage index in the amplifier's RF capabilities data model.
+	StageType          *StageTypeE            `protobuf:"varint,2,opt,name=stage_type,json=stageType,enum=scte.amp.StageTypeE" json:"stage_type,omitempty"`         //SCTE-283: stage type is either attenuator or equalizer.
+	MinValueTenthsDb   *int32                 `protobuf:"zigzag32,3,opt,name=min_value_tenths_db,json=minValueTenthsDb" json:"min_value_tenths_db,omitempty"`       // Read-only minimum value in tenths of tenths of dB at the attenuator/EQ stage
+	MaxValueTenthsDb   *int32                 `protobuf:"zigzag32,4,opt,name=max_value_tenths_db,json=maxValueTenthsDb" json:"max_value_tenths_db,omitempty"`       // Read-only maximum value in tenths of tenths of dB at the attenuator/EQ stage
+	ValueTenthsDb      *int32                 `protobuf:"zigzag32,5,opt,name=value_tenths_db,json=valueTenthsDb" json:"value_tenths_db,omitempty"`                  // Read/write value in tenths of tenths of dB at the attenuator/EQ stage. The amplifier will apply this value to the stage when the manual alignment operation is performed.
+	SavedValueTenthsDb *int32                 `protobuf:"zigzag32,6,opt,name=saved_value_tenths_db,json=savedValueTenthsDb" json:"saved_value_tenths_db,omitempty"` // Read-only, value read from amplifier NVM. May be different from value_tenths_db if the manual alignment operation has not been saved to NVM.
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *ManualAlignControlValue) Reset() {
+	*x = ManualAlignControlValue{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ManualAlignControlValue) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ManualAlignControlValue) ProtoMessage() {}
+
+func (x *ManualAlignControlValue) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ManualAlignControlValue.ProtoReflect.Descriptor instead.
+func (*ManualAlignControlValue) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ManualAlignControlValue) GetStageIndex() StageIndexE {
+	if x != nil && x.StageIndex != nil {
+		return *x.StageIndex
+	}
+	return StageIndexE_STAGE_INDEX1
+}
+
+func (x *ManualAlignControlValue) GetStageType() StageTypeE {
+	if x != nil && x.StageType != nil {
+		return *x.StageType
+	}
+	return StageTypeE_STAGE_TYPE_OTHER
+}
+
+func (x *ManualAlignControlValue) GetMinValueTenthsDb() int32 {
+	if x != nil && x.MinValueTenthsDb != nil {
+		return *x.MinValueTenthsDb
+	}
+	return 0
+}
+
+func (x *ManualAlignControlValue) GetMaxValueTenthsDb() int32 {
+	if x != nil && x.MaxValueTenthsDb != nil {
+		return *x.MaxValueTenthsDb
+	}
+	return 0
+}
+
+func (x *ManualAlignControlValue) GetValueTenthsDb() int32 {
+	if x != nil && x.ValueTenthsDb != nil {
+		return *x.ValueTenthsDb
+	}
+	return 0
+}
+
+func (x *ManualAlignControlValue) GetSavedValueTenthsDb() int32 {
+	if x != nil && x.SavedValueTenthsDb != nil {
+		return *x.SavedValueTenthsDb
+	}
+	return 0
+}
+
+// SCTE-283 Extension: Tell the amp which manual alignment operation to perform, and optionally how long to wait before reverting if not saved.
+type ManualAlignOperationRequest struct {
+	state                  protoimpl.MessageState     `protogen:"open.v1"`
+	Values                 []*ManualAlignControlValue `protobuf:"bytes,1,rep,name=values" json:"values,omitempty"`
+	ManualAlignRequestType *AlignmentOpE              `protobuf:"varint,2,opt,name=manual_align_request_type,json=manualAlignRequestType,enum=scte.amp.AlignmentOpE" json:"manual_align_request_type,omitempty"`
+	RevertTimeoutSec       *uint32                    `protobuf:"varint,3,opt,name=revert_timeout_sec,json=revertTimeoutSec" json:"revert_timeout_sec,omitempty"`
+	Direction              *PathSelectorE             `protobuf:"varint,4,opt,name=direction,enum=scte.amp.PathSelectorE" json:"direction,omitempty"` // us/ds path to perform the alignment on, default is downstream
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *ManualAlignOperationRequest) Reset() {
+	*x = ManualAlignOperationRequest{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ManualAlignOperationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ManualAlignOperationRequest) ProtoMessage() {}
+
+func (x *ManualAlignOperationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ManualAlignOperationRequest.ProtoReflect.Descriptor instead.
+func (*ManualAlignOperationRequest) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ManualAlignOperationRequest) GetValues() []*ManualAlignControlValue {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
+func (x *ManualAlignOperationRequest) GetManualAlignRequestType() AlignmentOpE {
+	if x != nil && x.ManualAlignRequestType != nil {
+		return *x.ManualAlignRequestType
+	}
+	return AlignmentOpE_UNSPECIFIED
+}
+
+func (x *ManualAlignOperationRequest) GetRevertTimeoutSec() uint32 {
+	if x != nil && x.RevertTimeoutSec != nil {
+		return *x.RevertTimeoutSec
+	}
+	return 0
+}
+
+func (x *ManualAlignOperationRequest) GetDirection() PathSelectorE {
+	if x != nil && x.Direction != nil {
+		return *x.Direction
+	}
+	return PathSelectorE_PATH_SELECTOR_UNKNOWN
+}
+
+type ManualAlignOperationResponse struct {
+	state                  protoimpl.MessageState       `protogen:"open.v1"`
+	Values                 []*ManualAlignControlValue   `protobuf:"bytes,1,rep,name=values" json:"values,omitempty"`
+	ManualAlignRequestType *AlignmentOpE                `protobuf:"varint,2,opt,name=manual_align_request_type,json=manualAlignRequestType,enum=scte.amp.AlignmentOpE" json:"manual_align_request_type,omitempty"`
+	RevertTimeoutSec       *uint32                      `protobuf:"varint,3,opt,name=revert_timeout_sec,json=revertTimeoutSec" json:"revert_timeout_sec,omitempty"`
+	Direction              *PathSelectorE               `protobuf:"varint,4,opt,name=direction,enum=scte.amp.PathSelectorE" json:"direction,omitempty"`   // us/ds path to perform the alignment on, default is downstream
+	FreqPwrValues          []*SpectrumCapturePointValue `protobuf:"bytes,5,rep,name=freq_pwr_values,json=freqPwrValues" json:"freq_pwr_values,omitempty"` // The frequency, power, reference power values at the DS marker frequencies.
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *ManualAlignOperationResponse) Reset() {
+	*x = ManualAlignOperationResponse{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ManualAlignOperationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ManualAlignOperationResponse) ProtoMessage() {}
+
+func (x *ManualAlignOperationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ManualAlignOperationResponse.ProtoReflect.Descriptor instead.
+func (*ManualAlignOperationResponse) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ManualAlignOperationResponse) GetValues() []*ManualAlignControlValue {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
+func (x *ManualAlignOperationResponse) GetManualAlignRequestType() AlignmentOpE {
+	if x != nil && x.ManualAlignRequestType != nil {
+		return *x.ManualAlignRequestType
+	}
+	return AlignmentOpE_UNSPECIFIED
+}
+
+func (x *ManualAlignOperationResponse) GetRevertTimeoutSec() uint32 {
+	if x != nil && x.RevertTimeoutSec != nil {
+		return *x.RevertTimeoutSec
+	}
+	return 0
+}
+
+func (x *ManualAlignOperationResponse) GetDirection() PathSelectorE {
+	if x != nil && x.Direction != nil {
+		return *x.Direction
+	}
+	return PathSelectorE_PATH_SELECTOR_UNKNOWN
+}
+
+func (x *ManualAlignOperationResponse) GetFreqPwrValues() []*SpectrumCapturePointValue {
+	if x != nil {
+		return x.FreqPwrValues
+	}
+	return nil
+}
+
+// Used to configure the upstream or downstream path of the amplifier's attenuation, and equalization settings for each stage.
+// According to SCTE-283, each attenuator or equalizer is a stage.
 type UsDsCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	StageIndex    *uint32                `protobuf:"varint,1,opt,name=stage_index,json=stageIndex" json:"stage_index,omitempty"`
-	Attenuation   *uint32                `protobuf:"varint,2,opt,name=attenuation" json:"attenuation,omitempty"`
-	Equalization  *float32               `protobuf:"fixed32,3,opt,name=equalization" json:"equalization,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	StageIndex           *uint32                `protobuf:"varint,1,opt,name=stage_index,json=stageIndex" json:"stage_index,omitempty"`
+	AttenuationTenthsDb  *uint32                `protobuf:"varint,2,opt,name=attenuation_tenths_db,json=attenuationTenthsDb" json:"attenuation_tenths_db,omitempty"`
+	EqualizationTenthsDb *int32                 `protobuf:"zigzag32,3,opt,name=equalization_tenths_db,json=equalizationTenthsDb" json:"equalization_tenths_db,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *UsDsCfg) Reset() {
 	*x = UsDsCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[0]
+	mi := &file_amps_rf_cfg_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -223,7 +724,7 @@ func (x *UsDsCfg) String() string {
 func (*UsDsCfg) ProtoMessage() {}
 
 func (x *UsDsCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[0]
+	mi := &file_amps_rf_cfg_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -236,7 +737,7 @@ func (x *UsDsCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsDsCfg.ProtoReflect.Descriptor instead.
 func (*UsDsCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{0}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UsDsCfg) GetStageIndex() uint32 {
@@ -246,30 +747,35 @@ func (x *UsDsCfg) GetStageIndex() uint32 {
 	return 0
 }
 
-func (x *UsDsCfg) GetAttenuation() uint32 {
-	if x != nil && x.Attenuation != nil {
-		return *x.Attenuation
+func (x *UsDsCfg) GetAttenuationTenthsDb() uint32 {
+	if x != nil && x.AttenuationTenthsDb != nil {
+		return *x.AttenuationTenthsDb
 	}
 	return 0
 }
 
-func (x *UsDsCfg) GetEqualization() float32 {
-	if x != nil && x.Equalization != nil {
-		return *x.Equalization
+func (x *UsDsCfg) GetEqualizationTenthsDb() int32 {
+	if x != nil && x.EqualizationTenthsDb != nil {
+		return *x.EqualizationTenthsDb
 	}
 	return 0
 }
 
 type UsCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UsConfig      *UsDsCfg               `protobuf:"bytes,1,opt,name=us_config,json=usConfig" json:"us_config,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	UsConfig *UsDsCfg               `protobuf:"bytes,1,opt,name=us_config,json=usConfig" json:"us_config,omitempty"`
+	// Types that are valid to be assigned to AlignOpRequest:
+	//
+	//	*UsCfg_UsAutoAlignOpRequest
+	//	*UsCfg_UsManualAlignOpRequest
+	AlignOpRequest isUsCfg_AlignOpRequest `protobuf_oneof:"align_op_request"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *UsCfg) Reset() {
 	*x = UsCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[1]
+	mi := &file_amps_rf_cfg_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -281,7 +787,7 @@ func (x *UsCfg) String() string {
 func (*UsCfg) ProtoMessage() {}
 
 func (x *UsCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[1]
+	mi := &file_amps_rf_cfg_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -294,7 +800,7 @@ func (x *UsCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsCfg.ProtoReflect.Descriptor instead.
 func (*UsCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{1}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UsCfg) GetUsConfig() *UsDsCfg {
@@ -304,17 +810,59 @@ func (x *UsCfg) GetUsConfig() *UsDsCfg {
 	return nil
 }
 
+func (x *UsCfg) GetAlignOpRequest() isUsCfg_AlignOpRequest {
+	if x != nil {
+		return x.AlignOpRequest
+	}
+	return nil
+}
+
+func (x *UsCfg) GetUsAutoAlignOpRequest() *AutoAlignOperationRequest {
+	if x != nil {
+		if x, ok := x.AlignOpRequest.(*UsCfg_UsAutoAlignOpRequest); ok {
+			return x.UsAutoAlignOpRequest
+		}
+	}
+	return nil
+}
+
+func (x *UsCfg) GetUsManualAlignOpRequest() *ManualAlignOperationRequest {
+	if x != nil {
+		if x, ok := x.AlignOpRequest.(*UsCfg_UsManualAlignOpRequest); ok {
+			return x.UsManualAlignOpRequest
+		}
+	}
+	return nil
+}
+
+type isUsCfg_AlignOpRequest interface {
+	isUsCfg_AlignOpRequest()
+}
+
+type UsCfg_UsAutoAlignOpRequest struct {
+	UsAutoAlignOpRequest *AutoAlignOperationRequest `protobuf:"bytes,2,opt,name=us_auto_align_op_request,json=usAutoAlignOpRequest,oneof"` //SCTE-283 Extension: Used to request auto alignment for the upstream path.
+}
+
+type UsCfg_UsManualAlignOpRequest struct {
+	UsManualAlignOpRequest *ManualAlignOperationRequest `protobuf:"bytes,3,opt,name=us_manual_align_op_request,json=usManualAlignOpRequest,oneof"` //SCTE-283 Extension: Used to request manual alignment for the upstream path.
+}
+
+func (*UsCfg_UsAutoAlignOpRequest) isUsCfg_AlignOpRequest() {}
+
+func (*UsCfg_UsManualAlignOpRequest) isUsCfg_AlignOpRequest() {}
+
+// SCTE-283 Extension: This is an extension to the SCTE-283 RF configuration data model, allowing for the configuration of test points on the amplifier's RF ports.
 type TestPointConfig struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	TestPointId     *TestPointIdE          `protobuf:"varint,1,opt,name=test_point_id,json=testPointId,enum=scte.amp.TestPointIdE" json:"test_point_id,omitempty"`
-	TestPointConfig *TestPointConfigE      `protobuf:"varint,2,opt,name=test_point_config,json=testPointConfig,enum=scte.amp.TestPointConfigE" json:"test_point_config,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TestPointId   *TestPointIdE          `protobuf:"varint,1,opt,name=test_point_id,json=testPointId,enum=scte.amp.TestPointIdE" json:"test_point_id,omitempty"` //Normally one per port.
+	Direction     *TestPointConfigE      `protobuf:"varint,2,opt,name=direction,enum=scte.amp.TestPointConfigE" json:"direction,omitempty"`                      //Direction of the test point, either forward(downstream) or reverse(Upstream).
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TestPointConfig) Reset() {
 	*x = TestPointConfig{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	mi := &file_amps_rf_cfg_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -326,7 +874,7 @@ func (x *TestPointConfig) String() string {
 func (*TestPointConfig) ProtoMessage() {}
 
 func (x *TestPointConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[2]
+	mi := &file_amps_rf_cfg_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -339,7 +887,7 @@ func (x *TestPointConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TestPointConfig.ProtoReflect.Descriptor instead.
 func (*TestPointConfig) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{2}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *TestPointConfig) GetTestPointId() TestPointIdE {
@@ -349,9 +897,9 @@ func (x *TestPointConfig) GetTestPointId() TestPointIdE {
 	return TestPointIdE_INPUT_TP
 }
 
-func (x *TestPointConfig) GetTestPointConfig() TestPointConfigE {
-	if x != nil && x.TestPointConfig != nil {
-		return *x.TestPointConfig
+func (x *TestPointConfig) GetDirection() TestPointConfigE {
+	if x != nil && x.Direction != nil {
+		return *x.Direction
 	}
 	return TestPointConfigE_FWD
 }
@@ -360,14 +908,14 @@ type LogicalPortCfg struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AdminStatus     *AdminStatusE          `protobuf:"varint,1,opt,name=admin_status,json=adminStatus,enum=scte.amp.AdminStatusE" json:"admin_status,omitempty"`
 	RfMute          *bool                  `protobuf:"varint,2,opt,name=rf_mute,json=rfMute" json:"rf_mute,omitempty"`
-	TestPointConfig *TestPointConfig       `protobuf:"bytes,3,opt,name=test_point_config,json=testPointConfig" json:"test_point_config,omitempty"`
+	TestPointConfig *TestPointConfig       `protobuf:"bytes,3,opt,name=test_point_config,json=testPointConfig" json:"test_point_config,omitempty"` //SCTE-283 Extension: Test point configuration for the logical port, allowing for the configuration of test points on the amplifier's RF ports.
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
 
 func (x *LogicalPortCfg) Reset() {
 	*x = LogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[3]
+	mi := &file_amps_rf_cfg_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -379,7 +927,7 @@ func (x *LogicalPortCfg) String() string {
 func (*LogicalPortCfg) ProtoMessage() {}
 
 func (x *LogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[3]
+	mi := &file_amps_rf_cfg_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -392,7 +940,7 @@ func (x *LogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*LogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{3}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *LogicalPortCfg) GetAdminStatus() AdminStatusE {
@@ -417,16 +965,16 @@ func (x *LogicalPortCfg) GetTestPointConfig() *TestPointConfig {
 }
 
 type UsIngressSwitchCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	State         *IngressSwitchStatesE  `protobuf:"varint,1,opt,name=state,enum=scte.amp.IngressSwitchStatesE" json:"state,omitempty"`
-	Attenuation   *uint32                `protobuf:"varint,2,opt,name=attenuation" json:"attenuation,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	State               *IngressSwitchStatesE  `protobuf:"varint,1,opt,name=state,enum=scte.amp.IngressSwitchStatesE" json:"state,omitempty"`
+	AttenuationTenthsDb *uint32                `protobuf:"varint,2,opt,name=attenuation_tenths_db,json=attenuationTenthsDb" json:"attenuation_tenths_db,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *UsIngressSwitchCfg) Reset() {
 	*x = UsIngressSwitchCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[4]
+	mi := &file_amps_rf_cfg_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -438,7 +986,7 @@ func (x *UsIngressSwitchCfg) String() string {
 func (*UsIngressSwitchCfg) ProtoMessage() {}
 
 func (x *UsIngressSwitchCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[4]
+	mi := &file_amps_rf_cfg_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -451,19 +999,19 @@ func (x *UsIngressSwitchCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsIngressSwitchCfg.ProtoReflect.Descriptor instead.
 func (*UsIngressSwitchCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{4}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UsIngressSwitchCfg) GetState() IngressSwitchStatesE {
 	if x != nil && x.State != nil {
 		return *x.State
 	}
-	return IngressSwitchStatesE_SAMP_INGRESS_SWITCH_ON
+	return IngressSwitchStatesE_INGRESS_SWITCH_ON
 }
 
-func (x *UsIngressSwitchCfg) GetAttenuation() uint32 {
-	if x != nil && x.Attenuation != nil {
-		return *x.Attenuation
+func (x *UsIngressSwitchCfg) GetAttenuationTenthsDb() uint32 {
+	if x != nil && x.AttenuationTenthsDb != nil {
+		return *x.AttenuationTenthsDb
 	}
 	return 0
 }
@@ -480,7 +1028,7 @@ type UsLogicalPortCfg struct {
 
 func (x *UsLogicalPortCfg) Reset() {
 	*x = UsLogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[5]
+	mi := &file_amps_rf_cfg_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -492,7 +1040,7 @@ func (x *UsLogicalPortCfg) String() string {
 func (*UsLogicalPortCfg) ProtoMessage() {}
 
 func (x *UsLogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[5]
+	mi := &file_amps_rf_cfg_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -505,7 +1053,7 @@ func (x *UsLogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsLogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*UsLogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{5}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UsLogicalPortCfg) GetThermalLevelControlSelectRangeSetting() uint32 {
@@ -546,7 +1094,7 @@ type BiDirLogicalPortCfg struct {
 
 func (x *BiDirLogicalPortCfg) Reset() {
 	*x = BiDirLogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[6]
+	mi := &file_amps_rf_cfg_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -558,7 +1106,7 @@ func (x *BiDirLogicalPortCfg) String() string {
 func (*BiDirLogicalPortCfg) ProtoMessage() {}
 
 func (x *BiDirLogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[6]
+	mi := &file_amps_rf_cfg_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -571,7 +1119,7 @@ func (x *BiDirLogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BiDirLogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*BiDirLogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{6}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *BiDirLogicalPortCfg) GetActiveDiplexFilterIndex() uint32 {
@@ -589,15 +1137,20 @@ func (x *BiDirLogicalPortCfg) GetPortAdminStatus() *LogicalPortCfg {
 }
 
 type DsCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	DsConfig      *UsDsCfg               `protobuf:"bytes,1,opt,name=ds_config,json=dsConfig" json:"ds_config,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	DsConfig *UsDsCfg               `protobuf:"bytes,1,opt,name=ds_config,json=dsConfig" json:"ds_config,omitempty"`
+	// Types that are valid to be assigned to AlignOpRequest:
+	//
+	//	*DsCfg_DsAutoAlignOpRequest
+	//	*DsCfg_DsManualAlignOpRequest
+	AlignOpRequest isDsCfg_AlignOpRequest `protobuf_oneof:"align_op_request"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *DsCfg) Reset() {
 	*x = DsCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[7]
+	mi := &file_amps_rf_cfg_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -609,7 +1162,7 @@ func (x *DsCfg) String() string {
 func (*DsCfg) ProtoMessage() {}
 
 func (x *DsCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[7]
+	mi := &file_amps_rf_cfg_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -622,7 +1175,7 @@ func (x *DsCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DsCfg.ProtoReflect.Descriptor instead.
 func (*DsCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{7}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *DsCfg) GetDsConfig() *UsDsCfg {
@@ -632,18 +1185,59 @@ func (x *DsCfg) GetDsConfig() *UsDsCfg {
 	return nil
 }
 
+func (x *DsCfg) GetAlignOpRequest() isDsCfg_AlignOpRequest {
+	if x != nil {
+		return x.AlignOpRequest
+	}
+	return nil
+}
+
+func (x *DsCfg) GetDsAutoAlignOpRequest() *AutoAlignOperationRequest {
+	if x != nil {
+		if x, ok := x.AlignOpRequest.(*DsCfg_DsAutoAlignOpRequest); ok {
+			return x.DsAutoAlignOpRequest
+		}
+	}
+	return nil
+}
+
+func (x *DsCfg) GetDsManualAlignOpRequest() *ManualAlignOperationRequest {
+	if x != nil {
+		if x, ok := x.AlignOpRequest.(*DsCfg_DsManualAlignOpRequest); ok {
+			return x.DsManualAlignOpRequest
+		}
+	}
+	return nil
+}
+
+type isDsCfg_AlignOpRequest interface {
+	isDsCfg_AlignOpRequest()
+}
+
+type DsCfg_DsAutoAlignOpRequest struct {
+	DsAutoAlignOpRequest *AutoAlignOperationRequest `protobuf:"bytes,2,opt,name=ds_auto_align_op_request,json=dsAutoAlignOpRequest,oneof"` //SCTE-283 Extension: Used to request auto alignment for the downstream path.
+}
+
+type DsCfg_DsManualAlignOpRequest struct {
+	DsManualAlignOpRequest *ManualAlignOperationRequest `protobuf:"bytes,3,opt,name=ds_manual_align_op_request,json=dsManualAlignOpRequest,oneof"` //SCTE-283 Extension: Used to request manual alignment for the downstream path.
+}
+
+func (*DsCfg_DsAutoAlignOpRequest) isDsCfg_AlignOpRequest() {}
+
+func (*DsCfg_DsManualAlignOpRequest) isDsCfg_AlignOpRequest() {}
+
 type AgileAgcPilotCfg struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PilotNum      *uint32                `protobuf:"varint,1,opt,name=pilot_num,json=pilotNum" json:"pilot_num,omitempty"`
-	PilotFreq     *uint32                `protobuf:"varint,2,opt,name=pilot_freq,json=pilotFreq" json:"pilot_freq,omitempty"`
-	PilotType     *PilotTypeE            `protobuf:"varint,3,opt,name=pilot_type,json=pilotType,enum=scte.amp.PilotTypeE" json:"pilot_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	PilotNum         *uint32                `protobuf:"varint,1,opt,name=pilot_num,json=pilotNum" json:"pilot_num,omitempty"`
+	PilotFreqMhzX100 *uint32                `protobuf:"varint,2,opt,name=pilot_freq_mhz_x100,json=pilotFreqMhzX100" json:"pilot_freq_mhz_x100,omitempty"`
+	PilotType        *PilotTypeE            `protobuf:"varint,3,opt,name=pilot_type,json=pilotType,enum=scte.amp.PilotTypeE" json:"pilot_type,omitempty"` //primary or backup pilot
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *AgileAgcPilotCfg) Reset() {
 	*x = AgileAgcPilotCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[8]
+	mi := &file_amps_rf_cfg_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -655,7 +1249,7 @@ func (x *AgileAgcPilotCfg) String() string {
 func (*AgileAgcPilotCfg) ProtoMessage() {}
 
 func (x *AgileAgcPilotCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[8]
+	mi := &file_amps_rf_cfg_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -668,7 +1262,7 @@ func (x *AgileAgcPilotCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AgileAgcPilotCfg.ProtoReflect.Descriptor instead.
 func (*AgileAgcPilotCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{8}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AgileAgcPilotCfg) GetPilotNum() uint32 {
@@ -678,9 +1272,9 @@ func (x *AgileAgcPilotCfg) GetPilotNum() uint32 {
 	return 0
 }
 
-func (x *AgileAgcPilotCfg) GetPilotFreq() uint32 {
-	if x != nil && x.PilotFreq != nil {
-		return *x.PilotFreq
+func (x *AgileAgcPilotCfg) GetPilotFreqMhzX100() uint32 {
+	if x != nil && x.PilotFreqMhzX100 != nil {
+		return *x.PilotFreqMhzX100
 	}
 	return 0
 }
@@ -692,18 +1286,175 @@ func (x *AgileAgcPilotCfg) GetPilotType() PilotTypeE {
 	return PilotTypeE_PRIMARY
 }
 
-type DsLogicalPortCfg struct {
+// For example with the following configuration:
+// start = { freq_mhz_x100: 26100,  power_dbmv_x100: 3500 }   // 261 MHz, 35 dBmV
+// end   = { freq_mhz_x100: 179100, power_dbmv_x100: 4900 }   // 1791 MHz, 49 dBmV
+// step1 = { freq_mhz_x100: 121200, power_dbmv_x100: 600 }    // 6 dB drop at 1212 MHz
+//
+// Calculating the slope of the linear rise before and after the drop:
+// Fs = start.freq_mhz_x100 / 100
+// Ps = start.power_dbmv_x100 / 100
+// Fe = end.freq_mhz_x100 / 100
+// Pe = end.power_dbmv_x100 / 100
+// Fd = step1.freq_mhz_x100 / 100
+// D  = step1.power_dbmv_x100 / 100
+// Because end power is the actual power after the drop, the underlying linear rise must compensate for the drop:
+// total_uninterrupted_rise = Pe - Ps + D
+// slope = total_uninterrupted_rise / (Fe - Fs)
+// The reference power at frequency f is:
+// base(f) = Ps + slope × (f - Fs)
+// Before the step:
+// P(f) = base(f), where Fs <= f <= Fd
+// After the step:
+// P(f) = base(f) - D, where Fd <= f <= Fe
+// For the example:
+// slope = (49 - 35 + 6) / (1791 - 261)
+// = 20 / 1530
+// = 0.0130719 dB/MHz
+// At 1212 MHz before the drop:
+// P_before = 35 + 0.0130719 × (1212 - 261)
+// = 47.43 dBmV
+// At 1212 MHz after the drop:
+// P_after = 47.43 - 6
+// = 41.43 dBmV
+// At the end:
+// P(1791) = 35 + 0.0130719 × (1791 - 261) - 6
+// = 49.00 dBmV
+type FrequencyPower struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	DsAgcEnable   *bool                  `protobuf:"varint,1,opt,name=ds_agc_enable,json=dsAgcEnable" json:"ds_agc_enable,omitempty"`
-	PilotConfigs  []*AgileAgcPilotCfg    `protobuf:"bytes,2,rep,name=pilot_configs,json=pilotConfigs" json:"pilot_configs,omitempty"`
-	DsConfigs     []*DsCfg               `protobuf:"bytes,3,rep,name=ds_configs,json=dsConfigs" json:"ds_configs,omitempty"`
+	FreqMhzX100   *int32                 `protobuf:"varint,1,opt,name=freq_mhz_x100,json=freqMhzX100" json:"freq_mhz_x100,omitempty"`
+	PowerDbmvX100 *int32                 `protobuf:"varint,2,opt,name=power_dbmv_x100,json=powerDbmvX100" json:"power_dbmv_x100,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *FrequencyPower) Reset() {
+	*x = FrequencyPower{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FrequencyPower) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FrequencyPower) ProtoMessage() {}
+
+func (x *FrequencyPower) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FrequencyPower.ProtoReflect.Descriptor instead.
+func (*FrequencyPower) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *FrequencyPower) GetFreqMhzX100() int32 {
+	if x != nil && x.FreqMhzX100 != nil {
+		return *x.FreqMhzX100
+	}
+	return 0
+}
+
+func (x *FrequencyPower) GetPowerDbmvX100() int32 {
+	if x != nil && x.PowerDbmvX100 != nil {
+		return *x.PowerDbmvX100
+	}
+	return 0
+}
+
+// SCTE-283 Extension: This is used to configure the marker frequencies, and target power levels for start/end frequencies.
+// The amplifier will use this information to perform auto alignment operations, and optionally return the measured power levels at the marker frequencies.
+type DsAlignmentCfg struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Start         *FrequencyPower        `protobuf:"bytes,7,opt,name=start" json:"start,omitempty"`
+	End           *FrequencyPower        `protobuf:"bytes,8,opt,name=end" json:"end,omitempty"`
+	Step1         *FrequencyPower        `protobuf:"bytes,9,opt,name=step1" json:"step1,omitempty"`
+	MarkerPilots  []int32                `protobuf:"varint,12,rep,name=marker_pilots,json=markerPilots" json:"marker_pilots,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DsAlignmentCfg) Reset() {
+	*x = DsAlignmentCfg{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DsAlignmentCfg) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DsAlignmentCfg) ProtoMessage() {}
+
+func (x *DsAlignmentCfg) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DsAlignmentCfg.ProtoReflect.Descriptor instead.
+func (*DsAlignmentCfg) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *DsAlignmentCfg) GetStart() *FrequencyPower {
+	if x != nil {
+		return x.Start
+	}
+	return nil
+}
+
+func (x *DsAlignmentCfg) GetEnd() *FrequencyPower {
+	if x != nil {
+		return x.End
+	}
+	return nil
+}
+
+func (x *DsAlignmentCfg) GetStep1() *FrequencyPower {
+	if x != nil {
+		return x.Step1
+	}
+	return nil
+}
+
+func (x *DsAlignmentCfg) GetMarkerPilots() []int32 {
+	if x != nil {
+		return x.MarkerPilots
+	}
+	return nil
+}
+
+type DsLogicalPortCfg struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	DsAgcEnable        *bool                  `protobuf:"varint,1,opt,name=ds_agc_enable,json=dsAgcEnable" json:"ds_agc_enable,omitempty"`
+	PilotConfigs       []*AgileAgcPilotCfg    `protobuf:"bytes,2,rep,name=pilot_configs,json=pilotConfigs" json:"pilot_configs,omitempty"`
+	DsConfigs          []*DsCfg               `protobuf:"bytes,3,rep,name=ds_configs,json=dsConfigs" json:"ds_configs,omitempty"`
+	DsAlignmentConfigs []*DsAlignmentCfg      `protobuf:"bytes,4,rep,name=ds_alignment_configs,json=dsAlignmentConfigs" json:"ds_alignment_configs,omitempty"` //SCTE-283 Extension: May only apply to main DS output port.
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
 func (x *DsLogicalPortCfg) Reset() {
 	*x = DsLogicalPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[9]
+	mi := &file_amps_rf_cfg_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -715,7 +1466,7 @@ func (x *DsLogicalPortCfg) String() string {
 func (*DsLogicalPortCfg) ProtoMessage() {}
 
 func (x *DsLogicalPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[9]
+	mi := &file_amps_rf_cfg_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -728,7 +1479,7 @@ func (x *DsLogicalPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DsLogicalPortCfg.ProtoReflect.Descriptor instead.
 func (*DsLogicalPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{9}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *DsLogicalPortCfg) GetDsAgcEnable() bool {
@@ -752,18 +1503,27 @@ func (x *DsLogicalPortCfg) GetDsConfigs() []*DsCfg {
 	return nil
 }
 
+func (x *DsLogicalPortCfg) GetDsAlignmentConfigs() []*DsAlignmentCfg {
+	if x != nil {
+		return x.DsAlignmentConfigs
+	}
+	return nil
+}
+
 type RfPortCfg struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
-	UsLogicalPortConfig    *UsLogicalPortCfg      `protobuf:"bytes,1,opt,name=us_logical_port_config,json=usLogicalPortConfig" json:"us_logical_port_config,omitempty"`
-	BidirLogicalPortConfig *BiDirLogicalPortCfg   `protobuf:"bytes,2,opt,name=bidir_logical_port_config,json=bidirLogicalPortConfig" json:"bidir_logical_port_config,omitempty"`
-	DsLogicalPortConfig    *DsLogicalPortCfg      `protobuf:"bytes,3,opt,name=ds_logical_port_config,json=dsLogicalPortConfig" json:"ds_logical_port_config,omitempty"`
+	Index                  *RfPortIndexE          `protobuf:"varint,1,opt,name=index,enum=scte.amp.RfPortIndexE" json:"index,omitempty"`                                //SCTE-283: only output DS/input US ports can have configurable attributes
+	AdminStatus            *AdminStatusE          `protobuf:"varint,2,opt,name=admin_status,json=adminStatus,enum=scte.amp.AdminStatusE" json:"admin_status,omitempty"` //Default is UP.
+	UsLogicalPortConfig    *UsLogicalPortCfg      `protobuf:"bytes,3,opt,name=us_logical_port_config,json=usLogicalPortConfig" json:"us_logical_port_config,omitempty"`
+	BidirLogicalPortConfig *BiDirLogicalPortCfg   `protobuf:"bytes,4,opt,name=bidir_logical_port_config,json=bidirLogicalPortConfig" json:"bidir_logical_port_config,omitempty"`
+	DsLogicalPortConfig    *DsLogicalPortCfg      `protobuf:"bytes,5,opt,name=ds_logical_port_config,json=dsLogicalPortConfig" json:"ds_logical_port_config,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
 
 func (x *RfPortCfg) Reset() {
 	*x = RfPortCfg{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[10]
+	mi := &file_amps_rf_cfg_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -775,7 +1535,7 @@ func (x *RfPortCfg) String() string {
 func (*RfPortCfg) ProtoMessage() {}
 
 func (x *RfPortCfg) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[10]
+	mi := &file_amps_rf_cfg_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -788,7 +1548,21 @@ func (x *RfPortCfg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RfPortCfg.ProtoReflect.Descriptor instead.
 func (*RfPortCfg) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{10}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *RfPortCfg) GetIndex() RfPortIndexE {
+	if x != nil && x.Index != nil {
+		return *x.Index
+	}
+	return RfPortIndexE_RF_PORT_INDEX_1
+}
+
+func (x *RfPortCfg) GetAdminStatus() AdminStatusE {
+	if x != nil && x.AdminStatus != nil {
+		return *x.AdminStatus
+	}
+	return AdminStatusE_UP
 }
 
 func (x *RfPortCfg) GetUsLogicalPortConfig() *UsLogicalPortCfg {
@@ -812,9 +1586,75 @@ func (x *RfPortCfg) GetDsLogicalPortConfig() *DsLogicalPortCfg {
 	return nil
 }
 
+// Read/Configure the RF band parameters
+//
+//	Total Bandwidth (1.2 GHz / 1.8 GHz)
+//	Split selection
+//	Annex
+type RfBandCfg struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	BwMode        *BandwidthModeE        `protobuf:"varint,1,opt,name=bw_mode,json=bwMode,enum=scte.amp.BandwidthModeE" json:"bw_mode,omitempty"` // Bitmask: 0x1:1.2 GHz or 0x2:1.8 GHz
+	Split         *SplitTypeE            `protobuf:"varint,2,opt,name=split,enum=scte.amp.SplitTypeE" json:"split,omitempty"`                     // Bitmask: 0x1:42-54, 0x2:65-85, 0x4:85-108
+	Annex         *AnnexTypeE            `protobuf:"varint,3,opt,name=annex,enum=scte.amp.AnnexTypeE" json:"annex,omitempty"`                     // Bitmask: 0x1:Annex A, 0x2:Annex B, 0x4:Annex C
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RfBandCfg) Reset() {
+	*x = RfBandCfg{}
+	mi := &file_amps_rf_cfg_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RfBandCfg) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RfBandCfg) ProtoMessage() {}
+
+func (x *RfBandCfg) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_rf_cfg_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RfBandCfg.ProtoReflect.Descriptor instead.
+func (*RfBandCfg) Descriptor() ([]byte, []int) {
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *RfBandCfg) GetBwMode() BandwidthModeE {
+	if x != nil && x.BwMode != nil {
+		return *x.BwMode
+	}
+	return BandwidthModeE_BW_MODE_UNKNOWN
+}
+
+func (x *RfBandCfg) GetSplit() SplitTypeE {
+	if x != nil && x.Split != nil {
+		return *x.Split
+	}
+	return SplitTypeE_SPLIT_UNKNOWN
+}
+
+func (x *RfBandCfg) GetAnnex() AnnexTypeE {
+	if x != nil && x.Annex != nil {
+		return *x.Annex
+	}
+	return AnnexTypeE_ANNEX_UNKNOWN
+}
+
 type RfCfgGrp struct {
 	state         protoimpl.MessageState            `protogen:"open.v1"`
 	RfPortConfigs []*RfPortCfg                      `protobuf:"bytes,1,rep,name=rf_port_configs,json=rfPortConfigs" json:"rf_port_configs,omitempty"`
+	RfBandConfig  *RfBandCfg                        `protobuf:"bytes,2,opt,name=rf_band_config,json=rfBandConfig" json:"rf_band_config,omitempty"`  //SCTE-283 Extension: RF band configuration, including bandwidth mode, split selection, and annex type.
 	VendorRfCfgs  []*common_go.VendorExtension      `protobuf:"bytes,99,rep,name=vendor_rf_cfgs,json=vendorRfCfgs" json:"vendor_rf_cfgs,omitempty"` //scte.common.Vendor extensions for RF configuration, allowing for future expansion without modifying the core API.
 	Page          *common_go.ResponsePaginationInfo `protobuf:"bytes,100,opt,name=page" json:"page,omitempty"`                                      //Pagination info for cases where the response cannot fit in one packet and needs to be paginated in the API response.
 	unknownFields protoimpl.UnknownFields
@@ -823,7 +1663,7 @@ type RfCfgGrp struct {
 
 func (x *RfCfgGrp) Reset() {
 	*x = RfCfgGrp{}
-	mi := &file_amps_rf_cfg_proto_msgTypes[11]
+	mi := &file_amps_rf_cfg_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -835,7 +1675,7 @@ func (x *RfCfgGrp) String() string {
 func (*RfCfgGrp) ProtoMessage() {}
 
 func (x *RfCfgGrp) ProtoReflect() protoreflect.Message {
-	mi := &file_amps_rf_cfg_proto_msgTypes[11]
+	mi := &file_amps_rf_cfg_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -848,12 +1688,19 @@ func (x *RfCfgGrp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RfCfgGrp.ProtoReflect.Descriptor instead.
 func (*RfCfgGrp) Descriptor() ([]byte, []int) {
-	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{11}
+	return file_amps_rf_cfg_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *RfCfgGrp) GetRfPortConfigs() []*RfPortCfg {
 	if x != nil {
 		return x.RfPortConfigs
+	}
+	return nil
+}
+
+func (x *RfCfgGrp) GetRfBandConfig() *RfBandCfg {
+	if x != nil {
+		return x.RfBandConfig
 	}
 	return nil
 }
@@ -876,24 +1723,66 @@ var File_amps_rf_cfg_proto protoreflect.FileDescriptor
 
 const file_amps_rf_cfg_proto_rawDesc = "" +
 	"\n" +
-	"\x11amps/rf_cfg.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/vendor_common.proto\x1a\x11amps/common.proto\"p\n" +
+	"\x11amps/rf_cfg.proto\x12\bscte.amp\x1a\x17common/pagination.proto\x1a\x1acommon/vendor_common.proto\x1a\x11amps/common.proto\x1a\x13amps/spectrum.proto\"\xd3\x01\n" +
+	"\x19AutoAlignOperationRequest\x12O\n" +
+	"\x17auto_align_request_type\x18\x01 \x01(\x0e2\x18.scte.amp.alignment_op_eR\x14autoAlignRequestType\x12,\n" +
+	"\x12revert_timeout_sec\x18\x02 \x01(\rR\x10revertTimeoutSec\x127\n" +
+	"\tdirection\x18\x03 \x01(\x0e2\x19.scte.amp.path_selector_eR\tdirection\"\xd8\x01\n" +
+	"\x1cDsAutoAlignOperationResponse\x12h\n" +
+	"\x1eds_auto_align_operation_status\x18\x01 \x02(\v2$.scte.amp.DsAutoAlignOperationStatusR\x1adsAutoAlignOperationStatus\x12N\n" +
+	"\x0ffreq_pwr_values\x18\x02 \x03(\v2&.scte.amp.spectrum_capture_point_valueR\rfreqPwrValues\"\x9a\x02\n" +
+	"\x1aDsAutoAlignOperationStatus\x12H\n" +
+	"\x11auto_align_status\x18\x01 \x01(\x0e2\x1c.scte.amp.alignment_status_eR\x0fautoAlignStatus\x12\x1e\n" +
+	"\vrf_det_mode\x18\x02 \x01(\rR\trfDetMode\x12(\n" +
+	"\x10csm_cable_length\x18\x03 \x01(\x02R\x0ecsmCableLength\x12\x1b\n" +
+	"\tcsm_gamma\x18\x04 \x01(\x02R\bcsmGamma\x12\x17\n" +
+	"\acsm_phi\x18\x05 \x01(\x02R\x06csmPhi\x122\n" +
+	"\x15total_composite_power\x18\x06 \x01(\x02R\x13totalCompositePower\"\x8d\x02\n" +
+	"\x1cUsAutoAlignOperationResponse\x12M\n" +
+	"\x14us_auto_align_status\x18\x01 \x01(\x0e2\x1c.scte.amp.alignment_status_eR\x11usAutoAlignStatus\x12\x1e\n" +
+	"\vrf_det_mode\x18\x02 \x01(\rR\trfDetMode\x12?\n" +
+	"\x1ctotal_equalization_tenths_db\x18\x03 \x01(\x11R\x19totalEqualizationTenthsDb\x12=\n" +
+	"\x1btotal_attenuation_tenths_db\x18\x04 \x01(\rR\x18totalAttenuationTenthsDb\"\xc3\x02\n" +
+	"\x17ManualAlignControlValue\x128\n" +
+	"\vstage_index\x18\x01 \x01(\x0e2\x17.scte.amp.stage_index_eR\n" +
+	"stageIndex\x125\n" +
+	"\n" +
+	"stage_type\x18\x02 \x01(\x0e2\x16.scte.amp.stage_type_eR\tstageType\x12-\n" +
+	"\x13min_value_tenths_db\x18\x03 \x01(\x11R\x10minValueTenthsDb\x12-\n" +
+	"\x13max_value_tenths_db\x18\x04 \x01(\x11R\x10maxValueTenthsDb\x12&\n" +
+	"\x0fvalue_tenths_db\x18\x05 \x01(\x11R\rvalueTenthsDb\x121\n" +
+	"\x15saved_value_tenths_db\x18\x06 \x01(\x11R\x12savedValueTenthsDb\"\x94\x02\n" +
+	"\x1bManualAlignOperationRequest\x129\n" +
+	"\x06values\x18\x01 \x03(\v2!.scte.amp.ManualAlignControlValueR\x06values\x12S\n" +
+	"\x19manual_align_request_type\x18\x02 \x01(\x0e2\x18.scte.amp.alignment_op_eR\x16manualAlignRequestType\x12,\n" +
+	"\x12revert_timeout_sec\x18\x03 \x01(\rR\x10revertTimeoutSec\x127\n" +
+	"\tdirection\x18\x04 \x01(\x0e2\x19.scte.amp.path_selector_eR\tdirection\"\xe5\x02\n" +
+	"\x1cManualAlignOperationResponse\x129\n" +
+	"\x06values\x18\x01 \x03(\v2!.scte.amp.ManualAlignControlValueR\x06values\x12S\n" +
+	"\x19manual_align_request_type\x18\x02 \x01(\x0e2\x18.scte.amp.alignment_op_eR\x16manualAlignRequestType\x12,\n" +
+	"\x12revert_timeout_sec\x18\x03 \x01(\rR\x10revertTimeoutSec\x127\n" +
+	"\tdirection\x18\x04 \x01(\x0e2\x19.scte.amp.path_selector_eR\tdirection\x12N\n" +
+	"\x0ffreq_pwr_values\x18\x05 \x03(\v2&.scte.amp.spectrum_capture_point_valueR\rfreqPwrValues\"\x94\x01\n" +
 	"\aUsDsCfg\x12\x1f\n" +
 	"\vstage_index\x18\x01 \x01(\rR\n" +
-	"stageIndex\x12 \n" +
-	"\vattenuation\x18\x02 \x01(\rR\vattenuation\x12\"\n" +
-	"\fequalization\x18\x03 \x01(\x02R\fequalization\"7\n" +
+	"stageIndex\x122\n" +
+	"\x15attenuation_tenths_db\x18\x02 \x01(\rR\x13attenuationTenthsDb\x124\n" +
+	"\x16equalization_tenths_db\x18\x03 \x01(\x11R\x14equalizationTenthsDb\"\x8f\x02\n" +
 	"\x05UsCfg\x12.\n" +
-	"\tus_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\busConfig\"\x9b\x01\n" +
+	"\tus_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\busConfig\x12]\n" +
+	"\x18us_auto_align_op_request\x18\x02 \x01(\v2#.scte.amp.AutoAlignOperationRequestH\x00R\x14usAutoAlignOpRequest\x12c\n" +
+	"\x1aus_manual_align_op_request\x18\x03 \x01(\v2%.scte.amp.ManualAlignOperationRequestH\x00R\x16usManualAlignOpRequestB\x12\n" +
+	"\x10align_op_request\"\x8d\x01\n" +
 	"\x0fTestPointConfig\x12=\n" +
-	"\rtest_point_id\x18\x01 \x01(\x0e2\x19.scte.amp.test_point_id_eR\vtestPointId\x12I\n" +
-	"\x11test_point_config\x18\x02 \x01(\x0e2\x1d.scte.amp.test_point_config_eR\x0ftestPointConfig\"\xad\x01\n" +
+	"\rtest_point_id\x18\x01 \x01(\x0e2\x19.scte.amp.test_point_id_eR\vtestPointId\x12;\n" +
+	"\tdirection\x18\x02 \x01(\x0e2\x1d.scte.amp.test_point_config_eR\tdirection\"\xad\x01\n" +
 	"\x0eLogicalPortCfg\x12;\n" +
 	"\fadmin_status\x18\x01 \x01(\x0e2\x18.scte.amp.admin_status_eR\vadminStatus\x12\x17\n" +
 	"\arf_mute\x18\x02 \x01(\bR\x06rfMute\x12E\n" +
-	"\x11test_point_config\x18\x03 \x01(\v2\x19.scte.amp.TestPointConfigR\x0ftestPointConfig\"o\n" +
+	"\x11test_point_config\x18\x03 \x01(\v2\x19.scte.amp.TestPointConfigR\x0ftestPointConfig\"\x81\x01\n" +
 	"\x12UsIngressSwitchCfg\x127\n" +
-	"\x05state\x18\x01 \x01(\x0e2!.scte.amp.ingress_switch_states_eR\x05state\x12 \n" +
-	"\vattenuation\x18\x02 \x01(\rR\vattenuation\"\xa8\x02\n" +
+	"\x05state\x18\x01 \x01(\x0e2!.scte.amp.ingress_switch_states_eR\x05state\x122\n" +
+	"\x15attenuation_tenths_db\x18\x02 \x01(\rR\x13attenuationTenthsDb\"\xa8\x02\n" +
 	"\x10UsLogicalPortCfg\x12Y\n" +
 	"*thermal_level_control_select_range_setting\x18\x01 \x01(\rR%thermalLevelControlSelectRangeSetting\x12D\n" +
 	"\x11port_admin_status\x18\x02 \x01(\v2\x18.scte.amp.LogicalPortCfgR\x0fportAdminStatus\x12C\n" +
@@ -902,39 +1791,58 @@ const file_amps_rf_cfg_proto_rawDesc = "" +
 	"us_configs\x18\x04 \x03(\v2\x0f.scte.amp.UsCfgR\tusConfigs\"\x98\x01\n" +
 	"\x13BiDirLogicalPortCfg\x12;\n" +
 	"\x1aactive_diplex_filter_index\x18\x01 \x01(\rR\x17activeDiplexFilterIndex\x12D\n" +
-	"\x11port_admin_status\x18\x02 \x01(\v2\x18.scte.amp.LogicalPortCfgR\x0fportAdminStatus\"7\n" +
+	"\x11port_admin_status\x18\x02 \x01(\v2\x18.scte.amp.LogicalPortCfgR\x0fportAdminStatus\"\x8f\x02\n" +
 	"\x05DsCfg\x12.\n" +
-	"\tds_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\bdsConfig\"\x85\x01\n" +
+	"\tds_config\x18\x01 \x01(\v2\x11.scte.amp.UsDsCfgR\bdsConfig\x12]\n" +
+	"\x18ds_auto_align_op_request\x18\x02 \x01(\v2#.scte.amp.AutoAlignOperationRequestH\x00R\x14dsAutoAlignOpRequest\x12c\n" +
+	"\x1ads_manual_align_op_request\x18\x03 \x01(\v2%.scte.amp.ManualAlignOperationRequestH\x00R\x16dsManualAlignOpRequestB\x12\n" +
+	"\x10align_op_request\"\x95\x01\n" +
 	"\x10AgileAgcPilotCfg\x12\x1b\n" +
-	"\tpilot_num\x18\x01 \x01(\rR\bpilotNum\x12\x1d\n" +
+	"\tpilot_num\x18\x01 \x01(\rR\bpilotNum\x12-\n" +
+	"\x13pilot_freq_mhz_x100\x18\x02 \x01(\rR\x10pilotFreqMhzX100\x125\n" +
 	"\n" +
-	"pilot_freq\x18\x02 \x01(\rR\tpilotFreq\x125\n" +
-	"\n" +
-	"pilot_type\x18\x03 \x01(\x0e2\x16.scte.amp.pilot_type_eR\tpilotType\"\xa7\x01\n" +
+	"pilot_type\x18\x03 \x01(\x0e2\x16.scte.amp.pilot_type_eR\tpilotType\"\\\n" +
+	"\x0eFrequencyPower\x12\"\n" +
+	"\rfreq_mhz_x100\x18\x01 \x01(\x05R\vfreqMhzX100\x12&\n" +
+	"\x0fpower_dbmv_x100\x18\x02 \x01(\x05R\rpowerDbmvX100\"\xc1\x01\n" +
+	"\x0eDsAlignmentCfg\x12.\n" +
+	"\x05start\x18\a \x01(\v2\x18.scte.amp.FrequencyPowerR\x05start\x12*\n" +
+	"\x03end\x18\b \x01(\v2\x18.scte.amp.FrequencyPowerR\x03end\x12.\n" +
+	"\x05step1\x18\t \x01(\v2\x18.scte.amp.FrequencyPowerR\x05step1\x12#\n" +
+	"\rmarker_pilots\x18\f \x03(\x05R\fmarkerPilots\"\xf3\x01\n" +
 	"\x10DsLogicalPortCfg\x12\"\n" +
 	"\rds_agc_enable\x18\x01 \x01(\bR\vdsAgcEnable\x12?\n" +
 	"\rpilot_configs\x18\x02 \x03(\v2\x1a.scte.amp.AgileAgcPilotCfgR\fpilotConfigs\x12.\n" +
 	"\n" +
-	"ds_configs\x18\x03 \x03(\v2\x0f.scte.amp.DsCfgR\tdsConfigs\"\x87\x02\n" +
-	"\tRfPortCfg\x12O\n" +
-	"\x16us_logical_port_config\x18\x01 \x01(\v2\x1a.scte.amp.UsLogicalPortCfgR\x13usLogicalPortConfig\x12X\n" +
-	"\x19bidir_logical_port_config\x18\x02 \x01(\v2\x1d.scte.amp.BiDirLogicalPortCfgR\x16bidirLogicalPortConfig\x12O\n" +
-	"\x16ds_logical_port_config\x18\x03 \x01(\v2\x1a.scte.amp.DsLogicalPortCfgR\x13dsLogicalPortConfig\"\xc4\x01\n" +
+	"ds_configs\x18\x03 \x03(\v2\x0f.scte.amp.DsCfgR\tdsConfigs\x12J\n" +
+	"\x14ds_alignment_configs\x18\x04 \x03(\v2\x18.scte.amp.DsAlignmentCfgR\x12dsAlignmentConfigs\"\xf5\x02\n" +
+	"\tRfPortCfg\x12/\n" +
+	"\x05index\x18\x01 \x01(\x0e2\x19.scte.amp.rf_port_index_eR\x05index\x12;\n" +
+	"\fadmin_status\x18\x02 \x01(\x0e2\x18.scte.amp.admin_status_eR\vadminStatus\x12O\n" +
+	"\x16us_logical_port_config\x18\x03 \x01(\v2\x1a.scte.amp.UsLogicalPortCfgR\x13usLogicalPortConfig\x12X\n" +
+	"\x19bidir_logical_port_config\x18\x04 \x01(\v2\x1d.scte.amp.BiDirLogicalPortCfgR\x16bidirLogicalPortConfig\x12O\n" +
+	"\x16ds_logical_port_config\x18\x05 \x01(\v2\x1a.scte.amp.DsLogicalPortCfgR\x13dsLogicalPortConfig\"\x9c\x01\n" +
+	"\tRfBandCfg\x123\n" +
+	"\abw_mode\x18\x01 \x01(\x0e2\x1a.scte.amp.bandwidth_mode_eR\x06bwMode\x12,\n" +
+	"\x05split\x18\x02 \x01(\x0e2\x16.scte.amp.split_type_eR\x05split\x12,\n" +
+	"\x05annex\x18\x03 \x01(\x0e2\x16.scte.amp.annex_type_eR\x05annex\"\xff\x01\n" +
 	"\bRfCfgGrp\x12;\n" +
-	"\x0frf_port_configs\x18\x01 \x03(\v2\x13.scte.amp.RfPortCfgR\rrfPortConfigs\x12B\n" +
+	"\x0frf_port_configs\x18\x01 \x03(\v2\x13.scte.amp.RfPortCfgR\rrfPortConfigs\x129\n" +
+	"\x0erf_band_config\x18\x02 \x01(\v2\x13.scte.amp.RfBandCfgR\frfBandConfig\x12B\n" +
 	"\x0evendor_rf_cfgs\x18c \x03(\v2\x1c.scte.common.VendorExtensionR\fvendorRfCfgs\x127\n" +
 	"\x04page\x18d \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page*\"\n" +
 	"\x0eadmin_status_e\x12\x06\n" +
 	"\x02UP\x10\x01\x12\b\n" +
-	"\x04DOWN\x10\x02*v\n" +
-	"\x17ingress_switch_states_e\x12\x1a\n" +
-	"\x16SAMP_INGRESS_SWITCH_ON\x10\x01\x12\x1b\n" +
-	"\x17SAMP_INGRESS_SWITCH_OFF\x10\x02\x12\"\n" +
-	"\x1eSAMP_INGRESS_SWITCH_ATTENUATED\x10\x03*'\n" +
+	"\x04DOWN\x10\x02*g\n" +
+	"\x17ingress_switch_states_e\x12\x15\n" +
+	"\x11INGRESS_SWITCH_ON\x10\x01\x12\x16\n" +
+	"\x12INGRESS_SWITCH_OFF\x10\x02\x12\x1d\n" +
+	"\x19INGRESS_SWITCH_ATTENUATED\x10\x03*'\n" +
 	"\fpilot_type_e\x12\v\n" +
 	"\aPRIMARY\x10\x01\x12\n" +
 	"\n" +
-	"\x06BACKUP\x10\x02B,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\x06BACKUP\x10\x02B=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_rf_cfg_proto_rawDescOnce sync.Once
@@ -949,54 +1857,103 @@ func file_amps_rf_cfg_proto_rawDescGZIP() []byte {
 }
 
 var file_amps_rf_cfg_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_amps_rf_cfg_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_amps_rf_cfg_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_amps_rf_cfg_proto_goTypes = []any{
 	(AdminStatusE)(0),                        // 0: scte.amp.admin_status_e
 	(IngressSwitchStatesE)(0),                // 1: scte.amp.ingress_switch_states_e
 	(PilotTypeE)(0),                          // 2: scte.amp.pilot_type_e
-	(*UsDsCfg)(nil),                          // 3: scte.amp.UsDsCfg
-	(*UsCfg)(nil),                            // 4: scte.amp.UsCfg
-	(*TestPointConfig)(nil),                  // 5: scte.amp.TestPointConfig
-	(*LogicalPortCfg)(nil),                   // 6: scte.amp.LogicalPortCfg
-	(*UsIngressSwitchCfg)(nil),               // 7: scte.amp.UsIngressSwitchCfg
-	(*UsLogicalPortCfg)(nil),                 // 8: scte.amp.UsLogicalPortCfg
-	(*BiDirLogicalPortCfg)(nil),              // 9: scte.amp.BiDirLogicalPortCfg
-	(*DsCfg)(nil),                            // 10: scte.amp.DsCfg
-	(*AgileAgcPilotCfg)(nil),                 // 11: scte.amp.AgileAgcPilotCfg
-	(*DsLogicalPortCfg)(nil),                 // 12: scte.amp.DsLogicalPortCfg
-	(*RfPortCfg)(nil),                        // 13: scte.amp.RfPortCfg
-	(*RfCfgGrp)(nil),                         // 14: scte.amp.RfCfgGrp
-	(TestPointIdE)(0),                        // 15: scte.amp.test_point_id_e
-	(TestPointConfigE)(0),                    // 16: scte.amp.test_point_config_e
-	(*common_go.VendorExtension)(nil),        // 17: scte.common.VendorExtension
-	(*common_go.ResponsePaginationInfo)(nil), // 18: scte.common.ResponsePaginationInfo
+	(*AutoAlignOperationRequest)(nil),        // 3: scte.amp.AutoAlignOperationRequest
+	(*DsAutoAlignOperationResponse)(nil),     // 4: scte.amp.DsAutoAlignOperationResponse
+	(*DsAutoAlignOperationStatus)(nil),       // 5: scte.amp.DsAutoAlignOperationStatus
+	(*UsAutoAlignOperationResponse)(nil),     // 6: scte.amp.UsAutoAlignOperationResponse
+	(*ManualAlignControlValue)(nil),          // 7: scte.amp.ManualAlignControlValue
+	(*ManualAlignOperationRequest)(nil),      // 8: scte.amp.ManualAlignOperationRequest
+	(*ManualAlignOperationResponse)(nil),     // 9: scte.amp.ManualAlignOperationResponse
+	(*UsDsCfg)(nil),                          // 10: scte.amp.UsDsCfg
+	(*UsCfg)(nil),                            // 11: scte.amp.UsCfg
+	(*TestPointConfig)(nil),                  // 12: scte.amp.TestPointConfig
+	(*LogicalPortCfg)(nil),                   // 13: scte.amp.LogicalPortCfg
+	(*UsIngressSwitchCfg)(nil),               // 14: scte.amp.UsIngressSwitchCfg
+	(*UsLogicalPortCfg)(nil),                 // 15: scte.amp.UsLogicalPortCfg
+	(*BiDirLogicalPortCfg)(nil),              // 16: scte.amp.BiDirLogicalPortCfg
+	(*DsCfg)(nil),                            // 17: scte.amp.DsCfg
+	(*AgileAgcPilotCfg)(nil),                 // 18: scte.amp.AgileAgcPilotCfg
+	(*FrequencyPower)(nil),                   // 19: scte.amp.FrequencyPower
+	(*DsAlignmentCfg)(nil),                   // 20: scte.amp.DsAlignmentCfg
+	(*DsLogicalPortCfg)(nil),                 // 21: scte.amp.DsLogicalPortCfg
+	(*RfPortCfg)(nil),                        // 22: scte.amp.RfPortCfg
+	(*RfBandCfg)(nil),                        // 23: scte.amp.RfBandCfg
+	(*RfCfgGrp)(nil),                         // 24: scte.amp.RfCfgGrp
+	(AlignmentOpE)(0),                        // 25: scte.amp.alignment_op_e
+	(PathSelectorE)(0),                       // 26: scte.amp.path_selector_e
+	(*SpectrumCapturePointValue)(nil),        // 27: scte.amp.spectrum_capture_point_value
+	(AlignmentStatusE)(0),                    // 28: scte.amp.alignment_status_e
+	(StageIndexE)(0),                         // 29: scte.amp.stage_index_e
+	(StageTypeE)(0),                          // 30: scte.amp.stage_type_e
+	(TestPointIdE)(0),                        // 31: scte.amp.test_point_id_e
+	(TestPointConfigE)(0),                    // 32: scte.amp.test_point_config_e
+	(RfPortIndexE)(0),                        // 33: scte.amp.rf_port_index_e
+	(BandwidthModeE)(0),                      // 34: scte.amp.bandwidth_mode_e
+	(SplitTypeE)(0),                          // 35: scte.amp.split_type_e
+	(AnnexTypeE)(0),                          // 36: scte.amp.annex_type_e
+	(*common_go.VendorExtension)(nil),        // 37: scte.common.VendorExtension
+	(*common_go.ResponsePaginationInfo)(nil), // 38: scte.common.ResponsePaginationInfo
 }
 var file_amps_rf_cfg_proto_depIdxs = []int32{
-	3,  // 0: scte.amp.UsCfg.us_config:type_name -> scte.amp.UsDsCfg
-	15, // 1: scte.amp.TestPointConfig.test_point_id:type_name -> scte.amp.test_point_id_e
-	16, // 2: scte.amp.TestPointConfig.test_point_config:type_name -> scte.amp.test_point_config_e
-	0,  // 3: scte.amp.LogicalPortCfg.admin_status:type_name -> scte.amp.admin_status_e
-	5,  // 4: scte.amp.LogicalPortCfg.test_point_config:type_name -> scte.amp.TestPointConfig
-	1,  // 5: scte.amp.UsIngressSwitchCfg.state:type_name -> scte.amp.ingress_switch_states_e
-	6,  // 6: scte.amp.UsLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
-	7,  // 7: scte.amp.UsLogicalPortCfg.ingress_switch:type_name -> scte.amp.UsIngressSwitchCfg
-	4,  // 8: scte.amp.UsLogicalPortCfg.us_configs:type_name -> scte.amp.UsCfg
-	6,  // 9: scte.amp.BiDirLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
-	3,  // 10: scte.amp.DsCfg.ds_config:type_name -> scte.amp.UsDsCfg
-	2,  // 11: scte.amp.AgileAgcPilotCfg.pilot_type:type_name -> scte.amp.pilot_type_e
-	11, // 12: scte.amp.DsLogicalPortCfg.pilot_configs:type_name -> scte.amp.AgileAgcPilotCfg
-	10, // 13: scte.amp.DsLogicalPortCfg.ds_configs:type_name -> scte.amp.DsCfg
-	8,  // 14: scte.amp.RfPortCfg.us_logical_port_config:type_name -> scte.amp.UsLogicalPortCfg
-	9,  // 15: scte.amp.RfPortCfg.bidir_logical_port_config:type_name -> scte.amp.BiDirLogicalPortCfg
-	12, // 16: scte.amp.RfPortCfg.ds_logical_port_config:type_name -> scte.amp.DsLogicalPortCfg
-	13, // 17: scte.amp.RfCfgGrp.rf_port_configs:type_name -> scte.amp.RfPortCfg
-	17, // 18: scte.amp.RfCfgGrp.vendor_rf_cfgs:type_name -> scte.common.VendorExtension
-	18, // 19: scte.amp.RfCfgGrp.page:type_name -> scte.common.ResponsePaginationInfo
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	25, // 0: scte.amp.AutoAlignOperationRequest.auto_align_request_type:type_name -> scte.amp.alignment_op_e
+	26, // 1: scte.amp.AutoAlignOperationRequest.direction:type_name -> scte.amp.path_selector_e
+	5,  // 2: scte.amp.DsAutoAlignOperationResponse.ds_auto_align_operation_status:type_name -> scte.amp.DsAutoAlignOperationStatus
+	27, // 3: scte.amp.DsAutoAlignOperationResponse.freq_pwr_values:type_name -> scte.amp.spectrum_capture_point_value
+	28, // 4: scte.amp.DsAutoAlignOperationStatus.auto_align_status:type_name -> scte.amp.alignment_status_e
+	28, // 5: scte.amp.UsAutoAlignOperationResponse.us_auto_align_status:type_name -> scte.amp.alignment_status_e
+	29, // 6: scte.amp.ManualAlignControlValue.stage_index:type_name -> scte.amp.stage_index_e
+	30, // 7: scte.amp.ManualAlignControlValue.stage_type:type_name -> scte.amp.stage_type_e
+	7,  // 8: scte.amp.ManualAlignOperationRequest.values:type_name -> scte.amp.ManualAlignControlValue
+	25, // 9: scte.amp.ManualAlignOperationRequest.manual_align_request_type:type_name -> scte.amp.alignment_op_e
+	26, // 10: scte.amp.ManualAlignOperationRequest.direction:type_name -> scte.amp.path_selector_e
+	7,  // 11: scte.amp.ManualAlignOperationResponse.values:type_name -> scte.amp.ManualAlignControlValue
+	25, // 12: scte.amp.ManualAlignOperationResponse.manual_align_request_type:type_name -> scte.amp.alignment_op_e
+	26, // 13: scte.amp.ManualAlignOperationResponse.direction:type_name -> scte.amp.path_selector_e
+	27, // 14: scte.amp.ManualAlignOperationResponse.freq_pwr_values:type_name -> scte.amp.spectrum_capture_point_value
+	10, // 15: scte.amp.UsCfg.us_config:type_name -> scte.amp.UsDsCfg
+	3,  // 16: scte.amp.UsCfg.us_auto_align_op_request:type_name -> scte.amp.AutoAlignOperationRequest
+	8,  // 17: scte.amp.UsCfg.us_manual_align_op_request:type_name -> scte.amp.ManualAlignOperationRequest
+	31, // 18: scte.amp.TestPointConfig.test_point_id:type_name -> scte.amp.test_point_id_e
+	32, // 19: scte.amp.TestPointConfig.direction:type_name -> scte.amp.test_point_config_e
+	0,  // 20: scte.amp.LogicalPortCfg.admin_status:type_name -> scte.amp.admin_status_e
+	12, // 21: scte.amp.LogicalPortCfg.test_point_config:type_name -> scte.amp.TestPointConfig
+	1,  // 22: scte.amp.UsIngressSwitchCfg.state:type_name -> scte.amp.ingress_switch_states_e
+	13, // 23: scte.amp.UsLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
+	14, // 24: scte.amp.UsLogicalPortCfg.ingress_switch:type_name -> scte.amp.UsIngressSwitchCfg
+	11, // 25: scte.amp.UsLogicalPortCfg.us_configs:type_name -> scte.amp.UsCfg
+	13, // 26: scte.amp.BiDirLogicalPortCfg.port_admin_status:type_name -> scte.amp.LogicalPortCfg
+	10, // 27: scte.amp.DsCfg.ds_config:type_name -> scte.amp.UsDsCfg
+	3,  // 28: scte.amp.DsCfg.ds_auto_align_op_request:type_name -> scte.amp.AutoAlignOperationRequest
+	8,  // 29: scte.amp.DsCfg.ds_manual_align_op_request:type_name -> scte.amp.ManualAlignOperationRequest
+	2,  // 30: scte.amp.AgileAgcPilotCfg.pilot_type:type_name -> scte.amp.pilot_type_e
+	19, // 31: scte.amp.DsAlignmentCfg.start:type_name -> scte.amp.FrequencyPower
+	19, // 32: scte.amp.DsAlignmentCfg.end:type_name -> scte.amp.FrequencyPower
+	19, // 33: scte.amp.DsAlignmentCfg.step1:type_name -> scte.amp.FrequencyPower
+	18, // 34: scte.amp.DsLogicalPortCfg.pilot_configs:type_name -> scte.amp.AgileAgcPilotCfg
+	17, // 35: scte.amp.DsLogicalPortCfg.ds_configs:type_name -> scte.amp.DsCfg
+	20, // 36: scte.amp.DsLogicalPortCfg.ds_alignment_configs:type_name -> scte.amp.DsAlignmentCfg
+	33, // 37: scte.amp.RfPortCfg.index:type_name -> scte.amp.rf_port_index_e
+	0,  // 38: scte.amp.RfPortCfg.admin_status:type_name -> scte.amp.admin_status_e
+	15, // 39: scte.amp.RfPortCfg.us_logical_port_config:type_name -> scte.amp.UsLogicalPortCfg
+	16, // 40: scte.amp.RfPortCfg.bidir_logical_port_config:type_name -> scte.amp.BiDirLogicalPortCfg
+	21, // 41: scte.amp.RfPortCfg.ds_logical_port_config:type_name -> scte.amp.DsLogicalPortCfg
+	34, // 42: scte.amp.RfBandCfg.bw_mode:type_name -> scte.amp.bandwidth_mode_e
+	35, // 43: scte.amp.RfBandCfg.split:type_name -> scte.amp.split_type_e
+	36, // 44: scte.amp.RfBandCfg.annex:type_name -> scte.amp.annex_type_e
+	22, // 45: scte.amp.RfCfgGrp.rf_port_configs:type_name -> scte.amp.RfPortCfg
+	23, // 46: scte.amp.RfCfgGrp.rf_band_config:type_name -> scte.amp.RfBandCfg
+	37, // 47: scte.amp.RfCfgGrp.vendor_rf_cfgs:type_name -> scte.common.VendorExtension
+	38, // 48: scte.amp.RfCfgGrp.page:type_name -> scte.common.ResponsePaginationInfo
+	49, // [49:49] is the sub-list for method output_type
+	49, // [49:49] is the sub-list for method input_type
+	49, // [49:49] is the sub-list for extension type_name
+	49, // [49:49] is the sub-list for extension extendee
+	0,  // [0:49] is the sub-list for field type_name
 }
 
 func init() { file_amps_rf_cfg_proto_init() }
@@ -1005,13 +1962,22 @@ func file_amps_rf_cfg_proto_init() {
 		return
 	}
 	file_amps_common_proto_init()
+	file_amps_spectrum_proto_init()
+	file_amps_rf_cfg_proto_msgTypes[8].OneofWrappers = []any{
+		(*UsCfg_UsAutoAlignOpRequest)(nil),
+		(*UsCfg_UsManualAlignOpRequest)(nil),
+	}
+	file_amps_rf_cfg_proto_msgTypes[14].OneofWrappers = []any{
+		(*DsCfg_DsAutoAlignOpRequest)(nil),
+		(*DsCfg_DsManualAlignOpRequest)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_rf_cfg_proto_rawDesc), len(file_amps_rf_cfg_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   12,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

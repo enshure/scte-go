@@ -263,7 +263,8 @@ const file_common_system_common_proto_rawDesc = "" +
 	"\x1bUPSTREAM_DEVICE_NOT_SET_BIT\x10\x02\x12\x1c\n" +
 	"\x18US_ALIGNMENT_NOT_SET_BIT\x10\x04\x12\x1c\n" +
 	"\x18DS_ALIGNMENT_NOT_SET_BIT\x10\b\x12\x18\n" +
-	"\x14ALSC_NOT_ENABLED_BIT\x10\x10B1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x14ALSC_NOT_ENABLED_BIT\x10\x10BD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_system_common_proto_rawDescOnce sync.Once

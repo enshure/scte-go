@@ -1313,7 +1313,7 @@ func (x *HGD_SetBandwidthMode) GetValue() BandwidthModeE {
 	if x != nil && x.Value != nil {
 		return *x.Value
 	}
-	return BandwidthModeE_BW_MODE_1P2GHZ
+	return BandwidthModeE_BW_MODE_UNKNOWN
 }
 
 type HGD_GetBandwidthMode struct {
@@ -1357,7 +1357,7 @@ func (x *HGD_GetBandwidthMode) GetValue() BandwidthModeE {
 	if x != nil && x.Value != nil {
 		return *x.Value
 	}
-	return BandwidthModeE_BW_MODE_1P2GHZ
+	return BandwidthModeE_BW_MODE_UNKNOWN
 }
 
 type HGD_SetMainWink struct {
@@ -1633,7 +1633,8 @@ const file_amps_debug_proto_rawDesc = "" +
 	"\x11OUTSEL_MIXER_RSTB\x10\x05\x12\x13\n" +
 	"\x0fOUTSEL_INPUT_TP\x10\x06\x12\x14\n" +
 	"\x10OUTSEL_OUTPUT_TP\x10\a\x12\x17\n" +
-	"\x13OUTSEL_CURRENT_CTRL\x10\bB,Z*github.com/enshure/scte-go/amps_go;scteampP\x00"
+	"\x13OUTSEL_CURRENT_CTRL\x10\bB=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteampP\x00"
 
 var (
 	file_amps_debug_proto_rawDescOnce sync.Once

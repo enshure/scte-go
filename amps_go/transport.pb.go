@@ -7,6 +7,7 @@
 package scteamp
 
 import (
+	common_go "github.com/enshure/scte-go/common_go"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -21,13 +22,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// --------------------------------
-// Think of these messages as a way to encapsulate the request and response structures for the HRDC (HFC Remote Devices Controller) APIs in the amplifier system.
-// These APIs would be similar to RPCs in other protocols, where you have a defined request and response message for each API call.
-// The HRDC_GetAPI message can be used for any API call that retrieves information (GET operations), while the HRDC_SetAPI message can be used for any API call that modifies information
-// (SET operations).
-// Each of these messages contains a oneof field that can hold either a request or a response
-// --------------------------------
 type HRDC_GetAPI struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Id:
@@ -192,11 +186,109 @@ func (*HRDC_SetAPI_Request) isHRDC_SetAPI_Id() {}
 
 func (*HRDC_SetAPI_Response) isHRDC_SetAPI_Id() {}
 
+type Msg struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Cookie *uint32                `protobuf:"varint,1,opt,name=cookie" json:"cookie,omitempty"`
+	// Types that are valid to be assigned to Id:
+	//
+	//	*Msg_HRDCGet
+	//	*Msg_HRDCSet
+	Id            isMsg_Id          `protobuf_oneof:"id"`
+	Result        *common_go.Result `protobuf:"bytes,3,opt,name=result" json:"result,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Msg) Reset() {
+	*x = Msg{}
+	mi := &file_amps_transport_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Msg) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Msg) ProtoMessage() {}
+
+func (x *Msg) ProtoReflect() protoreflect.Message {
+	mi := &file_amps_transport_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Msg.ProtoReflect.Descriptor instead.
+func (*Msg) Descriptor() ([]byte, []int) {
+	return file_amps_transport_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Msg) GetCookie() uint32 {
+	if x != nil && x.Cookie != nil {
+		return *x.Cookie
+	}
+	return 0
+}
+
+func (x *Msg) GetId() isMsg_Id {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
+func (x *Msg) GetHRDCGet() *HRDC_GetAPI {
+	if x != nil {
+		if x, ok := x.Id.(*Msg_HRDCGet); ok {
+			return x.HRDCGet
+		}
+	}
+	return nil
+}
+
+func (x *Msg) GetHRDCSet() *HRDC_SetAPI {
+	if x != nil {
+		if x, ok := x.Id.(*Msg_HRDCSet); ok {
+			return x.HRDCSet
+		}
+	}
+	return nil
+}
+
+func (x *Msg) GetResult() *common_go.Result {
+	if x != nil {
+		return x.Result
+	}
+	return nil
+}
+
+type isMsg_Id interface {
+	isMsg_Id()
+}
+
+type Msg_HRDCGet struct {
+	HRDCGet *HRDC_GetAPI `protobuf:"bytes,1900,opt,name=HRDCGet,oneof"`
+}
+
+type Msg_HRDCSet struct {
+	HRDCSet *HRDC_SetAPI `protobuf:"bytes,1901,opt,name=HRDCSet,oneof"`
+}
+
+func (*Msg_HRDCGet) isMsg_Id() {}
+
+func (*Msg_HRDCSet) isMsg_Id() {}
+
 var File_amps_transport_proto protoreflect.FileDescriptor
 
 const file_amps_transport_proto_rawDesc = "" +
 	"\n" +
-	"\x14amps/transport.proto\x12\bscte.amp\x1a\x15amps/controller.proto\"\x8e\x01\n" +
+	"\x14amps/transport.proto\x12\bscte.amp\x1a\x15amps/controller.proto\x1a\x10common/api.proto\"\x8e\x01\n" +
 	"\vHRDC_GetAPI\x12:\n" +
 	"\arequest\x18\x01 \x01(\v2\x1e.scte.amp.ControllerGetRequestH\x00R\arequest\x12=\n" +
 	"\bresponse\x18\x02 \x01(\v2\x1f.scte.amp.ControllerGetResponseH\x00R\bresponseB\x04\n" +
@@ -204,7 +296,14 @@ const file_amps_transport_proto_rawDesc = "" +
 	"\vHRDC_SetAPI\x12:\n" +
 	"\arequest\x18\x01 \x01(\v2\x1e.scte.amp.ControllerSetRequestH\x00R\arequest\x12=\n" +
 	"\bresponse\x18\x02 \x01(\v2\x1f.scte.amp.ControllerSetResponseH\x00R\bresponseB\x04\n" +
-	"\x02idB,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\x02id\"\xb8\x01\n" +
+	"\x03Msg\x12\x16\n" +
+	"\x06cookie\x18\x01 \x01(\rR\x06cookie\x122\n" +
+	"\aHRDCGet\x18\xec\x0e \x01(\v2\x15.scte.amp.HRDC_GetAPIH\x00R\aHRDCGet\x122\n" +
+	"\aHRDCSet\x18\xed\x0e \x01(\v2\x15.scte.amp.HRDC_SetAPIH\x00R\aHRDCSet\x12+\n" +
+	"\x06result\x18\x03 \x01(\v2\x13.scte.common.ResultR\x06resultB\x04\n" +
+	"\x02idB=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_transport_proto_rawDescOnce sync.Once
@@ -218,25 +317,30 @@ func file_amps_transport_proto_rawDescGZIP() []byte {
 	return file_amps_transport_proto_rawDescData
 }
 
-var file_amps_transport_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_amps_transport_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_amps_transport_proto_goTypes = []any{
 	(*HRDC_GetAPI)(nil),           // 0: scte.amp.HRDC_GetAPI
 	(*HRDC_SetAPI)(nil),           // 1: scte.amp.HRDC_SetAPI
-	(*ControllerGetRequest)(nil),  // 2: scte.amp.ControllerGetRequest
-	(*ControllerGetResponse)(nil), // 3: scte.amp.ControllerGetResponse
-	(*ControllerSetRequest)(nil),  // 4: scte.amp.ControllerSetRequest
-	(*ControllerSetResponse)(nil), // 5: scte.amp.ControllerSetResponse
+	(*Msg)(nil),                   // 2: scte.amp.Msg
+	(*ControllerGetRequest)(nil),  // 3: scte.amp.ControllerGetRequest
+	(*ControllerGetResponse)(nil), // 4: scte.amp.ControllerGetResponse
+	(*ControllerSetRequest)(nil),  // 5: scte.amp.ControllerSetRequest
+	(*ControllerSetResponse)(nil), // 6: scte.amp.ControllerSetResponse
+	(*common_go.Result)(nil),      // 7: scte.common.Result
 }
 var file_amps_transport_proto_depIdxs = []int32{
-	2, // 0: scte.amp.HRDC_GetAPI.request:type_name -> scte.amp.ControllerGetRequest
-	3, // 1: scte.amp.HRDC_GetAPI.response:type_name -> scte.amp.ControllerGetResponse
-	4, // 2: scte.amp.HRDC_SetAPI.request:type_name -> scte.amp.ControllerSetRequest
-	5, // 3: scte.amp.HRDC_SetAPI.response:type_name -> scte.amp.ControllerSetResponse
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 0: scte.amp.HRDC_GetAPI.request:type_name -> scte.amp.ControllerGetRequest
+	4, // 1: scte.amp.HRDC_GetAPI.response:type_name -> scte.amp.ControllerGetResponse
+	5, // 2: scte.amp.HRDC_SetAPI.request:type_name -> scte.amp.ControllerSetRequest
+	6, // 3: scte.amp.HRDC_SetAPI.response:type_name -> scte.amp.ControllerSetResponse
+	0, // 4: scte.amp.Msg.HRDCGet:type_name -> scte.amp.HRDC_GetAPI
+	1, // 5: scte.amp.Msg.HRDCSet:type_name -> scte.amp.HRDC_SetAPI
+	7, // 6: scte.amp.Msg.result:type_name -> scte.common.Result
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_amps_transport_proto_init() }
@@ -253,13 +357,17 @@ func file_amps_transport_proto_init() {
 		(*HRDC_SetAPI_Request)(nil),
 		(*HRDC_SetAPI_Response)(nil),
 	}
+	file_amps_transport_proto_msgTypes[2].OneofWrappers = []any{
+		(*Msg_HRDCGet)(nil),
+		(*Msg_HRDCSet)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_amps_transport_proto_rawDesc), len(file_amps_transport_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

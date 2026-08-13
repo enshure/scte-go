@@ -83,26 +83,33 @@ func (OperStatusE) EnumDescriptor() ([]byte, []int) {
 	return file_common_status_common_proto_rawDescGZIP(), []int{0}
 }
 
+// SCTE APIs use sensor_type_e as the machine-readable sensor value unit/type.
+// units_display remains the operator-facing display string for the unit.
 type SensorTypeE int32
 
 const (
-	SensorTypeE_SENSOR_TYPE_OTHER      SensorTypeE = 1
-	SensorTypeE_SENSOR_TYPE_UNKNOWN    SensorTypeE = 2
-	SensorTypeE_SENSOR_TYPE_VOLTS_AC   SensorTypeE = 3
-	SensorTypeE_SENSOR_TYPE_VOLTS_DC   SensorTypeE = 4
-	SensorTypeE_SENSOR_TYPE_AMPERES    SensorTypeE = 5
-	SensorTypeE_SENSOR_TYPE_WATTS      SensorTypeE = 6
-	SensorTypeE_SENSOR_TYPE_HERTZ      SensorTypeE = 7
-	SensorTypeE_SENSOR_TYPE_CELSIUS    SensorTypeE = 8
-	SensorTypeE_SENSOR_TYPE_PERCENT_RH SensorTypeE = 9
-	SensorTypeE_SENSOR_TYPE_RPM        SensorTypeE = 10
-	SensorTypeE_SENSOR_TYPE_CMM        SensorTypeE = 11
-	SensorTypeE_SENSOR_TYPE_TRUTHVALUE SensorTypeE = 12
+	SensorTypeE_SENSOR_TYPE_UNSPECIFIED   SensorTypeE = 0
+	SensorTypeE_SENSOR_TYPE_OTHER         SensorTypeE = 1
+	SensorTypeE_SENSOR_TYPE_UNKNOWN       SensorTypeE = 2
+	SensorTypeE_SENSOR_TYPE_VOLTS_AC      SensorTypeE = 3
+	SensorTypeE_SENSOR_TYPE_VOLTS_DC      SensorTypeE = 4
+	SensorTypeE_SENSOR_TYPE_AMPERES       SensorTypeE = 5
+	SensorTypeE_SENSOR_TYPE_WATTS         SensorTypeE = 6
+	SensorTypeE_SENSOR_TYPE_HERTZ         SensorTypeE = 7
+	SensorTypeE_SENSOR_TYPE_CELSIUS       SensorTypeE = 8
+	SensorTypeE_SENSOR_TYPE_PERCENT_RH    SensorTypeE = 9
+	SensorTypeE_SENSOR_TYPE_RPM           SensorTypeE = 10
+	SensorTypeE_SENSOR_TYPE_CMM           SensorTypeE = 11
+	SensorTypeE_SENSOR_TYPE_TRUTHVALUE    SensorTypeE = 12
+	SensorTypeE_SENSOR_TYPE_DBMV          SensorTypeE = 13
+	SensorTypeE_SENSOR_TYPE_DB            SensorTypeE = 14
+	SensorTypeE_SENSOR_TYPE_DIMENSIONLESS SensorTypeE = 15
 )
 
 // Enum value maps for SensorTypeE.
 var (
 	SensorTypeE_name = map[int32]string{
+		0:  "SENSOR_TYPE_UNSPECIFIED",
 		1:  "SENSOR_TYPE_OTHER",
 		2:  "SENSOR_TYPE_UNKNOWN",
 		3:  "SENSOR_TYPE_VOLTS_AC",
@@ -115,20 +122,27 @@ var (
 		10: "SENSOR_TYPE_RPM",
 		11: "SENSOR_TYPE_CMM",
 		12: "SENSOR_TYPE_TRUTHVALUE",
+		13: "SENSOR_TYPE_DBMV",
+		14: "SENSOR_TYPE_DB",
+		15: "SENSOR_TYPE_DIMENSIONLESS",
 	}
 	SensorTypeE_value = map[string]int32{
-		"SENSOR_TYPE_OTHER":      1,
-		"SENSOR_TYPE_UNKNOWN":    2,
-		"SENSOR_TYPE_VOLTS_AC":   3,
-		"SENSOR_TYPE_VOLTS_DC":   4,
-		"SENSOR_TYPE_AMPERES":    5,
-		"SENSOR_TYPE_WATTS":      6,
-		"SENSOR_TYPE_HERTZ":      7,
-		"SENSOR_TYPE_CELSIUS":    8,
-		"SENSOR_TYPE_PERCENT_RH": 9,
-		"SENSOR_TYPE_RPM":        10,
-		"SENSOR_TYPE_CMM":        11,
-		"SENSOR_TYPE_TRUTHVALUE": 12,
+		"SENSOR_TYPE_UNSPECIFIED":   0,
+		"SENSOR_TYPE_OTHER":         1,
+		"SENSOR_TYPE_UNKNOWN":       2,
+		"SENSOR_TYPE_VOLTS_AC":      3,
+		"SENSOR_TYPE_VOLTS_DC":      4,
+		"SENSOR_TYPE_AMPERES":       5,
+		"SENSOR_TYPE_WATTS":         6,
+		"SENSOR_TYPE_HERTZ":         7,
+		"SENSOR_TYPE_CELSIUS":       8,
+		"SENSOR_TYPE_PERCENT_RH":    9,
+		"SENSOR_TYPE_RPM":           10,
+		"SENSOR_TYPE_CMM":           11,
+		"SENSOR_TYPE_TRUTHVALUE":    12,
+		"SENSOR_TYPE_DBMV":          13,
+		"SENSOR_TYPE_DB":            14,
+		"SENSOR_TYPE_DIMENSIONLESS": 15,
 	}
 )
 
@@ -172,28 +186,30 @@ func (SensorTypeE) EnumDescriptor() ([]byte, []int) {
 type ScaleE int32
 
 const (
-	ScaleE_SCALE_YOCTO ScaleE = 1
-	ScaleE_SCALE_ZEPTO ScaleE = 2
-	ScaleE_SCALE_ATTO  ScaleE = 3
-	ScaleE_SCALE_FEMTO ScaleE = 4
-	ScaleE_SCALE_PICO  ScaleE = 5
-	ScaleE_SCALE_NANO  ScaleE = 6
-	ScaleE_SCALE_MICRO ScaleE = 7
-	ScaleE_SCALE_MILLI ScaleE = 8
-	ScaleE_SCALE_UNITS ScaleE = 9
-	ScaleE_SCALE_KILO  ScaleE = 10
-	ScaleE_SCALE_MEGA  ScaleE = 11
-	ScaleE_SCALE_GIGA  ScaleE = 12
-	ScaleE_SCALE_TERA  ScaleE = 13
-	ScaleE_SCALE_EXA   ScaleE = 14
-	ScaleE_SCALE_PETA  ScaleE = 15
-	ScaleE_SCALE_ZETTA ScaleE = 16
-	ScaleE_SCALE_YOTTA ScaleE = 17
+	ScaleE_SCALE_UNKNOWN ScaleE = 0
+	ScaleE_SCALE_YOCTO   ScaleE = 1
+	ScaleE_SCALE_ZEPTO   ScaleE = 2
+	ScaleE_SCALE_ATTO    ScaleE = 3
+	ScaleE_SCALE_FEMTO   ScaleE = 4
+	ScaleE_SCALE_PICO    ScaleE = 5
+	ScaleE_SCALE_NANO    ScaleE = 6
+	ScaleE_SCALE_MICRO   ScaleE = 7
+	ScaleE_SCALE_MILLI   ScaleE = 8
+	ScaleE_SCALE_UNITS   ScaleE = 9
+	ScaleE_SCALE_KILO    ScaleE = 10
+	ScaleE_SCALE_MEGA    ScaleE = 11
+	ScaleE_SCALE_GIGA    ScaleE = 12
+	ScaleE_SCALE_TERA    ScaleE = 13
+	ScaleE_SCALE_EXA     ScaleE = 14
+	ScaleE_SCALE_PETA    ScaleE = 15
+	ScaleE_SCALE_ZETTA   ScaleE = 16
+	ScaleE_SCALE_YOTTA   ScaleE = 17
 )
 
 // Enum value maps for ScaleE.
 var (
 	ScaleE_name = map[int32]string{
+		0:  "SCALE_UNKNOWN",
 		1:  "SCALE_YOCTO",
 		2:  "SCALE_ZEPTO",
 		3:  "SCALE_ATTO",
@@ -213,23 +229,24 @@ var (
 		17: "SCALE_YOTTA",
 	}
 	ScaleE_value = map[string]int32{
-		"SCALE_YOCTO": 1,
-		"SCALE_ZEPTO": 2,
-		"SCALE_ATTO":  3,
-		"SCALE_FEMTO": 4,
-		"SCALE_PICO":  5,
-		"SCALE_NANO":  6,
-		"SCALE_MICRO": 7,
-		"SCALE_MILLI": 8,
-		"SCALE_UNITS": 9,
-		"SCALE_KILO":  10,
-		"SCALE_MEGA":  11,
-		"SCALE_GIGA":  12,
-		"SCALE_TERA":  13,
-		"SCALE_EXA":   14,
-		"SCALE_PETA":  15,
-		"SCALE_ZETTA": 16,
-		"SCALE_YOTTA": 17,
+		"SCALE_UNKNOWN": 0,
+		"SCALE_YOCTO":   1,
+		"SCALE_ZEPTO":   2,
+		"SCALE_ATTO":    3,
+		"SCALE_FEMTO":   4,
+		"SCALE_PICO":    5,
+		"SCALE_NANO":    6,
+		"SCALE_MICRO":   7,
+		"SCALE_MILLI":   8,
+		"SCALE_UNITS":   9,
+		"SCALE_KILO":    10,
+		"SCALE_MEGA":    11,
+		"SCALE_GIGA":    12,
+		"SCALE_TERA":    13,
+		"SCALE_EXA":     14,
+		"SCALE_PETA":    15,
+		"SCALE_ZETTA":   16,
+		"SCALE_YOTTA":   17,
 	}
 )
 
@@ -279,8 +296,9 @@ const file_common_status_common_proto_rawDesc = "" +
 	"\x11OPER_STATUS_OTHER\x10\x00\x12\x17\n" +
 	"\x13OPER_STATUS_UNKNOWN\x10\x01\x12\x12\n" +
 	"\x0eOPER_STATUS_UP\x10\x02\x12\x14\n" +
-	"\x10OPER_STATUS_DOWN\x10\x03*\xb5\x02\n" +
-	"\rsensor_type_e\x12\x15\n" +
+	"\x10OPER_STATUS_DOWN\x10\x03*\x9b\x03\n" +
+	"\rsensor_type_e\x12\x1b\n" +
+	"\x17SENSOR_TYPE_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11SENSOR_TYPE_OTHER\x10\x01\x12\x17\n" +
 	"\x13SENSOR_TYPE_UNKNOWN\x10\x02\x12\x18\n" +
 	"\x14SENSOR_TYPE_VOLTS_AC\x10\x03\x12\x18\n" +
@@ -293,8 +311,12 @@ const file_common_status_common_proto_rawDesc = "" +
 	"\x0fSENSOR_TYPE_RPM\x10\n" +
 	"\x12\x13\n" +
 	"\x0fSENSOR_TYPE_CMM\x10\v\x12\x1a\n" +
-	"\x16SENSOR_TYPE_TRUTHVALUE\x10\f*\xa0\x02\n" +
-	"\ascale_e\x12\x0f\n" +
+	"\x16SENSOR_TYPE_TRUTHVALUE\x10\f\x12\x14\n" +
+	"\x10SENSOR_TYPE_DBMV\x10\r\x12\x12\n" +
+	"\x0eSENSOR_TYPE_DB\x10\x0e\x12\x1d\n" +
+	"\x19SENSOR_TYPE_DIMENSIONLESS\x10\x0f*\xb3\x02\n" +
+	"\ascale_e\x12\x11\n" +
+	"\rSCALE_UNKNOWN\x10\x00\x12\x0f\n" +
 	"\vSCALE_YOCTO\x10\x01\x12\x0f\n" +
 	"\vSCALE_ZEPTO\x10\x02\x12\x0e\n" +
 	"\n" +
@@ -320,7 +342,8 @@ const file_common_status_common_proto_rawDesc = "" +
 	"\n" +
 	"SCALE_PETA\x10\x0f\x12\x0f\n" +
 	"\vSCALE_ZETTA\x10\x10\x12\x0f\n" +
-	"\vSCALE_YOTTA\x10\x11B1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\vSCALE_YOTTA\x10\x11BD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_status_common_proto_rawDescOnce sync.Once

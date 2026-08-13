@@ -25,25 +25,28 @@ const (
 type ResetTypeE int32
 
 const (
-	ResetTypeE_SOFT_RESET    ResetTypeE = 1
-	ResetTypeE_HARD_RESET    ResetTypeE = 2
-	ResetTypeE_NV_RESET      ResetTypeE = 4
-	ResetTypeE_FACTORY_RESET ResetTypeE = 8
+	ResetTypeE_RESET_TYPE_UNKNOWN ResetTypeE = 0
+	ResetTypeE_SOFT_RESET         ResetTypeE = 1
+	ResetTypeE_HARD_RESET         ResetTypeE = 2
+	ResetTypeE_NV_RESET           ResetTypeE = 4
+	ResetTypeE_FACTORY_RESET      ResetTypeE = 8
 )
 
 // Enum value maps for ResetTypeE.
 var (
 	ResetTypeE_name = map[int32]string{
+		0: "RESET_TYPE_UNKNOWN",
 		1: "SOFT_RESET",
 		2: "HARD_RESET",
 		4: "NV_RESET",
 		8: "FACTORY_RESET",
 	}
 	ResetTypeE_value = map[string]int32{
-		"SOFT_RESET":    1,
-		"HARD_RESET":    2,
-		"NV_RESET":      4,
-		"FACTORY_RESET": 8,
+		"RESET_TYPE_UNKNOWN": 0,
+		"SOFT_RESET":         1,
+		"HARD_RESET":         2,
+		"NV_RESET":           4,
+		"FACTORY_RESET":      8,
 	}
 )
 
@@ -197,7 +200,7 @@ func (x *ResetHistoryStatus) GetType() ResetTypeE {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
-	return ResetTypeE_SOFT_RESET
+	return ResetTypeE_RESET_TYPE_UNKNOWN
 }
 
 func (x *ResetHistoryStatus) GetReason() string {
@@ -272,7 +275,7 @@ func (x *Reset) GetType() ResetTypeE {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
-	return ResetTypeE_SOFT_RESET
+	return ResetTypeE_RESET_TYPE_UNKNOWN
 }
 
 func (x *Reset) GetResult() bool {
@@ -454,14 +457,16 @@ const file_common_reset_common_proto_rawDesc = "" +
 	"\x10EnableAutoReboot\x12\x16\n" +
 	"\x06result\x18\x01 \x01(\bR\x06result\x125\n" +
 	"\terror_tag\x18\x02 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage*O\n" +
-	"\freset_type_e\x12\x0e\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage*g\n" +
+	"\freset_type_e\x12\x16\n" +
+	"\x12RESET_TYPE_UNKNOWN\x10\x00\x12\x0e\n" +
 	"\n" +
 	"SOFT_RESET\x10\x01\x12\x0e\n" +
 	"\n" +
 	"HARD_RESET\x10\x02\x12\f\n" +
 	"\bNV_RESET\x10\x04\x12\x11\n" +
-	"\rFACTORY_RESET\x10\bB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\rFACTORY_RESET\x10\bBD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_reset_common_proto_rawDescOnce sync.Once

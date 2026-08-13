@@ -83,7 +83,7 @@ func (x *SystemCapabilities) GetPowerSupplyRedundancyMode() PwrSupplyRedundancyM
 	if x != nil && x.PowerSupplyRedundancyMode != nil {
 		return *x.PowerSupplyRedundancyMode
 	}
-	return PwrSupplyRedundancyModeE_PS_REDUNDANCY_MODE_OTHER
+	return PwrSupplyRedundancyModeE_PS_REDUNDANCY_MODE_NONE
 }
 
 func (x *SystemCapabilities) GetSupportsPowerSavingMode() bool {
@@ -411,7 +411,8 @@ const file_amps_system_grp_proto_rawDesc = "" +
 	"\voper_status\x18\x03 \x01(\x0e2\x1a.scte.common.oper_status_eR\n" +
 	"operStatus\x12\x18\n" +
 	"\avoltage\x18\x04 \x01(\rR\avoltage\x12\x18\n" +
-	"\acurrent\x18\x05 \x01(\rR\acurrentB,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\acurrent\x18\x05 \x01(\rR\acurrentB=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_system_grp_proto_rawDescOnce sync.Once

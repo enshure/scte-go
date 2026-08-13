@@ -148,7 +148,8 @@ const file_xponder_system_proto_rawDesc = "" +
 	"\x14information_model_id\x18\x04 \x01(\tR\x12informationModelId\"Q\n" +
 	"\x0eManagedDevices\x12?\n" +
 	"\vinfo_models\x18\x01 \x03(\v2\x1e.scte.xponder.InfoModelSupportR\n" +
-	"infoModelsB3Z1github.com/enshure/scte-go/xponder_go;sctexponder"
+	"infoModelsBG\n" +
+	"\x10org.scte.xponderP\x01Z1github.com/enshure/scte-go/xponder_go;sctexponder"
 
 var (
 	file_xponder_system_proto_rawDescOnce sync.Once

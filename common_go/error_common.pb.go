@@ -112,7 +112,8 @@ const file_common_error_common_proto_rawDesc = "" +
 	"\x17OPERATION_NOT_SUPPORTED\x10\x05\x12\x1a\n" +
 	"\x16RESPONSE_SIZE_OVERFLOW\x10\x06\x12\x14\n" +
 	"\x10ENTITY_NOT_FOUND\x10\a\x12\x17\n" +
-	"\x13GROUP_NOT_SUPPORTED\x10\bB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x13GROUP_NOT_SUPPORTED\x10\bBD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_error_common_proto_rawDescOnce sync.Once

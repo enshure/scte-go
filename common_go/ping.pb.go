@@ -74,7 +74,8 @@ const file_common_ping_proto_rawDesc = "" +
 	"\n" +
 	"\x11common/ping.proto\x12\vscte.common\"\x1a\n" +
 	"\x04Ping\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04dataB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\x04data\x18\x01 \x01(\fR\x04dataBD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_ping_proto_rawDescOnce sync.Once

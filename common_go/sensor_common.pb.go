@@ -37,7 +37,7 @@ type Sensor struct {
 	SensorType      *SensorTypeE           `protobuf:"varint,3,opt,name=sensor_type,json=sensorType,enum=scte.common.SensorTypeE" json:"sensor_type,omitempty"`
 	Scale           *ScaleE                `protobuf:"varint,4,opt,name=scale,enum=scte.common.ScaleE" json:"scale,omitempty"`
 	Precision       *int32                 `protobuf:"varint,5,opt,name=precision" json:"precision,omitempty"`
-	Value           *int32                 `protobuf:"varint,6,opt,name=value" json:"value,omitempty"`
+	Value           *int32                 `protobuf:"zigzag32,6,opt,name=value" json:"value,omitempty"`
 	OperStatus      *OperStatusE           `protobuf:"varint,7,opt,name=oper_status,json=operStatus,enum=scte.common.OperStatusE" json:"oper_status,omitempty"`
 	UnitsDisplay    *string                `protobuf:"bytes,8,opt,name=units_display,json=unitsDisplay" json:"units_display,omitempty"`
 	ValueTimestamp  *string                `protobuf:"bytes,9,opt,name=value_timestamp,json=valueTimestamp" json:"value_timestamp,omitempty"`
@@ -94,14 +94,14 @@ func (x *Sensor) GetSensorType() SensorTypeE {
 	if x != nil && x.SensorType != nil {
 		return *x.SensorType
 	}
-	return SensorTypeE_SENSOR_TYPE_OTHER
+	return SensorTypeE_SENSOR_TYPE_UNSPECIFIED
 }
 
 func (x *Sensor) GetScale() ScaleE {
 	if x != nil && x.Scale != nil {
 		return *x.Scale
 	}
-	return ScaleE_SCALE_YOCTO
+	return ScaleE_SCALE_UNKNOWN
 }
 
 func (x *Sensor) GetPrecision() int32 {
@@ -259,14 +259,14 @@ func (x *SensorDescriptor) GetSensorType() SensorTypeE {
 	if x != nil && x.SensorType != nil {
 		return *x.SensorType
 	}
-	return SensorTypeE_SENSOR_TYPE_OTHER
+	return SensorTypeE_SENSOR_TYPE_UNSPECIFIED
 }
 
 func (x *SensorDescriptor) GetScale() ScaleE {
 	if x != nil && x.Scale != nil {
 		return *x.Scale
 	}
-	return ScaleE_SCALE_YOCTO
+	return ScaleE_SCALE_UNKNOWN
 }
 
 func (x *SensorDescriptor) GetPrecision() int32 {
@@ -354,7 +354,7 @@ func (x *SensorDescriptors) GetPage() *ResponsePaginationInfo {
 type SensorData struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *uint32                `protobuf:"varint,1,opt,name=id" json:"id,omitempty"`
-	Value         *int32                 `protobuf:"varint,2,opt,name=value" json:"value,omitempty"`
+	Value         *int32                 `protobuf:"zigzag32,2,opt,name=value" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -409,9 +409,8 @@ type SensorsData struct {
 	// such as addition/removal of sensors or changes in the meta-data of existing sensors.
 	// This allows HRDC to detect changes in the sensor catalog and update its stored descriptors accordingly.
 	SensorCatalogVersion *uint64                 `protobuf:"varint,1,opt,name=sensor_catalog_version,json=sensorCatalogVersion" json:"sensor_catalog_version,omitempty"`
-	TelemetryEtag        *uint64                 `protobuf:"varint,2,opt,name=telemetry_etag,json=telemetryEtag" json:"telemetry_etag,omitempty"`
-	Sensors              []*SensorData           `protobuf:"bytes,3,rep,name=sensors" json:"sensors,omitempty"`
-	Page                 *ResponsePaginationInfo `protobuf:"bytes,4,opt,name=page" json:"page,omitempty"`
+	Sensors              []*SensorData           `protobuf:"bytes,2,rep,name=sensors" json:"sensors,omitempty"`
+	Page                 *ResponsePaginationInfo `protobuf:"bytes,3,opt,name=page" json:"page,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -449,13 +448,6 @@ func (*SensorsData) Descriptor() ([]byte, []int) {
 func (x *SensorsData) GetSensorCatalogVersion() uint64 {
 	if x != nil && x.SensorCatalogVersion != nil {
 		return *x.SensorCatalogVersion
-	}
-	return 0
-}
-
-func (x *SensorsData) GetTelemetryEtag() uint64 {
-	if x != nil && x.TelemetryEtag != nil {
-		return *x.TelemetryEtag
 	}
 	return 0
 }
@@ -606,7 +598,7 @@ const file_common_sensor_common_proto_rawDesc = "" +
 	"sensorType\x12*\n" +
 	"\x05scale\x18\x04 \x01(\x0e2\x14.scte.common.scale_eR\x05scale\x12\x1c\n" +
 	"\tprecision\x18\x05 \x01(\x05R\tprecision\x12\x14\n" +
-	"\x05value\x18\x06 \x01(\x05R\x05value\x12;\n" +
+	"\x05value\x18\x06 \x01(\x11R\x05value\x12;\n" +
 	"\voper_status\x18\a \x01(\x0e2\x1a.scte.common.oper_status_eR\n" +
 	"operStatus\x12#\n" +
 	"\runits_display\x18\b \x01(\tR\funitsDisplay\x12'\n" +
@@ -632,12 +624,11 @@ const file_common_sensor_common_proto_rawDesc = "" +
 	"\n" +
 	"SensorData\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value\"\xd6\x01\n" +
+	"\x05value\x18\x02 \x01(\x11R\x05value\"\xaf\x01\n" +
 	"\vSensorsData\x124\n" +
-	"\x16sensor_catalog_version\x18\x01 \x01(\x04R\x14sensorCatalogVersion\x12%\n" +
-	"\x0etelemetry_etag\x18\x02 \x01(\x04R\rtelemetryEtag\x121\n" +
-	"\asensors\x18\x03 \x03(\v2\x17.scte.common.SensorDataR\asensors\x127\n" +
-	"\x04page\x18\x04 \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\xd6\x01\n" +
+	"\x16sensor_catalog_version\x18\x01 \x01(\x04R\x14sensorCatalogVersion\x121\n" +
+	"\asensors\x18\x02 \x03(\v2\x17.scte.common.SensorDataR\asensors\x127\n" +
+	"\x04page\x18\x03 \x01(\v2#.scte.common.ResponsePaginationInfoR\x04page\"\xd6\x01\n" +
 	"\x16TelemetryIntervalEntry\x12\x19\n" +
 	"\bclass_id\x18\x01 \x01(\rR\aclassId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12)\n" +
@@ -645,7 +636,8 @@ const file_common_sensor_common_proto_rawDesc = "" +
 	"\x14min_interval_seconds\x18\x04 \x01(\rR\x12minIntervalSeconds\x120\n" +
 	"\x14max_interval_seconds\x18\x05 \x01(\rR\x12maxIntervalSeconds\"\\\n" +
 	"\x17TelemetryIntervalConfig\x12A\n" +
-	"\tintervals\x18\x01 \x03(\v2#.scte.common.TelemetryIntervalEntryR\tintervalsB1Z/github.com/enshure/scte-go/common_go;sctecommon"
+	"\tintervals\x18\x01 \x03(\v2#.scte.common.TelemetryIntervalEntryR\tintervalsBD\n" +
+	"\x0forg.scte.commonP\x01Z/github.com/enshure/scte-go/common_go;sctecommon"
 
 var (
 	file_common_sensor_common_proto_rawDescOnce sync.Once

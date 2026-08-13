@@ -43,6 +43,9 @@ const (
 	GroupId_ENABLE_AUTO_REBOOT        GroupId = 24
 	GroupId_EVENT_CAPABILITIES        GroupId = 30
 	GroupId_EVENT_NOTIFICATION        GroupId = 31
+	GroupId_EVENT_REPORTING_CFG       GroupId = 32
+	GroupId_EVENT_STATUS              GroupId = 33
+	GroupId_EVENT_LOG                 GroupId = 34
 	GroupId_SENSOR_DESCRIPTOR         GroupId = 40
 	GroupId_SENSOR_READING            GroupId = 41
 	GroupId_TELEMETRY_INTERVAL_CFG    GroupId = 42
@@ -50,6 +53,12 @@ const (
 	GroupId_RF_CAPABILITIES           GroupId = 61
 	GroupId_RF_STATUS                 GroupId = 62
 	GroupId_RF_CFG_GRP                GroupId = 63
+	GroupId_RF_CFG_ALIGNMENT          GroupId = 64
+	GroupId_RF_DS_AUTO_ALIGN_STATUS   GroupId = 65
+	GroupId_RF_US_AUTO_ALIGN_STATUS   GroupId = 66
+	GroupId_RF_DS_MANUAL_ALIGN        GroupId = 67
+	GroupId_RF_US_MANUAL_ALIGN        GroupId = 68
+	GroupId_RF_BAND_CFG               GroupId = 69
 	GroupId_VENDOR_EXTENSIONS         GroupId = 100 // catch-all for vendor-specific indexed groups, e.g. per-sensor config
 	GroupId_PING                      GroupId = 101
 )
@@ -74,6 +83,9 @@ var (
 		24:  "ENABLE_AUTO_REBOOT",
 		30:  "EVENT_CAPABILITIES",
 		31:  "EVENT_NOTIFICATION",
+		32:  "EVENT_REPORTING_CFG",
+		33:  "EVENT_STATUS",
+		34:  "EVENT_LOG",
 		40:  "SENSOR_DESCRIPTOR",
 		41:  "SENSOR_READING",
 		42:  "TELEMETRY_INTERVAL_CFG",
@@ -81,6 +93,12 @@ var (
 		61:  "RF_CAPABILITIES",
 		62:  "RF_STATUS",
 		63:  "RF_CFG_GRP",
+		64:  "RF_CFG_ALIGNMENT",
+		65:  "RF_DS_AUTO_ALIGN_STATUS",
+		66:  "RF_US_AUTO_ALIGN_STATUS",
+		67:  "RF_DS_MANUAL_ALIGN",
+		68:  "RF_US_MANUAL_ALIGN",
+		69:  "RF_BAND_CFG",
 		100: "VENDOR_EXTENSIONS",
 		101: "PING",
 	}
@@ -102,6 +120,9 @@ var (
 		"ENABLE_AUTO_REBOOT":        24,
 		"EVENT_CAPABILITIES":        30,
 		"EVENT_NOTIFICATION":        31,
+		"EVENT_REPORTING_CFG":       32,
+		"EVENT_STATUS":              33,
+		"EVENT_LOG":                 34,
 		"SENSOR_DESCRIPTOR":         40,
 		"SENSOR_READING":            41,
 		"TELEMETRY_INTERVAL_CFG":    42,
@@ -109,6 +130,12 @@ var (
 		"RF_CAPABILITIES":           61,
 		"RF_STATUS":                 62,
 		"RF_CFG_GRP":                63,
+		"RF_CFG_ALIGNMENT":          64,
+		"RF_DS_AUTO_ALIGN_STATUS":   65,
+		"RF_US_AUTO_ALIGN_STATUS":   66,
+		"RF_DS_MANUAL_ALIGN":        67,
+		"RF_US_MANUAL_ALIGN":        68,
+		"RF_BAND_CFG":               69,
 		"VENDOR_EXTENSIONS":         100,
 		"PING":                      101,
 	}
@@ -303,7 +330,7 @@ type ControllerGetGroupResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ErrorTag      *common_go.ErrorTagE   `protobuf:"varint,1,opt,name=error_tag,json=errorTag,enum=scte.common.ErrorTagE" json:"error_tag,omitempty"`
 	ErrorMessage  *string                `protobuf:"bytes,2,opt,name=error_message,json=errorMessage" json:"error_message,omitempty"`
-	LastUpdatedAt *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=last_updated_at,json=lastUpdatedAt" json:"last_updated_at,omitempty"`
+	LastUpdatedAt *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=last_updated_at,json=lastUpdatedAt" json:"last_updated_at,omitempty"` //Used by NBI.  not amp
 	// Types that are valid to be assigned to Payload:
 	//
 	//	*ControllerGetGroupResponse_SystemCapabilities
@@ -323,6 +350,8 @@ type ControllerGetGroupResponse struct {
 	//	*ControllerGetGroupResponse_EnableAutoReboot
 	//	*ControllerGetGroupResponse_EventCapabilities
 	//	*ControllerGetGroupResponse_EventNotification
+	//	*ControllerGetGroupResponse_EventStatus
+	//	*ControllerGetGroupResponse_EventLog
 	//	*ControllerGetGroupResponse_TelemetryIntervalConfig
 	//	*ControllerGetGroupResponse_SpectrumCapture
 	//	*ControllerGetGroupResponse_Sensors
@@ -331,6 +360,11 @@ type ControllerGetGroupResponse struct {
 	//	*ControllerGetGroupResponse_RfCapabilities
 	//	*ControllerGetGroupResponse_RfStatusGroup
 	//	*ControllerGetGroupResponse_RfConfigGrp
+	//	*ControllerGetGroupResponse_DsAutoAlignStatus
+	//	*ControllerGetGroupResponse_UsAutoAlignStatus
+	//	*ControllerGetGroupResponse_DsAlignmentCfg
+	//	*ControllerGetGroupResponse_ManualAlignOpResponse
+	//	*ControllerGetGroupResponse_RfBandCfg
 	//	*ControllerGetGroupResponse_VendorExtensions
 	//	*ControllerGetGroupResponse_Ping
 	Payload       isControllerGetGroupResponse_Payload `protobuf_oneof:"payload"`
@@ -549,6 +583,24 @@ func (x *ControllerGetGroupResponse) GetEventNotification() *common_go.EventNoti
 	return nil
 }
 
+func (x *ControllerGetGroupResponse) GetEventStatus() *common_go.EventStatus {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventStatus); ok {
+			return x.EventStatus
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetEventLog() *common_go.EventLog {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_EventLog); ok {
+			return x.EventLog
+		}
+	}
+	return nil
+}
+
 func (x *ControllerGetGroupResponse) GetTelemetryIntervalConfig() *common_go.TelemetryIntervalConfig {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_TelemetryIntervalConfig); ok {
@@ -616,6 +668,51 @@ func (x *ControllerGetGroupResponse) GetRfConfigGrp() *RfCfgGrp {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerGetGroupResponse_RfConfigGrp); ok {
 			return x.RfConfigGrp
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetDsAutoAlignStatus() *DsAutoAlignOperationResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_DsAutoAlignStatus); ok {
+			return x.DsAutoAlignStatus
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetUsAutoAlignStatus() *UsAutoAlignOperationResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_UsAutoAlignStatus); ok {
+			return x.UsAutoAlignStatus
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetDsAlignmentCfg() *DsAlignmentCfg {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_DsAlignmentCfg); ok {
+			return x.DsAlignmentCfg
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetManualAlignOpResponse() *ManualAlignOperationResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_ManualAlignOpResponse); ok {
+			return x.ManualAlignOpResponse
+		}
+	}
+	return nil
+}
+
+func (x *ControllerGetGroupResponse) GetRfBandCfg() *RfBandCfg {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerGetGroupResponse_RfBandCfg); ok {
+			return x.RfBandCfg
 		}
 	}
 	return nil
@@ -711,6 +808,14 @@ type ControllerGetGroupResponse_EventNotification struct {
 	EventNotification *common_go.EventNotification `protobuf:"bytes,30,opt,name=event_notification,json=eventNotification,oneof"`
 }
 
+type ControllerGetGroupResponse_EventStatus struct {
+	EventStatus *common_go.EventStatus `protobuf:"bytes,43,opt,name=event_status,json=eventStatus,oneof"`
+}
+
+type ControllerGetGroupResponse_EventLog struct {
+	EventLog *common_go.EventLog `protobuf:"bytes,44,opt,name=event_log,json=eventLog,oneof"`
+}
+
 type ControllerGetGroupResponse_TelemetryIntervalConfig struct {
 	TelemetryIntervalConfig *common_go.TelemetryIntervalConfig `protobuf:"bytes,31,opt,name=telemetry_interval_config,json=telemetryIntervalConfig,oneof"`
 }
@@ -741,6 +846,26 @@ type ControllerGetGroupResponse_RfStatusGroup struct {
 
 type ControllerGetGroupResponse_RfConfigGrp struct {
 	RfConfigGrp *RfCfgGrp `protobuf:"bytes,39,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
+}
+
+type ControllerGetGroupResponse_DsAutoAlignStatus struct {
+	DsAutoAlignStatus *DsAutoAlignOperationResponse `protobuf:"bytes,40,opt,name=ds_auto_align_status,json=dsAutoAlignStatus,oneof"`
+}
+
+type ControllerGetGroupResponse_UsAutoAlignStatus struct {
+	UsAutoAlignStatus *UsAutoAlignOperationResponse `protobuf:"bytes,41,opt,name=us_auto_align_status,json=usAutoAlignStatus,oneof"`
+}
+
+type ControllerGetGroupResponse_DsAlignmentCfg struct {
+	DsAlignmentCfg *DsAlignmentCfg `protobuf:"bytes,42,opt,name=ds_alignment_cfg,json=dsAlignmentCfg,oneof"`
+}
+
+type ControllerGetGroupResponse_ManualAlignOpResponse struct {
+	ManualAlignOpResponse *ManualAlignOperationResponse `protobuf:"bytes,45,opt,name=manual_align_op_response,json=manualAlignOpResponse,oneof"` //Also has direction field to specify us/ds path, and the status of the manual alignment operation.
+}
+
+type ControllerGetGroupResponse_RfBandCfg struct {
+	RfBandCfg *RfBandCfg `protobuf:"bytes,46,opt,name=rf_band_cfg,json=rfBandCfg,oneof"` //RF band configuration, including bandwidth mode, split selection, and annex type.
 }
 
 type ControllerGetGroupResponse_VendorExtensions struct {
@@ -785,6 +910,10 @@ func (*ControllerGetGroupResponse_EventCapabilities) isControllerGetGroupRespons
 
 func (*ControllerGetGroupResponse_EventNotification) isControllerGetGroupResponse_Payload() {}
 
+func (*ControllerGetGroupResponse_EventStatus) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_EventLog) isControllerGetGroupResponse_Payload() {}
+
 func (*ControllerGetGroupResponse_TelemetryIntervalConfig) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_SpectrumCapture) isControllerGetGroupResponse_Payload() {}
@@ -800,6 +929,16 @@ func (*ControllerGetGroupResponse_RfCapabilities) isControllerGetGroupResponse_P
 func (*ControllerGetGroupResponse_RfStatusGroup) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_RfConfigGrp) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_DsAutoAlignStatus) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_UsAutoAlignStatus) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_DsAlignmentCfg) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_ManualAlignOpResponse) isControllerGetGroupResponse_Payload() {}
+
+func (*ControllerGetGroupResponse_RfBandCfg) isControllerGetGroupResponse_Payload() {}
 
 func (*ControllerGetGroupResponse_VendorExtensions) isControllerGetGroupResponse_Payload() {}
 
@@ -877,6 +1016,10 @@ type ControllerSetRequest struct {
 	//	*ControllerSetRequest_EventReportingCfg
 	//	*ControllerSetRequest_TelemetryIntervalConfig
 	//	*ControllerSetRequest_RfConfigGrp
+	//	*ControllerSetRequest_DsAlignmentCfg
+	//	*ControllerSetRequest_AutoAlignOpRequest
+	//	*ControllerSetRequest_ManualAlignOpRequest
+	//	*ControllerSetRequest_RfBandCfg
 	//	*ControllerSetRequest_VendorExtensions
 	Payload       isControllerSetRequest_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
@@ -995,6 +1138,42 @@ func (x *ControllerSetRequest) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
+func (x *ControllerSetRequest) GetDsAlignmentCfg() *DsAlignmentCfg {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetRequest_DsAlignmentCfg); ok {
+			return x.DsAlignmentCfg
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetRequest) GetAutoAlignOpRequest() *AutoAlignOperationRequest {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetRequest_AutoAlignOpRequest); ok {
+			return x.AutoAlignOpRequest
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetRequest) GetManualAlignOpRequest() *ManualAlignOperationRequest {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetRequest_ManualAlignOpRequest); ok {
+			return x.ManualAlignOpRequest
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetRequest) GetRfBandCfg() *RfBandCfg {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetRequest_RfBandCfg); ok {
+			return x.RfBandCfg
+		}
+	}
+	return nil
+}
+
 func (x *ControllerSetRequest) GetVendorExtensions() *common_go.VendorExtensions {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetRequest_VendorExtensions); ok {
@@ -1036,6 +1215,22 @@ type ControllerSetRequest_RfConfigGrp struct {
 	RfConfigGrp *RfCfgGrp `protobuf:"bytes,17,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
 }
 
+type ControllerSetRequest_DsAlignmentCfg struct {
+	DsAlignmentCfg *DsAlignmentCfg `protobuf:"bytes,18,opt,name=ds_alignment_cfg,json=dsAlignmentCfg,oneof"`
+}
+
+type ControllerSetRequest_AutoAlignOpRequest struct {
+	AutoAlignOpRequest *AutoAlignOperationRequest `protobuf:"bytes,19,opt,name=auto_align_op_request,json=autoAlignOpRequest,oneof"` //has direction field to specify us/ds path
+}
+
+type ControllerSetRequest_ManualAlignOpRequest struct {
+	ManualAlignOpRequest *ManualAlignOperationRequest `protobuf:"bytes,21,opt,name=manual_align_op_request,json=manualAlignOpRequest,oneof"` //has direction field to specify us/ds path
+}
+
+type ControllerSetRequest_RfBandCfg struct {
+	RfBandCfg *RfBandCfg `protobuf:"bytes,22,opt,name=rf_band_cfg,json=rfBandCfg,oneof"` //RF band configuration, including bandwidth mode, split selection, and annex type.
+}
+
 type ControllerSetRequest_VendorExtensions struct {
 	VendorExtensions *common_go.VendorExtensions `protobuf:"bytes,100,opt,name=vendor_extensions,json=vendorExtensions,oneof"`
 }
@@ -1054,6 +1249,14 @@ func (*ControllerSetRequest_TelemetryIntervalConfig) isControllerSetRequest_Payl
 
 func (*ControllerSetRequest_RfConfigGrp) isControllerSetRequest_Payload() {}
 
+func (*ControllerSetRequest_DsAlignmentCfg) isControllerSetRequest_Payload() {}
+
+func (*ControllerSetRequest_AutoAlignOpRequest) isControllerSetRequest_Payload() {}
+
+func (*ControllerSetRequest_ManualAlignOpRequest) isControllerSetRequest_Payload() {}
+
+func (*ControllerSetRequest_RfBandCfg) isControllerSetRequest_Payload() {}
+
 func (*ControllerSetRequest_VendorExtensions) isControllerSetRequest_Payload() {}
 
 type ControllerSetResponse struct {
@@ -1069,6 +1272,11 @@ type ControllerSetResponse struct {
 	//	*ControllerSetResponse_EventReportingCfg
 	//	*ControllerSetResponse_TelemetryIntervalConfig
 	//	*ControllerSetResponse_RfConfigGrp
+	//	*ControllerSetResponse_DsAlignmentCfg
+	//	*ControllerSetResponse_DsAutoAlignStatus
+	//	*ControllerSetResponse_UsAutoAlignStatus
+	//	*ControllerSetResponse_ManualAlignOpResponse
+	//	*ControllerSetResponse_RfBandCfg
 	//	*ControllerSetResponse_VendorExtensions
 	Payload       isControllerSetResponse_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
@@ -1189,6 +1397,51 @@ func (x *ControllerSetResponse) GetRfConfigGrp() *RfCfgGrp {
 	return nil
 }
 
+func (x *ControllerSetResponse) GetDsAlignmentCfg() *DsAlignmentCfg {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetResponse_DsAlignmentCfg); ok {
+			return x.DsAlignmentCfg
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetResponse) GetDsAutoAlignStatus() *DsAutoAlignOperationResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetResponse_DsAutoAlignStatus); ok {
+			return x.DsAutoAlignStatus
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetResponse) GetUsAutoAlignStatus() *UsAutoAlignOperationResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetResponse_UsAutoAlignStatus); ok {
+			return x.UsAutoAlignStatus
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetResponse) GetManualAlignOpResponse() *ManualAlignOperationResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetResponse_ManualAlignOpResponse); ok {
+			return x.ManualAlignOpResponse
+		}
+	}
+	return nil
+}
+
+func (x *ControllerSetResponse) GetRfBandCfg() *RfBandCfg {
+	if x != nil {
+		if x, ok := x.Payload.(*ControllerSetResponse_RfBandCfg); ok {
+			return x.RfBandCfg
+		}
+	}
+	return nil
+}
+
 func (x *ControllerSetResponse) GetVendorExtensions() *common_go.VendorExtensions {
 	if x != nil {
 		if x, ok := x.Payload.(*ControllerSetResponse_VendorExtensions); ok {
@@ -1230,6 +1483,26 @@ type ControllerSetResponse_RfConfigGrp struct {
 	RfConfigGrp *RfCfgGrp `protobuf:"bytes,17,opt,name=rf_config_grp,json=rfConfigGrp,oneof"`
 }
 
+type ControllerSetResponse_DsAlignmentCfg struct {
+	DsAlignmentCfg *DsAlignmentCfg `protobuf:"bytes,18,opt,name=ds_alignment_cfg,json=dsAlignmentCfg,oneof"`
+}
+
+type ControllerSetResponse_DsAutoAlignStatus struct {
+	DsAutoAlignStatus *DsAutoAlignOperationResponse `protobuf:"bytes,19,opt,name=ds_auto_align_status,json=dsAutoAlignStatus,oneof"`
+}
+
+type ControllerSetResponse_UsAutoAlignStatus struct {
+	UsAutoAlignStatus *UsAutoAlignOperationResponse `protobuf:"bytes,20,opt,name=us_auto_align_status,json=usAutoAlignStatus,oneof"`
+}
+
+type ControllerSetResponse_ManualAlignOpResponse struct {
+	ManualAlignOpResponse *ManualAlignOperationResponse `protobuf:"bytes,21,opt,name=manual_align_op_response,json=manualAlignOpResponse,oneof"` //Also has direction field to specify us/ds path, and the status of the manual alignment operation.
+}
+
+type ControllerSetResponse_RfBandCfg struct {
+	RfBandCfg *RfBandCfg `protobuf:"bytes,22,opt,name=rf_band_cfg,json=rfBandCfg,oneof"` //RF band configuration, including bandwidth mode, split selection, and annex type.
+}
+
 type ControllerSetResponse_VendorExtensions struct {
 	VendorExtensions *common_go.VendorExtensions `protobuf:"bytes,100,opt,name=vendor_extensions,json=vendorExtensions,oneof"`
 }
@@ -1247,6 +1520,16 @@ func (*ControllerSetResponse_EventReportingCfg) isControllerSetResponse_Payload(
 func (*ControllerSetResponse_TelemetryIntervalConfig) isControllerSetResponse_Payload() {}
 
 func (*ControllerSetResponse_RfConfigGrp) isControllerSetResponse_Payload() {}
+
+func (*ControllerSetResponse_DsAlignmentCfg) isControllerSetResponse_Payload() {}
+
+func (*ControllerSetResponse_DsAutoAlignStatus) isControllerSetResponse_Payload() {}
+
+func (*ControllerSetResponse_UsAutoAlignStatus) isControllerSetResponse_Payload() {}
+
+func (*ControllerSetResponse_ManualAlignOpResponse) isControllerSetResponse_Payload() {}
+
+func (*ControllerSetResponse_RfBandCfg) isControllerSetResponse_Payload() {}
 
 func (*ControllerSetResponse_VendorExtensions) isControllerSetResponse_Payload() {}
 
@@ -1268,7 +1551,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x0fmax_packet_size\x18\x02 \x01(\r:\x03232R\rmaxPacketSize\x12Z\n" +
 	"\x18spectrum_capture_request\x18\n" +
 	" \x01(\v2 .scte.amp.SpectrumCaptureRequestR\x16spectrumCaptureRequest\x12%\n" +
-	"\x04ping\x18e \x01(\v2\x11.scte.common.PingR\x04ping\"\xd7\x10\n" +
+	"\x04ping\x18e \x01(\v2\x11.scte.common.PingR\x04ping\"\xe2\x14\n" +
 	"\x1aControllerGetGroupResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12B\n" +
@@ -1291,7 +1574,9 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x13disable_auto_reboot\x18\x18 \x01(\v2\x1e.scte.common.DisableAutoRebootH\x00R\x11disableAutoReboot\x12M\n" +
 	"\x12enable_auto_reboot\x18\x19 \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12O\n" +
 	"\x12event_capabilities\x18\x1a \x01(\v2\x1e.scte.common.EventCapabilitiesH\x00R\x11eventCapabilities\x12O\n" +
-	"\x12event_notification\x18\x1e \x01(\v2\x1e.scte.common.EventNotificationH\x00R\x11eventNotification\x12b\n" +
+	"\x12event_notification\x18\x1e \x01(\v2\x1e.scte.common.EventNotificationH\x00R\x11eventNotification\x12=\n" +
+	"\fevent_status\x18+ \x01(\v2\x18.scte.common.EventStatusH\x00R\veventStatus\x124\n" +
+	"\tevent_log\x18, \x01(\v2\x15.scte.common.EventLogH\x00R\beventLog\x12b\n" +
 	"\x19telemetry_interval_config\x18\x1f \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x12N\n" +
 	"\x10spectrum_capture\x18  \x01(\v2!.scte.amp.SpectrumCaptureResponseH\x00R\x0fspectrumCapture\x120\n" +
 	"\asensors\x18! \x01(\v2\x14.scte.common.SensorsH\x00R\asensors\x12O\n" +
@@ -1299,7 +1584,12 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\fsensors_data\x18# \x01(\v2\x18.scte.common.SensorsDataH\x00R\vsensorsData\x12C\n" +
 	"\x0frf_capabilities\x18% \x01(\v2\x18.scte.amp.RfCapabilitiesH\x00R\x0erfCapabilities\x12?\n" +
 	"\x0frf_status_group\x18& \x01(\v2\x15.scte.amp.RfStatusGrpH\x00R\rrfStatusGroup\x128\n" +
-	"\rrf_config_grp\x18' \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
+	"\rrf_config_grp\x18' \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12Y\n" +
+	"\x14ds_auto_align_status\x18( \x01(\v2&.scte.amp.DsAutoAlignOperationResponseH\x00R\x11dsAutoAlignStatus\x12Y\n" +
+	"\x14us_auto_align_status\x18) \x01(\v2&.scte.amp.UsAutoAlignOperationResponseH\x00R\x11usAutoAlignStatus\x12D\n" +
+	"\x10ds_alignment_cfg\x18* \x01(\v2\x18.scte.amp.DsAlignmentCfgH\x00R\x0edsAlignmentCfg\x12a\n" +
+	"\x18manual_align_op_response\x18- \x01(\v2&.scte.amp.ManualAlignOperationResponseH\x00R\x15manualAlignOpResponse\x125\n" +
+	"\vrf_band_cfg\x18. \x01(\v2\x13.scte.amp.RfBandCfgH\x00R\trfBandCfg\x12L\n" +
 	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensions\x12'\n" +
 	"\x04ping\x18e \x01(\v2\x11.scte.common.PingH\x00R\x04pingB\t\n" +
 	"\apayload\"\xac\x01\n" +
@@ -1307,7 +1597,7 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x06result\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\x06result\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x12<\n" +
 	"\x06groups\x18\n" +
-	" \x03(\v2$.scte.amp.ControllerGetGroupResponseR\x06groups\"\x92\x05\n" +
+	" \x03(\v2$.scte.amp.ControllerGetGroupResponseR\x06groups\"\xc9\a\n" +
 	"\x14ControllerSetRequest\x12+\n" +
 	"\x0fmax_packet_size\x18\x01 \x01(\r:\x03232R\rmaxPacketSize\x127\n" +
 	"\n" +
@@ -1318,9 +1608,13 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
-	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
+	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12D\n" +
+	"\x10ds_alignment_cfg\x18\x12 \x01(\v2\x18.scte.amp.DsAlignmentCfgH\x00R\x0edsAlignmentCfg\x12X\n" +
+	"\x15auto_align_op_request\x18\x13 \x01(\v2#.scte.amp.AutoAlignOperationRequestH\x00R\x12autoAlignOpRequest\x12^\n" +
+	"\x17manual_align_op_request\x18\x15 \x01(\v2%.scte.amp.ManualAlignOperationRequestH\x00R\x14manualAlignOpRequest\x125\n" +
+	"\vrf_band_cfg\x18\x16 \x01(\v2\x13.scte.amp.RfBandCfgH\x00R\trfBandCfg\x12L\n" +
 	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
-	"\apayload\"\xc2\x05\n" +
+	"\apayload\"\xd8\b\n" +
 	"\x15ControllerSetResponse\x125\n" +
 	"\terror_tag\x18\x01 \x01(\x0e2\x18.scte.common.error_tag_eR\berrorTag\x12#\n" +
 	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\x127\n" +
@@ -1332,9 +1626,14 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x12enable_auto_reboot\x18\x0e \x01(\v2\x1d.scte.common.EnableAutoRebootH\x00R\x10enableAutoReboot\x12P\n" +
 	"\x13event_reporting_cfg\x18\x0f \x01(\v2\x1e.scte.common.EventReportingCfgH\x00R\x11eventReportingCfg\x12b\n" +
 	"\x19telemetry_interval_config\x18\x10 \x01(\v2$.scte.common.TelemetryIntervalConfigH\x00R\x17telemetryIntervalConfig\x128\n" +
-	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12L\n" +
+	"\rrf_config_grp\x18\x11 \x01(\v2\x12.scte.amp.RfCfgGrpH\x00R\vrfConfigGrp\x12D\n" +
+	"\x10ds_alignment_cfg\x18\x12 \x01(\v2\x18.scte.amp.DsAlignmentCfgH\x00R\x0edsAlignmentCfg\x12Y\n" +
+	"\x14ds_auto_align_status\x18\x13 \x01(\v2&.scte.amp.DsAutoAlignOperationResponseH\x00R\x11dsAutoAlignStatus\x12Y\n" +
+	"\x14us_auto_align_status\x18\x14 \x01(\v2&.scte.amp.UsAutoAlignOperationResponseH\x00R\x11usAutoAlignStatus\x12a\n" +
+	"\x18manual_align_op_response\x18\x15 \x01(\v2&.scte.amp.ManualAlignOperationResponseH\x00R\x15manualAlignOpResponse\x125\n" +
+	"\vrf_band_cfg\x18\x16 \x01(\v2\x13.scte.amp.RfBandCfgH\x00R\trfBandCfg\x12L\n" +
 	"\x11vendor_extensions\x18d \x01(\v2\x1d.scte.common.VendorExtensionsH\x00R\x10vendorExtensionsB\t\n" +
-	"\apayload*\xb0\x04\n" +
+	"\apayload*\xfb\x05\n" +
 	"\aGroupId\x12\x17\n" +
 	"\x13SYSTEM_CAPABILITIES\x10\x01\x12\x1d\n" +
 	"\x19POWER_SUPPLY_CAPABILITIES\x10\x02\x12\x11\n" +
@@ -1355,7 +1654,10 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x13DISABLE_AUTO_REBOOT\x10\x17\x12\x16\n" +
 	"\x12ENABLE_AUTO_REBOOT\x10\x18\x12\x16\n" +
 	"\x12EVENT_CAPABILITIES\x10\x1e\x12\x16\n" +
-	"\x12EVENT_NOTIFICATION\x10\x1f\x12\x15\n" +
+	"\x12EVENT_NOTIFICATION\x10\x1f\x12\x17\n" +
+	"\x13EVENT_REPORTING_CFG\x10 \x12\x10\n" +
+	"\fEVENT_STATUS\x10!\x12\r\n" +
+	"\tEVENT_LOG\x10\"\x12\x15\n" +
 	"\x11SENSOR_DESCRIPTOR\x10(\x12\x12\n" +
 	"\x0eSENSOR_READING\x10)\x12\x1a\n" +
 	"\x16TELEMETRY_INTERVAL_CFG\x10*\x12\x14\n" +
@@ -1363,9 +1665,16 @@ const file_amps_controller_proto_rawDesc = "" +
 	"\x0fRF_CAPABILITIES\x10=\x12\r\n" +
 	"\tRF_STATUS\x10>\x12\x0e\n" +
 	"\n" +
-	"RF_CFG_GRP\x10?\x12\x15\n" +
+	"RF_CFG_GRP\x10?\x12\x14\n" +
+	"\x10RF_CFG_ALIGNMENT\x10@\x12\x1b\n" +
+	"\x17RF_DS_AUTO_ALIGN_STATUS\x10A\x12\x1b\n" +
+	"\x17RF_US_AUTO_ALIGN_STATUS\x10B\x12\x16\n" +
+	"\x12RF_DS_MANUAL_ALIGN\x10C\x12\x16\n" +
+	"\x12RF_US_MANUAL_ALIGN\x10D\x12\x0f\n" +
+	"\vRF_BAND_CFG\x10E\x12\x15\n" +
 	"\x11VENDOR_EXTENSIONS\x10d\x12\b\n" +
-	"\x04PING\x10eB,Z*github.com/enshure/scte-go/amps_go;scteamp"
+	"\x04PING\x10eB=\n" +
+	"\rorg.scte.ampsP\x01Z*github.com/enshure/scte-go/amps_go;scteamp"
 
 var (
 	file_amps_controller_proto_rawDescOnce sync.Once
@@ -1410,16 +1719,25 @@ var file_amps_controller_proto_goTypes = []any{
 	(*common_go.EnableAutoReboot)(nil),        // 25: scte.common.EnableAutoReboot
 	(*common_go.EventCapabilities)(nil),       // 26: scte.common.EventCapabilities
 	(*common_go.EventNotification)(nil),       // 27: scte.common.EventNotification
-	(*common_go.TelemetryIntervalConfig)(nil), // 28: scte.common.TelemetryIntervalConfig
-	(*SpectrumCaptureResponse)(nil),           // 29: scte.amp.SpectrumCaptureResponse
-	(*common_go.Sensors)(nil),                 // 30: scte.common.Sensors
-	(*common_go.SensorDescriptors)(nil),       // 31: scte.common.SensorDescriptors
-	(*common_go.SensorsData)(nil),             // 32: scte.common.SensorsData
-	(*RfCapabilities)(nil),                    // 33: scte.amp.RfCapabilities
-	(*RfStatusGrp)(nil),                       // 34: scte.amp.RfStatusGrp
-	(*RfCfgGrp)(nil),                          // 35: scte.amp.RfCfgGrp
-	(*common_go.VendorExtensions)(nil),        // 36: scte.common.VendorExtensions
-	(*common_go.EventReportingCfg)(nil),       // 37: scte.common.EventReportingCfg
+	(*common_go.EventStatus)(nil),             // 28: scte.common.EventStatus
+	(*common_go.EventLog)(nil),                // 29: scte.common.EventLog
+	(*common_go.TelemetryIntervalConfig)(nil), // 30: scte.common.TelemetryIntervalConfig
+	(*SpectrumCaptureResponse)(nil),           // 31: scte.amp.SpectrumCaptureResponse
+	(*common_go.Sensors)(nil),                 // 32: scte.common.Sensors
+	(*common_go.SensorDescriptors)(nil),       // 33: scte.common.SensorDescriptors
+	(*common_go.SensorsData)(nil),             // 34: scte.common.SensorsData
+	(*RfCapabilities)(nil),                    // 35: scte.amp.RfCapabilities
+	(*RfStatusGrp)(nil),                       // 36: scte.amp.RfStatusGrp
+	(*RfCfgGrp)(nil),                          // 37: scte.amp.RfCfgGrp
+	(*DsAutoAlignOperationResponse)(nil),      // 38: scte.amp.DsAutoAlignOperationResponse
+	(*UsAutoAlignOperationResponse)(nil),      // 39: scte.amp.UsAutoAlignOperationResponse
+	(*DsAlignmentCfg)(nil),                    // 40: scte.amp.DsAlignmentCfg
+	(*ManualAlignOperationResponse)(nil),      // 41: scte.amp.ManualAlignOperationResponse
+	(*RfBandCfg)(nil),                         // 42: scte.amp.RfBandCfg
+	(*common_go.VendorExtensions)(nil),        // 43: scte.common.VendorExtensions
+	(*common_go.EventReportingCfg)(nil),       // 44: scte.common.EventReportingCfg
+	(*AutoAlignOperationRequest)(nil),         // 45: scte.amp.AutoAlignOperationRequest
+	(*ManualAlignOperationRequest)(nil),       // 46: scte.amp.ManualAlignOperationRequest
 }
 var file_amps_controller_proto_depIdxs = []int32{
 	0,  // 0: scte.amp.GroupSelector.group_id:type_name -> scte.amp.GroupId
@@ -1445,40 +1763,56 @@ var file_amps_controller_proto_depIdxs = []int32{
 	25, // 20: scte.amp.ControllerGetGroupResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
 	26, // 21: scte.amp.ControllerGetGroupResponse.event_capabilities:type_name -> scte.common.EventCapabilities
 	27, // 22: scte.amp.ControllerGetGroupResponse.event_notification:type_name -> scte.common.EventNotification
-	28, // 23: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	29, // 24: scte.amp.ControllerGetGroupResponse.spectrum_capture:type_name -> scte.amp.SpectrumCaptureResponse
-	30, // 25: scte.amp.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
-	31, // 26: scte.amp.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
-	32, // 27: scte.amp.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
-	33, // 28: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
-	34, // 29: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
-	35, // 30: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	36, // 31: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
-	8,  // 32: scte.amp.ControllerGetGroupResponse.ping:type_name -> scte.common.Ping
-	9,  // 33: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
-	3,  // 34: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
-	20, // 35: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
-	23, // 36: scte.amp.ControllerSetRequest.reset:type_name -> scte.common.Reset
-	24, // 37: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
-	25, // 38: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	37, // 39: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	28, // 40: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	35, // 41: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	36, // 42: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtensions
-	9,  // 43: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
-	20, // 44: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
-	23, // 45: scte.amp.ControllerSetResponse.reset:type_name -> scte.common.Reset
-	24, // 46: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
-	25, // 47: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
-	37, // 48: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
-	28, // 49: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
-	35, // 50: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
-	36, // 51: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
-	52, // [52:52] is the sub-list for method output_type
-	52, // [52:52] is the sub-list for method input_type
-	52, // [52:52] is the sub-list for extension type_name
-	52, // [52:52] is the sub-list for extension extendee
-	0,  // [0:52] is the sub-list for field type_name
+	28, // 23: scte.amp.ControllerGetGroupResponse.event_status:type_name -> scte.common.EventStatus
+	29, // 24: scte.amp.ControllerGetGroupResponse.event_log:type_name -> scte.common.EventLog
+	30, // 25: scte.amp.ControllerGetGroupResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	31, // 26: scte.amp.ControllerGetGroupResponse.spectrum_capture:type_name -> scte.amp.SpectrumCaptureResponse
+	32, // 27: scte.amp.ControllerGetGroupResponse.sensors:type_name -> scte.common.Sensors
+	33, // 28: scte.amp.ControllerGetGroupResponse.sensor_descriptors:type_name -> scte.common.SensorDescriptors
+	34, // 29: scte.amp.ControllerGetGroupResponse.sensors_data:type_name -> scte.common.SensorsData
+	35, // 30: scte.amp.ControllerGetGroupResponse.rf_capabilities:type_name -> scte.amp.RfCapabilities
+	36, // 31: scte.amp.ControllerGetGroupResponse.rf_status_group:type_name -> scte.amp.RfStatusGrp
+	37, // 32: scte.amp.ControllerGetGroupResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	38, // 33: scte.amp.ControllerGetGroupResponse.ds_auto_align_status:type_name -> scte.amp.DsAutoAlignOperationResponse
+	39, // 34: scte.amp.ControllerGetGroupResponse.us_auto_align_status:type_name -> scte.amp.UsAutoAlignOperationResponse
+	40, // 35: scte.amp.ControllerGetGroupResponse.ds_alignment_cfg:type_name -> scte.amp.DsAlignmentCfg
+	41, // 36: scte.amp.ControllerGetGroupResponse.manual_align_op_response:type_name -> scte.amp.ManualAlignOperationResponse
+	42, // 37: scte.amp.ControllerGetGroupResponse.rf_band_cfg:type_name -> scte.amp.RfBandCfg
+	43, // 38: scte.amp.ControllerGetGroupResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
+	8,  // 39: scte.amp.ControllerGetGroupResponse.ping:type_name -> scte.common.Ping
+	9,  // 40: scte.amp.ControllerGetResponse.result:type_name -> scte.common.error_tag_e
+	3,  // 41: scte.amp.ControllerGetResponse.groups:type_name -> scte.amp.ControllerGetGroupResponse
+	20, // 42: scte.amp.ControllerSetRequest.system_cfg:type_name -> scte.common.SystemCfg
+	23, // 43: scte.amp.ControllerSetRequest.reset:type_name -> scte.common.Reset
+	24, // 44: scte.amp.ControllerSetRequest.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	25, // 45: scte.amp.ControllerSetRequest.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
+	44, // 46: scte.amp.ControllerSetRequest.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	30, // 47: scte.amp.ControllerSetRequest.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	37, // 48: scte.amp.ControllerSetRequest.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	40, // 49: scte.amp.ControllerSetRequest.ds_alignment_cfg:type_name -> scte.amp.DsAlignmentCfg
+	45, // 50: scte.amp.ControllerSetRequest.auto_align_op_request:type_name -> scte.amp.AutoAlignOperationRequest
+	46, // 51: scte.amp.ControllerSetRequest.manual_align_op_request:type_name -> scte.amp.ManualAlignOperationRequest
+	42, // 52: scte.amp.ControllerSetRequest.rf_band_cfg:type_name -> scte.amp.RfBandCfg
+	43, // 53: scte.amp.ControllerSetRequest.vendor_extensions:type_name -> scte.common.VendorExtensions
+	9,  // 54: scte.amp.ControllerSetResponse.error_tag:type_name -> scte.common.error_tag_e
+	20, // 55: scte.amp.ControllerSetResponse.system_cfg:type_name -> scte.common.SystemCfg
+	23, // 56: scte.amp.ControllerSetResponse.reset:type_name -> scte.common.Reset
+	24, // 57: scte.amp.ControllerSetResponse.disable_auto_reboot:type_name -> scte.common.DisableAutoReboot
+	25, // 58: scte.amp.ControllerSetResponse.enable_auto_reboot:type_name -> scte.common.EnableAutoReboot
+	44, // 59: scte.amp.ControllerSetResponse.event_reporting_cfg:type_name -> scte.common.EventReportingCfg
+	30, // 60: scte.amp.ControllerSetResponse.telemetry_interval_config:type_name -> scte.common.TelemetryIntervalConfig
+	37, // 61: scte.amp.ControllerSetResponse.rf_config_grp:type_name -> scte.amp.RfCfgGrp
+	40, // 62: scte.amp.ControllerSetResponse.ds_alignment_cfg:type_name -> scte.amp.DsAlignmentCfg
+	38, // 63: scte.amp.ControllerSetResponse.ds_auto_align_status:type_name -> scte.amp.DsAutoAlignOperationResponse
+	39, // 64: scte.amp.ControllerSetResponse.us_auto_align_status:type_name -> scte.amp.UsAutoAlignOperationResponse
+	41, // 65: scte.amp.ControllerSetResponse.manual_align_op_response:type_name -> scte.amp.ManualAlignOperationResponse
+	42, // 66: scte.amp.ControllerSetResponse.rf_band_cfg:type_name -> scte.amp.RfBandCfg
+	43, // 67: scte.amp.ControllerSetResponse.vendor_extensions:type_name -> scte.common.VendorExtensions
+	68, // [68:68] is the sub-list for method output_type
+	68, // [68:68] is the sub-list for method input_type
+	68, // [68:68] is the sub-list for extension type_name
+	68, // [68:68] is the sub-list for extension extendee
+	0,  // [0:68] is the sub-list for field type_name
 }
 
 func init() { file_amps_controller_proto_init() }
@@ -1509,6 +1843,8 @@ func file_amps_controller_proto_init() {
 		(*ControllerGetGroupResponse_EnableAutoReboot)(nil),
 		(*ControllerGetGroupResponse_EventCapabilities)(nil),
 		(*ControllerGetGroupResponse_EventNotification)(nil),
+		(*ControllerGetGroupResponse_EventStatus)(nil),
+		(*ControllerGetGroupResponse_EventLog)(nil),
 		(*ControllerGetGroupResponse_TelemetryIntervalConfig)(nil),
 		(*ControllerGetGroupResponse_SpectrumCapture)(nil),
 		(*ControllerGetGroupResponse_Sensors)(nil),
@@ -1517,6 +1853,11 @@ func file_amps_controller_proto_init() {
 		(*ControllerGetGroupResponse_RfCapabilities)(nil),
 		(*ControllerGetGroupResponse_RfStatusGroup)(nil),
 		(*ControllerGetGroupResponse_RfConfigGrp)(nil),
+		(*ControllerGetGroupResponse_DsAutoAlignStatus)(nil),
+		(*ControllerGetGroupResponse_UsAutoAlignStatus)(nil),
+		(*ControllerGetGroupResponse_DsAlignmentCfg)(nil),
+		(*ControllerGetGroupResponse_ManualAlignOpResponse)(nil),
+		(*ControllerGetGroupResponse_RfBandCfg)(nil),
 		(*ControllerGetGroupResponse_VendorExtensions)(nil),
 		(*ControllerGetGroupResponse_Ping)(nil),
 	}
@@ -1528,6 +1869,10 @@ func file_amps_controller_proto_init() {
 		(*ControllerSetRequest_EventReportingCfg)(nil),
 		(*ControllerSetRequest_TelemetryIntervalConfig)(nil),
 		(*ControllerSetRequest_RfConfigGrp)(nil),
+		(*ControllerSetRequest_DsAlignmentCfg)(nil),
+		(*ControllerSetRequest_AutoAlignOpRequest)(nil),
+		(*ControllerSetRequest_ManualAlignOpRequest)(nil),
+		(*ControllerSetRequest_RfBandCfg)(nil),
 		(*ControllerSetRequest_VendorExtensions)(nil),
 	}
 	file_amps_controller_proto_msgTypes[5].OneofWrappers = []any{
@@ -1538,6 +1883,11 @@ func file_amps_controller_proto_init() {
 		(*ControllerSetResponse_EventReportingCfg)(nil),
 		(*ControllerSetResponse_TelemetryIntervalConfig)(nil),
 		(*ControllerSetResponse_RfConfigGrp)(nil),
+		(*ControllerSetResponse_DsAlignmentCfg)(nil),
+		(*ControllerSetResponse_DsAutoAlignStatus)(nil),
+		(*ControllerSetResponse_UsAutoAlignStatus)(nil),
+		(*ControllerSetResponse_ManualAlignOpResponse)(nil),
+		(*ControllerSetResponse_RfBandCfg)(nil),
 		(*ControllerSetResponse_VendorExtensions)(nil),
 	}
 	type x struct{}
